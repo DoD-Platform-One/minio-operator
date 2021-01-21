@@ -1,0 +1,14 @@
+# Configure number of MinIO Operator Deployment Replicas
+replicas:
+  count: 1
+
+# Configure repo and tag of MinIO Operator Image
+image:
+  name: registry.dsop.io/platform-one/apps/minio/operator-ib
+  tag: 2.0.9-ib
+  imagePullPolicy: IfNotPresent
+
+## set kubernetes cluster domain where minio is running
+##
+clusterDomain: cluster.local
+watchedNamespace: default
