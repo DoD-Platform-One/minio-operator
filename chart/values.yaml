@@ -11,4 +11,5 @@ image:
 ## set kubernetes cluster domain where minio is running
 ##
 clusterDomain: cluster.local
-watchedNamespace: default
+# watchedNamespace: default
+watchedNamespace: 
