@@ -11,5 +11,5 @@ image:
 ## set kubernetes cluster domain where minio is running
 ##
 clusterDomain: cluster.local
-# watchedNamespace: default
-watchedNamespace: 
+# watchedNamespace: set to blank to enable watching all namespaces
+watchedNamespace:
