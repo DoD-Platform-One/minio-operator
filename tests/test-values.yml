@@ -4,12 +4,12 @@ replicas:
 
 # Configure repo and tag of MinIO Operator Image
 image:
-  name: registry.dsop.io/platform-one/apps/minio/operator-ib
-  tag: 2.0.9-ib
+  name: registry1.dso.mil/ironbank/opensource/minio/minio-operator
+  tag: 2.0.9
   imagePullPolicy: IfNotPresent
 
 ## set kubernetes cluster domain where minio is running
 ##
 clusterDomain: cluster.local
-# watchedNamespace: default
-watchedNamespace: 
+# watchedNamespace: set to blank to enable watching all namespaces
+watchedNamespace:
