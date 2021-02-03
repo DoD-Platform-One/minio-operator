@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+    name: operator
+upstream:
+    type: git
+    git:
+        commit: de7c5283f7e5783a8a1c6df19ad0f2216f4d3a9b
+        repo: https://github.com/minio/operator
+        directory: /
+        ref: 2.0.9
