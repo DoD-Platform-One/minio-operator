@@ -13,3 +13,5 @@ image:
 clusterDomain: cluster.local
 # watchedNamespace: set to blank to enable watching all namespaces
 watchedNamespace:
+
+imagePullSecrets: [ ]
