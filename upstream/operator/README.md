@@ -1,13 +1,4 @@
-# MinIO Operator V2.0.9
-
-This package contains a helm deployment for the MinIO Operator (v2.0.9).   The following information for the operator is from the 2.0.9 README file.
-
-* The helm chart uses the YAML files contained in this deployment and modifies them to:
-* provide an imagepullsecret 
-* provide the default minio secret if not overridden.
-
-
-# MinIO Operator Guide 
+# MinIO Operator Guide [![Slack](https://slack.min.io/slack?type=svg)](https://slack.min.io) [![Docker Pulls](https://img.shields.io/docker/pulls/minio/k8s-operator.svg?maxAge=604800)](https://hub.docker.com/r/minio/k8s-operator)
 
 MinIO is a high performance distributed object storage server, designed for large-scale private cloud infrastructure. MinIO is designed in a cloud-native manner to scale sustainably in multi-tenant environments. Orchestration platforms like Kubernetes provide perfect launchpad for MinIO to scale.
 
