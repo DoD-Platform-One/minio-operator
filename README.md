@@ -3,8 +3,19 @@
 This package contains a helm deployment for the MinIO Operator (v2.0.9).   The following information for the operator is from the 2.0.9 README file.
 
 * The helm chart uses the YAML files contained in this deployment and modifies them to:
-* provide an imagepullsecret 
-* provide the default minio secret if not overridden.
+  * provide an imagepullsecrets
+  
+  In the cart/values.yaml file specify the name of a docker pull secret used to pull the operator from your git repository.   For example:
+  
+```
+  kubectl create secret docker-registry private-registry -n minio-operator \
+     --docker-server=registry1.dso.mil \
+     --docker-username='USERNAME' \
+     --docker-password='PASSWORD' \
+     --docker-email=bigbang@bigbang.dev
+```
+
+
 
 
 # MinIO Operator Guide 
