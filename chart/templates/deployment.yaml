@@ -4,17 +4,17 @@ metadata:
   namespace: {{ .Release.Namespace }}
 # name: {{ include "minio-operator.name" . }}
   labels:
-    {{ - include "minio-operator.labels" . | nindent 4 }}
+    {{- include "minio-operator.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas.count }}
   selector:
     matchLabels:
 #      name: minio-operator
-      {{ - include "minio-operator.selectorLabels" . | nindent 6 }}
+      {{- include "minio-operator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{ - include "minio-operator.selectorLabels" . | nindent 8 }}
+        {{- include "minio-operator.selectorLabels" . | nindent 8 }}
 #       name: minio-operator
     spec:
       serviceAccountName: {{ include "minio-operator.serviceAccountName" . }}
