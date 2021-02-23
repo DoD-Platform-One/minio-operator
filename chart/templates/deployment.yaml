@@ -9,13 +9,15 @@ spec:
   replicas: {{ .Values.replicas.count }}
   selector:
     matchLabels:
-#      name: minio-operator
       {{- include "minio-operator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         {{- include "minio-operator.selectorLabels" . | nindent 8 }}
-#       name: minio-operator
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       serviceAccountName: {{ include "minio-operator.serviceAccountName" . }}
       containers:
