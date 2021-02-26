@@ -1,19 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: minio-operator
   namespace: {{ .Release.Namespace }}
+  name: {{ include "minio-operator.name" . }}
+  labels:
+    {{- include "minio-operator.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicas.count }}
   selector:
     matchLabels:
-      name: minio-operator
+      {{- include "minio-operator.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        name: minio-operator
+        {{- include "minio-operator.selectorLabels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
-      serviceAccountName: minio-operator
+      serviceAccountName: {{ include "minio-operator.serviceAccountName" . }}
       containers:
         - name: minio-operator
           image: {{ .Values.image.name }}:{{ .Values.image.tag }}

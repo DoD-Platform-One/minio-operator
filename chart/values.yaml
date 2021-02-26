@@ -1,6 +1,13 @@
+# Default values for minio-operator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
 # Configure number of MinIO Operator Deployment Replicas
 replicas:
   count: 1
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
 
 # Configure repo and tag of MinIO Operator Image
 image:
@@ -14,4 +21,11 @@ clusterDomain: cluster.local
 # watchedNamespace: set to blank to enable watching all namespaces
 watchedNamespace:
 
-imagePullSecrets: [ ]
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""

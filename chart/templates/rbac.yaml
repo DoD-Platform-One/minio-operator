@@ -76,5 +76,5 @@ roleRef:
   name: minio-operator-role
 subjects:
 - kind: ServiceAccount
-  name: minio-operator
+  name: {{ include "minio-operator.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
