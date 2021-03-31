@@ -30,12 +30,4 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 nodeSelector: {}
-affinity: 
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - "k3d-k3s-default-agent-1"
+affinity: {}
