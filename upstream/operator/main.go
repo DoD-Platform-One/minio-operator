@@ -20,6 +20,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -27,21 +28,26 @@ import (
 	"syscall"
 	"time"
 
+	miniov2 "github.com/minio/operator/pkg/apis/minio.min.io/v2"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"k8s.io/client-go/tools/clientcmd"
 
-	"k8s.io/klog"
+	"k8s.io/klog/v2"
 
-	clientset "github.com/minio/minio-operator/pkg/client/clientset/versioned"
-	informers "github.com/minio/minio-operator/pkg/client/informers/externalversions"
-	"github.com/minio/minio-operator/pkg/controller/cluster"
+	clientset "github.com/minio/operator/pkg/client/clientset/versioned"
+	informers "github.com/minio/operator/pkg/client/informers/externalversions"
+	"github.com/minio/operator/pkg/controller/cluster"
+	apiextension "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	kubeinformers "k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	certapi "k8s.io/client-go/kubernetes/typed/certificates/v1beta1"
 	"k8s.io/client-go/rest"
 )
 
-// Version provides the version of this minio-operator
-var Version = "DEVELOPMENT.GOGET"
+// version provides the version of this operator
+var version = "DEVELOPMENT.GOGET"
 
 var (
 	masterURL     string
@@ -54,6 +60,8 @@ var (
 )
 
 func init() {
+	klog.InitFlags(nil)
+	klog.LogToStderr(true)
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "path to a kubeconfig. Only required if out-of-cluster")
 	flag.StringVar(&masterURL, "master", "", "the address of the Kubernetes API server. Overrides any value in kubeconfig. Only required if out-of-cluster")
 	flag.StringVar(&hostsTemplate, "hosts-template", "", "the go template to use for hostname formatting of name fields (StatefulSet, CIService, HLService, Ellipsis, Domain)")
@@ -68,7 +76,7 @@ func main() {
 	flag.Parse()
 
 	if checkVersion {
-		fmt.Println(Version)
+		fmt.Println(version)
 		return
 	}
 
@@ -98,7 +106,41 @@ func main() {
 		klog.Errorf("Error building certificate clientset: %v", err.Error())
 	}
 
+	extClient, err := apiextension.NewForConfig(cfg)
+	if err != nil {
+		klog.Errorf("Error building certificate clientset: %v", err.Error())
+	}
+
 	namespace, isNamespaced := os.LookupEnv("WATCHED_NAMESPACE")
+
+	ctx := context.Background()
+	var caContent []byte
+	operatorCATLSCert, err := kubeClient.CoreV1().Secrets(miniov2.GetNSFromFile()).Get(ctx, "operator-ca-tls", metav1.GetOptions{})
+	// if custom ca.crt is not present in kubernetes secrets use the one stored in the pod
+	if err != nil {
+		caContent = miniov2.GetPodCAFromFile()
+	} else {
+		if val, ok := operatorCATLSCert.Data["ca.crt"]; ok {
+			caContent = val
+		}
+	}
+
+	if len(caContent) > 0 {
+		crd, err := extClient.ApiextensionsV1().CustomResourceDefinitions().Get(context.Background(), "tenants.minio.min.io", metav1.GetOptions{})
+		if err != nil {
+			klog.Errorf("Error getting CRD for adding caBundle: %v", err.Error())
+		} else {
+			crd.Spec.Conversion.Webhook.ClientConfig.CABundle = caContent
+			crd.Spec.Conversion.Webhook.ClientConfig.Service.Namespace = miniov2.GetNSFromFile()
+			_, err := extClient.ApiextensionsV1().CustomResourceDefinitions().Update(context.Background(), crd, metav1.UpdateOptions{})
+			if err != nil {
+				klog.Errorf("Error updating CRD with caBundle: %v", err.Error())
+			}
+			klog.Info("caBundle on CRD updated")
+		}
+	} else {
+		klog.Info("WARNING: Could not read ca.crt from the pod")
+	}
 
 	var kubeInformerFactory kubeinformers.SharedInformerFactory
 	var minioInformerFactory informers.SharedInformerFactory
@@ -114,9 +156,10 @@ func main() {
 		kubeInformerFactory.Apps().V1().StatefulSets(),
 		kubeInformerFactory.Apps().V1().Deployments(),
 		kubeInformerFactory.Batch().V1().Jobs(),
-		minioInformerFactory.Operator().V1().MinIOInstances(),
+		minioInformerFactory.Minio().V2().Tenants(),
 		kubeInformerFactory.Core().V1().Services(),
-		hostsTemplate)
+		hostsTemplate,
+		version)
 
 	go kubeInformerFactory.Start(stopCh)
 	go minioInformerFactory.Start(stopCh)

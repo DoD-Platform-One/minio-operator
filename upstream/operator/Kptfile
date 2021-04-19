@@ -5,7 +5,7 @@ metadata:
 upstream:
     type: git
     git:
-        commit: de7c5283f7e5783a8a1c6df19ad0f2216f4d3a9b
+        commit: b0ece2557ae04bc846492e13f2ade1bcf58fbe3b
         repo: https://github.com/minio/operator
         directory: /
         ref: v4.0.4
