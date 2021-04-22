@@ -1,7 +1,9 @@
 # Default values for minio-operator.
 
 operator:
-  clusterDomain: ""
+  ## set kubernetes cluster domain where minio is running
+  clusterDomain:  cluster.local
+  # nsToWatch: set to blank to enable watching all namespaces
   nsToWatch: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
@@ -21,6 +23,12 @@ operator:
 
 nameOverride: ""
 fullnameOverride: ""
+## set kubernetes cluster domain where minio is running
+##
+clusterDomain:
+# watchedNamespace: set to blank to enable watching all namespaces
+watchedNamespace:
+
 
 serviceAccount:
   # Specifies whether a service account should be created
