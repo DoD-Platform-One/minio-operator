@@ -1,6 +1,6 @@
 # Minio Operator
 
-* 4.0.3-bb.1 (4/29/2021)
+* 4.0.4-bb.1 (4/29/2021)
   * Upgraded Operator to Version 4.0.3.  CRD now uses "tenats" instaned of "miniinstances"
   * New operator has substantially more tuning knobs for tenants
 
