@@ -1,7 +1,7 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
 name: minio-operator
-version: 4.0.3
+version: 4.0.4
 appVersion: 4.0.4
 keywords:
 - storage
@@ -11,7 +11,7 @@ home: https://min.io
 icon: https://min.io/resources/img/logo/MINIO_wordmark.png
 sources:
 - https://github.com/minio/operator
-kubeVersion: ">=1.12.0-0"
+kubeVersion: ">=1.15.0-0"
 maintainers:
 - name: MinIO, Inc
   email: dev@minio.io
