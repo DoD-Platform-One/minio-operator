@@ -83,78 +83,9 @@ early development using MinIO for object storage.
   for the MinIO Tenant Persistent Volumes  (`PV`). The `StorageClass`
   *must* have `volumeBindingMode: WaitForFirstConsumer`
 
-- This procedure uses the [Kubernetes `krew`](https://github.com/kubernetes-sigs/krew)
-  plugin manager. See the
-  [`krew` installation documentation](https://krew.sigs.k8s.io/docs/user-guide/setup/install/).
+## Connect to the Tenant
 
-## 1) Install the MinIO Operator
-
-### Install using `kubectl krew`
-
-Run the following command to install the MinIO Operator and Plugin using `krew`:
-
-```sh
-   kubectl krew update
-   kubectl krew install minio
-```
-
-Run the following command to initialize the Operator:
-
-```sh
-kubectl minio init
-
-```
-
-## 2) Create a New Tenant
-
-The following `kubectl minio` command creates a MinIO Tenant with 4 nodes, 16
-volumes, and a total capacity  of 16Ti. This configuration requires
-*at least* 16
-[Persistent Volumes](https://github.com/minio/operator#Local-Persistent-Volumes).
-
-```sh
-   kubectl minio tenant create minio-tenant-1 \
-      --servers 4                             \
-      --volumes 16                            \
-      --capacity 16Ti                         \
-      --namespace minio-tenant-1              \
-      --storage-class local-storage        \
-```
-
-- The `minio-tenant-1` argument specifies the name of the MinIO Tenant. The MinIO
-  Operator uses this name as a prefix for certain resources in the Tenant.
-
-- The `--servers` field indicates the number of `minio` pods to deploy into the cluster.
-  The cluster *must* have at least one available worker Node per `minio` pod.
-
-- The `--volumes` field indicates the total number of volumes in the Tenant. MinIO
-  generates a Persistent Volume Claim (`PVC`) for each volume and evenly distributes
-  volumes across each `minio` pod. The example above results in 4 volumes per `minio` pod.
-
-  Tenant creation hangs if the Kubernetes cluster does not have at least one
-  unbound Persistent Volume (`PV`) for each generated `PVC`.
-
-- The `--capacity` field indicates the total capacity of the cluster. MinIO determines the
-  amount of storage to request for each `pvc` by dividing the specified capacity by the
-  total number of volumes in the server. The example above results in 1Ti requested
-  capacity per volume.
-
-  Tenant creation hangs if the Kubernetes cluster does not have at least one
-  Persistent Volume (`PV`) with sufficient capacity to bind to each generated `PVC`.
-
-- The `--namespace` field indicates the namespace onto which MinIO deploys the Tenant.
-  If omitted, MinIO uses the `Default` namespace.
-
-  MinIO supports *one* MinIO Tenant per namespace.
-
-- The `--storage-class` field indicates which
-  [`StorageClass`](https://kubernetes.io/docs/concepts/storage/storage-classes/) to use
-  when generating each `PVC`.
-
-## 3) Connect to the Tenant
-
-MinIO outputs credentials for connecting to the MinIO Tenant as part of the creation
-process:
+MinIO Operator creates services that allow you to connect to the tenents and the consoles for thosee tenants.
 
 ```sh
 
@@ -169,9 +100,6 @@ Tenant 'minio-tenant-1' created in 'minio-tenant-1' Namespace
 +-------------+------------------------+------------------+--------------+-----------------+
 
 ```
-
-Copy the credentials to a secure location, such as a password protected key manager.
-MinIO does *not* display these credentials again.
 
 MinIO Tenants deploy with TLS enabled by default, where the MinIO Operator uses the
 Kubernetes `certificates.k8s.io` API to generate the required x.509 certificates. Each
@@ -197,49 +125,6 @@ to temporarily forward traffic from the local host to the MinIO Tenant.
 
 - The `minio-tenant-1-console` service provides access to the MinIO Console. The
   MinIO Console supports GUI administration of the MinIO Tenant.
-
-# Expand a MinIO Tenant
-
-MinIO supports expanding an existing MinIO Tenant onto additional hosts and storage.
-
-- MinIO requires Kubernetes version 1.17.0 or later.
-
-- This procedure assumes the cluster contains a
-  [namespace](https://github.com/minio/operator#create-a-namespace) for
-  the MinIO Tenant.
-
-The following `kubectl minio` command expands a MinIO Tenant with an additional
-4 `minio` pods, 16 volumes, and added capacity of 16Ti:
-
-```sh
-
-   kubectl minio tenant expand minio-tenant-1 \
-      --servers 4                             \
-      --volumes 16                            \
-      --capacity 16Ti
-
-```
-
-- The `minio-tenant-1` argument specifies the name of the existing MinIO Tenant to expand.
-
-- The `--servers` field indicates the number of `minio` pods to deploy into the cluster.
-  The cluster *must* have at least one available worker Node per `minio` pod.
-
-- The `--volumes` field indicates the total number of volumes in the Tenant. MinIO
-  generates a Persistent Volume Claim (`PVC`) for each volume and evenly distributes
-  volumes across each `minio` pod. The example above results in 4 volumes per `minio` pod.
-
-  Tenant expansion hangs if the Kubernetes cluster does not have at least one
-  unbound Persistent Volume (`PV`) for each generated `PVC`.
-
-- The `--capacity` field indicates the total capacity of the cluster. MinIO determines the
-  amount of storage to request for each `pvc` by dividing the specified capacity by the
-  total number of volumes in the server. The example above results in 1Ti requested
-  capacity per volume.
-
-  Tenant expansion hangs if the Kubernetes cluster does not have at least one unbound
-  Persistent Volume (`PV`) for each generated `PVC`.
-
 
 # Kubernetes Cluster Configuration
 

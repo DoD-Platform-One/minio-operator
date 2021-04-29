@@ -11,7 +11,7 @@ home: https://min.io
 icon: https://min.io/resources/img/logo/MINIO_wordmark.png
 sources:
 - https://github.com/minio/operator
-kubeVersion: ">=1.15.0-0"
+kubeVersion: ">=1.17.0-0"
 maintainers:
 - name: MinIO, Inc
   email: dev@minio.io
