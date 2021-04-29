@@ -28,7 +28,7 @@ spec:
         {{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
       serviceAccountName: {{ include "minio-operator.serviceAccountName" . }}
-    {{- with .Values.operator.imagePullSecrets }}
+    {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}

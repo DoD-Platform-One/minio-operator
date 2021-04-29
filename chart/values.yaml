@@ -8,7 +8,6 @@ operator:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
     tag: v4.0.4
     pullPolicy: IfNotPresent
-  imagePullSecrets: []
   replicaCount: 1
   securityContext:
     runAsUser: 1000
@@ -20,6 +19,7 @@ operator:
       memory: 256Mi
       ephemeral-storage: 500Mi
 
+imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 ## set kubernetes cluster domain where minio is running
