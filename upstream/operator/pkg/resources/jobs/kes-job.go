@@ -18,19 +18,16 @@
 package jobs
 
 import (
-	"net"
-	"strconv"
-
-	miniov1 "github.com/minio/minio-operator/pkg/apis/operator.min.io/v1"
+	miniov2 "github.com/minio/operator/pkg/apis/minio.min.io/v2"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 // NewForKES creates a new Job to create KES Key
-func NewForKES(mi *miniov1.MinIOInstance) *batchv1.Job {
+func NewForKES(t *miniov2.Tenant) *batchv1.Job {
 
-	containers := []corev1.Container{kesJobContainer(mi)}
+	containers := []corev1.Container{kesJobContainer(t)}
 
 	var clientCertSecret string
 	var clientCertPaths = []corev1.KeyToPath{
@@ -38,23 +35,23 @@ func NewForKES(mi *miniov1.MinIOInstance) *batchv1.Job {
 		{Key: "private.key", Path: "minio.key"},
 	}
 
-	if mi.AutoCert() {
-		clientCertSecret = mi.MinIOClientTLSSecretName()
-	} else if mi.ExternalClientCert() {
-		clientCertSecret = mi.Spec.ExternalClientCertSecret.Name
+	if t.ExternalClientCert() {
+		clientCertSecret = t.Spec.ExternalClientCertSecret.Name
 		// This covers both secrets of type "kubernetes.io/tls" and
 		// "cert-manager.io/v1alpha2" because of same keys in both.
-		if mi.Spec.ExternalCertSecret.Type == "kubernetes.io/tls" || mi.Spec.ExternalCertSecret.Type == "cert-manager.io/v1alpha2" {
+		if t.Spec.ExternalClientCertSecret.Type == "kubernetes.io/tls" || t.Spec.ExternalClientCertSecret.Type == "cert-manager.io/v1alpha2" {
 			clientCertPaths = []corev1.KeyToPath{
 				{Key: "tls.crt", Path: "minio.crt"},
 				{Key: "tls.key", Path: "minio.key"},
 			}
 		}
+	} else if t.AutoCert() {
+		clientCertSecret = t.MinIOClientTLSSecretName()
 	}
 
 	podVolumes := []corev1.Volume{
 		{
-			Name: mi.KESVolMountName(),
+			Name: t.KESVolMountName(),
 			VolumeSource: corev1.VolumeSource{
 				Projected: &corev1.ProjectedVolumeSource{
 					Sources: []corev1.VolumeProjection{
@@ -74,54 +71,60 @@ func NewForKES(mi *miniov1.MinIOInstance) *batchv1.Job {
 
 	d := &batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
-			Namespace:       mi.Namespace,
-			Name:            mi.KESJobName(),
-			OwnerReferences: mi.OwnerRef(),
+			Namespace:       t.Namespace,
+			Name:            t.KESJobName(),
+			OwnerReferences: t.OwnerRef(),
 		},
 		Spec: batchv1.JobSpec{
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: kesMetadata(mi),
+				ObjectMeta: kesMetadata(t),
 				Spec: corev1.PodSpec{
-					RestartPolicy:    miniov1.KESJobRestartPolicy,
-					Containers:       containers,
-					ImagePullSecrets: []corev1.LocalObjectReference{mi.Spec.ImagePullSecret},
-					Volumes:          podVolumes,
+					RestartPolicy:   miniov2.KESJobRestartPolicy,
+					Containers:      containers,
+					Volumes:         podVolumes,
+					Tolerations:     t.Spec.KES.Tolerations,
+					NodeSelector:    t.Spec.KES.NodeSelector,
+					SecurityContext: t.Spec.KES.SecurityContext,
 				},
 			},
 		},
+	}
+	// Address issue https://github.com/kubernetes/kubernetes/issues/85332
+	if t.Spec.ImagePullSecret.Name != "" {
+		d.Spec.Template.Spec.ImagePullSecrets = []corev1.LocalObjectReference{t.Spec.ImagePullSecret}
 	}
 
 	return d
 }
 
 // returns the KES job container
-func kesJobContainer(mi *miniov1.MinIOInstance) corev1.Container {
-	args := []string{"key", "create", miniov1.KESMinIOKey, "-k"}
+func kesJobContainer(t *miniov2.Tenant) corev1.Container {
+	args := []string{"key", "create", "-k", t.Spec.KES.KeyName} // KES CLI expects flags before command args
 
 	return corev1.Container{
-		Name:            miniov1.KESContainerName,
-		Image:           mi.Spec.KES.Image,
-		ImagePullPolicy: miniov1.DefaultImagePullPolicy,
+		Name:            miniov2.KESContainerName,
+		Image:           t.Spec.KES.Image,
+		ImagePullPolicy: t.Spec.KES.ImagePullPolicy,
 		Args:            args,
-		Env:             kesEnvironmentVars(mi),
-		VolumeMounts:    kesVolumeMounts(mi),
+		Env:             kesEnvironmentVars(t),
+		VolumeMounts:    kesVolumeMounts(t),
 	}
 }
 
 // Returns the KES environment variables required for the Job.
-func kesEnvironmentVars(mi *miniov1.MinIOInstance) []corev1.EnvVar {
+func kesEnvironmentVars(t *miniov2.Tenant) []corev1.EnvVar {
 	return []corev1.EnvVar{
 		{
 			Name:  "KES_SERVER",
-			Value: "https://" + net.JoinHostPort(mi.KESServiceHost(), strconv.Itoa(miniov1.KESPort)),
+			Value: t.KESServiceEndpoint(),
 		},
 		{
 			Name:  "KES_CLIENT_CERT",
-			Value: miniov1.KESConfigMountPath + "/minio.crt",
+			Value: miniov2.KESConfigMountPath + "/minio.crt",
 		},
 		{
 			Name:  "KES_CLIENT_KEY",
-			Value: miniov1.KESConfigMountPath + "/minio.key",
+			Value: miniov2.KESConfigMountPath + "/minio.key",
 		},
 	}
 }
@@ -129,27 +132,27 @@ func kesEnvironmentVars(mi *miniov1.MinIOInstance) []corev1.EnvVar {
 // KESMetadata Returns the KES pods metadata set in configuration.
 // If a user specifies metadata in the spec we return that
 // metadata.
-func kesMetadata(mi *miniov1.MinIOInstance) metav1.ObjectMeta {
+func kesMetadata(t *miniov2.Tenant) metav1.ObjectMeta {
 	meta := metav1.ObjectMeta{}
-	if mi.HasKESMetadata() {
-		meta = *mi.Spec.KES.Metadata
-	}
+	meta.Labels = t.Spec.KES.Labels
+	meta.Annotations = t.Spec.KES.Annotations
+
 	if meta.Labels == nil {
 		meta.Labels = make(map[string]string)
 	}
 	// Add the additional label from spec
-	for k, v := range mi.KESPodLabels() {
+	for k, v := range t.KESPodLabels() {
 		meta.Labels[k] = v
 	}
 	return meta
 }
 
 // kesVolumeMounts builds the volume mounts for KES container.
-func kesVolumeMounts(mi *miniov1.MinIOInstance) []corev1.VolumeMount {
+func kesVolumeMounts(t *miniov2.Tenant) []corev1.VolumeMount {
 	return []corev1.VolumeMount{
 		{
-			Name:      mi.KESVolMountName(),
-			MountPath: miniov1.KESConfigMountPath,
+			Name:      t.KESVolMountName(),
+			MountPath: miniov2.KESConfigMountPath,
 		},
 	}
 }

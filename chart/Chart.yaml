@@ -1,26 +1,18 @@
 apiVersion: v2
-
+description: A Helm chart for MinIO Operator
 name: minio-operator
-
-description: |-
-  A Helm chart for deploying the Minio operator: the official Kubernetes operator for deploying MINIO cluster.
-
-#home: https://github.com/elastic/cloud-on-k8s
-
-type: application
-
-version: 2.0.9-bb.3
-
-appVersion: 2.0.9
-
-kubeVersion: ">=1.12.0-0"
-
+version: 4.0.4-bb.1
+appVersion: 4.0.4
 keywords:
-  - Minio
-  - Operator
-
+- storage
+- object-storage
+- S3
+home: https://min.io
+icon: https://min.io/resources/img/logo/MINIO_wordmark.png
+sources:
+- https://github.com/minio/operator
+kubeVersion: ">=1.17.0-0"
 maintainers:
-  - name:
-    email:
-
-dependencies:
+- name: MinIO, Inc
+  email: dev@minio.io
+type: application

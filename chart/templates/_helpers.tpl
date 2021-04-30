@@ -1,9 +1,10 @@
+{{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
 */}}
 {{- define "minio-operator.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- default .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 {{/*
 Create a default fully qualified app name.
@@ -23,40 +24,73 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+
+{{/*
+Expand the name of the Operator Console.
+*/}}
+{{- define "minio-operator.console-name" -}}
+{{- printf "%s-%s" .Chart.Name "console" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified console name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "minio-operator.console-fullname" -}}
+{{- printf "%s-%s" .Release.Name "console" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "minio-operator.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
-{{- end }}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 {{/*
-Common labels
+Common labels for operator
 */}}
 {{- define "minio-operator.labels" -}}
 helm.sh/chart: {{ include "minio-operator.chart" . }}
 {{ include "minio-operator.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- if .Chart.Version }}
+app.kubernetes.io/version: {{ .Chart.Version | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
+{{- end -}}
 
 {{/*
-Selector labels
+Selector labels Operator
 */}}
 {{- define "minio-operator.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "minio-operator.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+
+{{/*
+Common labels for console
+*/}}
+{{- define "minio-operator.console-labels" -}}
+helm.sh/chart: {{ include "minio-operator.chart" . }}
+{{ include "minio-operator.console-selectorLabels" . }}
+{{- if .Chart.Version }}
+app.kubernetes.io/version: {{ .Chart.Version | quote }}
 {{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
+{{/*
+Selector labels Operator
+*/}}
+{{- define "minio-operator.console-selectorLabels" -}}
+app.kubernetes.io/name: {{ include "minio-operator.name" . }}
+app.kubernetes.io/instance: {{ printf "%s-%s" .Release.Name "console" }}
+{{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
 {{- define "minio-operator.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
 {{- default (include "minio-operator.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
 {{- end }}

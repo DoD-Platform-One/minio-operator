@@ -21,7 +21,8 @@ package versioned
 import (
 	"fmt"
 
-	operatorv1 "github.com/minio/minio-operator/pkg/client/clientset/versioned/typed/operator.min.io/v1"
+	miniov1 "github.com/minio/operator/pkg/client/clientset/versioned/typed/minio.min.io/v1"
+	miniov2 "github.com/minio/operator/pkg/client/clientset/versioned/typed/minio.min.io/v2"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
@@ -29,19 +30,26 @@ import (
 
 type Interface interface {
 	Discovery() discovery.DiscoveryInterface
-	OperatorV1() operatorv1.OperatorV1Interface
+	MinioV1() miniov1.MinioV1Interface
+	MinioV2() miniov2.MinioV2Interface
 }
 
 // Clientset contains the clients for groups. Each group has exactly one
 // version included in a Clientset.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	operatorV1 *operatorv1.OperatorV1Client
+	minioV1 *miniov1.MinioV1Client
+	minioV2 *miniov2.MinioV2Client
 }
 
-// OperatorV1 retrieves the OperatorV1Client
-func (c *Clientset) OperatorV1() operatorv1.OperatorV1Interface {
-	return c.operatorV1
+// MinioV1 retrieves the MinioV1Client
+func (c *Clientset) MinioV1() miniov1.MinioV1Interface {
+	return c.minioV1
+}
+
+// MinioV2 retrieves the MinioV2Client
+func (c *Clientset) MinioV2() miniov2.MinioV2Interface {
+	return c.minioV2
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -65,7 +73,11 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 	}
 	var cs Clientset
 	var err error
-	cs.operatorV1, err = operatorv1.NewForConfig(&configShallowCopy)
+	cs.minioV1, err = miniov1.NewForConfig(&configShallowCopy)
+	if err != nil {
+		return nil, err
+	}
+	cs.minioV2, err = miniov2.NewForConfig(&configShallowCopy)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +93,8 @@ func NewForConfig(c *rest.Config) (*Clientset, error) {
 // panics if there is an error in the config.
 func NewForConfigOrDie(c *rest.Config) *Clientset {
 	var cs Clientset
-	cs.operatorV1 = operatorv1.NewForConfigOrDie(c)
+	cs.minioV1 = miniov1.NewForConfigOrDie(c)
+	cs.minioV2 = miniov2.NewForConfigOrDie(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClientForConfigOrDie(c)
 	return &cs
@@ -90,7 +103,8 @@ func NewForConfigOrDie(c *rest.Config) *Clientset {
 // New creates a new Clientset for the given RESTClient.
 func New(c rest.Interface) *Clientset {
 	var cs Clientset
-	cs.operatorV1 = operatorv1.New(c)
+	cs.minioV1 = miniov1.New(c)
+	cs.minioV2 = miniov2.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

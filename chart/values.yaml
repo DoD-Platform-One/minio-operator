@@ -1,23 +1,30 @@
 # Default values for minio-operator.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-# Configure number of MinIO Operator Deployment Replicas
-replicas:
-  count: 1
+operator:
+  ## set kubernetes cluster domain where minio is running
+  clusterDomain:  cluster.local
+  # nsToWatch: set to blank to enable watching all namespaces
+  nsToWatch: ""
+  image:
+    repository: registry1.dso.mil/ironbank/opensource/minio/operator
+    tag: v4.0.4
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+      ephemeral-storage: 500Mi
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
-# Configure repo and tag of MinIO Operator Image
-image:
-  name: registry1.dso.mil/ironbank/opensource/minio/minio-operator
-  tag: 2.0.9
-  imagePullPolicy: IfNotPresent
-
 ## set kubernetes cluster domain where minio is running
 ##
-clusterDomain: cluster.local
+clusterDomain:
 # watchedNamespace: set to blank to enable watching all namespaces
 watchedNamespace:
 
@@ -29,5 +36,14 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+
 nodeSelector: {}
+
 affinity: {}
+
+console:
+  image:
+    repository: minio/console
+    tag: v0.6.3
+    pullPolicy: IfNotPresent
+  replicaCount: 1
