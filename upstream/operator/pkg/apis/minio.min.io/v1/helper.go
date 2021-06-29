@@ -46,33 +46,13 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/klog/v2"
 
+	"github.com/minio/madmin-go"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"github.com/minio/minio/pkg/bucket/policy"
-	"github.com/minio/minio/pkg/bucket/policy/condition"
-	iampolicy "github.com/minio/minio/pkg/iam/policy"
-	"github.com/minio/minio/pkg/madmin"
 )
 
 // Webhook API constants
 const (
-	WebhookAPIVersion       = "/webhook/v1"
-	WebhookDefaultPort      = "4222"
-	WebhookSecret           = "operator-webhook-secret"
-	WebhookOperatorUsername = "webhookUsername"
-	WebhookOperatorPassword = "webhookPassword"
-)
-
-// Webhook environment variable constants
-const (
-	WebhookMinIOArgs   = "MINIO_ARGS"
-	WebhookMinIOBucket = "MINIO_DNS_WEBHOOK_ENDPOINT"
-)
-
-// List of webhook APIs
-const (
-	WebhookAPIGetenv        = WebhookAPIVersion + "/getenv"
-	WebhookAPIBucketService = WebhookAPIVersion + "/bucketsrv"
-	WebhookAPIUpdate        = WebhookAPIVersion + "/update"
+	WebhookAPIVersion = "/webhook/v1"
 )
 
 type hostsTemplateValues struct {
@@ -142,11 +122,6 @@ func (t *Tenant) ConsoleExternalCert() bool {
 
 // AutoCert is enabled by default, otherwise we return the user provided value
 func (t *Tenant) AutoCert() bool {
-	// AutoCertEnabled will take priority over RequestAutoCert and
-	// will be removed in the future
-	if t.Status.Certificates.AutoCertEnabled != nil {
-		return *t.Status.Certificates.AutoCertEnabled
-	}
 	if t.Spec.RequestAutoCert == nil {
 		return true
 	}
@@ -260,15 +235,15 @@ func find(slice []string, val string) string {
 func (t *Tenant) EnsureDefaults() *Tenant {
 	if t.Spec.PodManagementPolicy == "" || (t.Spec.PodManagementPolicy != appsv1.OrderedReadyPodManagement &&
 		t.Spec.PodManagementPolicy != appsv1.ParallelPodManagement) {
-		t.Spec.PodManagementPolicy = DefaultPodManagementPolicy
+		t.Spec.PodManagementPolicy = miniov2.DefaultPodManagementPolicy
 	}
 
 	if t.Spec.Image == "" {
-		t.Spec.Image = DefaultMinIOImage
+		t.Spec.Image = miniov2.DefaultMinIOImage
 	}
 
 	if t.Spec.ImagePullPolicy == "" {
-		t.Spec.ImagePullPolicy = DefaultImagePullPolicy
+		t.Spec.ImagePullPolicy = miniov2.DefaultImagePullPolicy
 	}
 
 	for zi, z := range t.Spec.Zones {
@@ -279,11 +254,11 @@ func (t *Tenant) EnsureDefaults() *Tenant {
 	}
 
 	if t.Spec.Mountpath == "" {
-		t.Spec.Mountpath = MinIOVolumeMountPath
+		t.Spec.Mountpath = miniov2.MinIOVolumeMountPath
 	}
 
 	if t.Spec.Subpath == "" {
-		t.Spec.Subpath = MinIOVolumeSubPath
+		t.Spec.Subpath = miniov2.MinIOVolumeSubPath
 	}
 
 	if t.AutoCert() {
@@ -291,17 +266,17 @@ func (t *Tenant) EnsureDefaults() *Tenant {
 			if t.Spec.CertConfig.CommonName == "" {
 				t.Spec.CertConfig.CommonName = t.MinIOWildCardName()
 			}
-			if t.Spec.CertConfig.DNSNames == nil {
+			if t.Spec.CertConfig.DNSNames == nil || len(t.Spec.CertConfig.DNSNames) == 0 {
 				t.Spec.CertConfig.DNSNames = t.MinIOHosts()
 			}
-			if t.Spec.CertConfig.OrganizationName == nil {
-				t.Spec.CertConfig.OrganizationName = DefaultOrgName
+			if t.Spec.CertConfig.OrganizationName == nil || len(t.Spec.CertConfig.OrganizationName) == 0 {
+				t.Spec.CertConfig.OrganizationName = miniov2.DefaultOrgName
 			}
 		} else {
 			t.Spec.CertConfig = &miniov2.CertificateConfig{
 				CommonName:       t.MinIOWildCardName(),
 				DNSNames:         t.MinIOHosts(),
-				OrganizationName: DefaultOrgName,
+				OrganizationName: miniov2.DefaultOrgName,
 			}
 		}
 	} else {
@@ -310,28 +285,28 @@ func (t *Tenant) EnsureDefaults() *Tenant {
 
 	if t.HasConsoleEnabled() {
 		if t.Spec.Console.Image == "" {
-			t.Spec.Console.Image = DefaultConsoleImage
+			t.Spec.Console.Image = miniov2.DefaultConsoleImage
 		}
 		if t.Spec.Console.Replicas == 0 {
-			t.Spec.Console.Replicas = DefaultConsoleReplicas
+			t.Spec.Console.Replicas = miniov2.DefaultConsoleReplicas
 		}
 		if t.Spec.Console.ImagePullPolicy == "" {
-			t.Spec.Console.ImagePullPolicy = DefaultImagePullPolicy
+			t.Spec.Console.ImagePullPolicy = miniov2.DefaultImagePullPolicy
 		}
 	}
 
 	if t.HasKESEnabled() {
 		if t.Spec.KES.Image == "" {
-			t.Spec.KES.Image = DefaultKESImage
+			t.Spec.KES.Image = miniov2.DefaultKESImage
 		}
 		if t.Spec.KES.Replicas == 0 {
-			t.Spec.KES.Replicas = DefaultKESReplicas
+			t.Spec.KES.Replicas = miniov2.DefaultKESReplicas
 		}
 		if t.Spec.KES.ImagePullPolicy == "" {
-			t.Spec.KES.ImagePullPolicy = DefaultImagePullPolicy
+			t.Spec.KES.ImagePullPolicy = miniov2.DefaultImagePullPolicy
 		}
 		if t.Spec.KES.KeyName == "" {
-			t.Spec.KES.KeyName = KESMinIOKey
+			t.Spec.KES.KeyName = miniov2.KESMinIOKey
 		}
 	}
 
@@ -446,7 +421,7 @@ func (t *Tenant) KESServiceEndpoint() string {
 	}
 	u := &url.URL{
 		Scheme: scheme,
-		Host:   net.JoinHostPort(t.KESServiceHost(), strconv.Itoa(KESPort)),
+		Host:   net.JoinHostPort(t.KESServiceHost(), strconv.Itoa(miniov2.KESPort)),
 	}
 	return u.String()
 }
@@ -480,7 +455,7 @@ func (t *Tenant) HasConsoleSecret() bool {
 // UpdateURL returns the URL for the sha256sum location of the new binary
 func (t *Tenant) UpdateURL(lrTime time.Time, overrideURL string) (string, error) {
 	if overrideURL == "" {
-		overrideURL = DefaultMinIOUpdateURL
+		overrideURL = miniov2.DefaultMinIOUpdateURL
 	}
 	u, err := url.Parse(overrideURL)
 	if err != nil {
@@ -495,9 +470,9 @@ func (t *Tenant) MinIOServerHostAddress() string {
 	var port int
 
 	if t.TLS() {
-		port = MinIOTLSPortLoadBalancerSVC
+		port = miniov2.MinIOTLSPortLoadBalancerSVC
 	} else {
-		port = MinIOPortLoadBalancerSVC
+		port = miniov2.MinIOPortLoadBalancerSVC
 	}
 
 	return net.JoinHostPort(t.MinIOServerHost(), strconv.Itoa(port))
@@ -597,49 +572,27 @@ func (t *Tenant) NewMinIOAdmin(minioSecret map[string][]byte) (*madmin.AdminClie
 	return madmClnt, nil
 }
 
-// CreateConsoleUser function creates an admin user
+// CreateConsoleUser function creates an admin users
 func (t *Tenant) CreateConsoleUser(madmClnt *madmin.AdminClient, userCredentialSecrets []*corev1.Secret, skipCreateUser bool) error {
 	// add user with a 20 seconds timeout
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
 	defer cancel()
-	// Create policy
-	p := iampolicy.Policy{
-		Version: iampolicy.DefaultVersion,
-		Statements: []iampolicy.Statement{
-			{
-				SID:        policy.ID(""),
-				Effect:     policy.Allow,
-				Actions:    iampolicy.NewActionSet(iampolicy.AllAdminActions),
-				Resources:  iampolicy.NewResourceSet(),
-				Conditions: condition.NewFunctions(),
-			},
-			{
-				SID:        policy.ID(""),
-				Effect:     policy.Allow,
-				Actions:    iampolicy.NewActionSet(iampolicy.AllActions),
-				Resources:  iampolicy.NewResourceSet(iampolicy.NewResource("*", "")),
-				Conditions: condition.NewFunctions(),
-			},
-		},
-	}
-	if err := madmClnt.AddCannedPolicy(context.Background(), ConsoleAdminPolicyName, &p); err != nil {
-		return err
-	}
 	for _, secret := range userCredentialSecrets {
 		consoleAccessKey, ok := secret.Data["CONSOLE_ACCESS_KEY"]
 		if !ok {
 			return errors.New("CONSOLE_ACCESS_KEY not provided")
 		}
-		consoleSecretKey, ok := secret.Data["CONSOLE_SECRET_KEY"]
-		if !ok || skipCreateUser {
-			return errors.New("CONSOLE_SECRET_KEY not provided")
-		}
+		// skipCreateUser handles the scenario of LDAP users that are not created in MinIO but still need to have a policy assigned
 		if !skipCreateUser {
+			consoleSecretKey, ok := secret.Data["CONSOLE_SECRET_KEY"]
+			if !ok {
+				return errors.New("CONSOLE_SECRET_KEY not provided")
+			}
 			if err := madmClnt.AddUser(ctx, string(consoleAccessKey), string(consoleSecretKey)); err != nil {
 				return err
 			}
 		}
-		if err := madmClnt.SetPolicy(context.Background(), ConsoleAdminPolicyName, string(consoleAccessKey), false); err != nil {
+		if err := madmClnt.SetPolicy(context.Background(), miniov2.ConsoleAdminPolicyName, string(consoleAccessKey), false); err != nil {
 			return err
 		}
 	}
@@ -748,7 +701,7 @@ func (t *Tenant) OwnerRef() []metav1.OwnerReference {
 		*metav1.NewControllerRef(t, schema.GroupVersionKind{
 			Group:   SchemeGroupVersion.Group,
 			Version: SchemeGroupVersion.Version,
-			Kind:    MinIOCRDResourceKind,
+			Kind:    miniov2.MinIOCRDResourceKind,
 		}),
 	}
 }

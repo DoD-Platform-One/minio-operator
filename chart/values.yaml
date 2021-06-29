@@ -1,4 +1,5 @@
 # Default values for minio-operator.
+
 operator:
   ## set kubernetes cluster domain where minio is running
   clusterDomain:  cluster.local
@@ -6,13 +7,15 @@ operator:
   nsToWatch: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.0.4
+    tag: v4.1.2
     pullPolicy: IfNotPresent
+  imagePullSecrets: []
   replicaCount: 1
   securityContext:
     runAsUser: 1000
     runAsGroup: 1000
     runAsNonRoot: true
+    fsGroup: 1000
   resources:
     requests:
       cpu: 200m

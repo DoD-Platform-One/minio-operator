@@ -67,7 +67,7 @@ metadata:
   labels:
     app: minio
   annotations:
-    prometheus.io/path: /minio/prometheus/metrics
+    prometheus.io/path: /minio/v2/metrics/cluster
     prometheus.io/port: "9000"
     prometheus.io/scrape: "true"
 ## If specified, Tenant pods will be dispatched by specified scheduler.
@@ -76,7 +76,7 @@ metadata:
 #  name: my-custom-scheduler
 spec:
   ## Registry location and Tag to download MinIO Server image
-  image: minio/minio:RELEASE.2021-03-01T04-20-55Z
+  image: minio/minio:RELEASE.2021-06-17T00-10-46Z
   ## Service account to be used for all the MinIO Pods
   serviceAccountName: minio-pods
   pools:
