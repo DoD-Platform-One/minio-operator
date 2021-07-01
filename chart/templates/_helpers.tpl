@@ -3,7 +3,7 @@
 Expand the name of the chart.
 */}}
 {{- define "minio-operator.name" -}}
-{{- default (printf "%s-%s" .Chart.Name "v4") | trunc 63 | trimSuffix "-" -}}
+{{- default .Chart.Name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
