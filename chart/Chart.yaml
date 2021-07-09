@@ -15,3 +15,8 @@ maintainers:
 - name: MinIO, Inc
   email: dev@minio.io
 type: application
+dependencies:
+  - name: minio-operator-crds
+    version: 4.1.12
+    condition: installCRDs
+    repository: "file://minio-operator-crds"
