@@ -1,5 +1,4 @@
 # Default values for minio-operator.
-
 operator:
   ## set kubernetes cluster domain where minio is running
   clusterDomain:  cluster.local
@@ -22,13 +21,13 @@ operator:
       ephemeral-storage: 500Mi
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+#nameOverride: ""
+#fullnameOverride: ""
 ## set kubernetes cluster domain where minio is running
 ##
-clusterDomain:
+#clusterDomain:
 # watchedNamespace: set to blank to enable watching all namespaces
-watchedNamespace:
+#watchedNamespace:
 
 serviceAccount:
   # Specifies whether a service account should be created
