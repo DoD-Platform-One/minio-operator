@@ -1,3 +1,11 @@
+# Network Policies  Values
+networkPolicies:
+  enabled: false
+  ingressLabels:
+    app: istio-ingressgateway
+    istio: ingressgateway
+
+
 # Default values for minio-operator.
 operator:
   ## set kubernetes cluster domain where minio is running
