@@ -7,6 +7,9 @@ networkPolicies:
     app: istio-ingressgateway
     istio: ingressgateway
 
+monitoring:
+  enabled: false
+  namespace: monitoring
 
 # Default values for minio-operator.
 operator:
