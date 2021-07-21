@@ -1,5 +1,10 @@
 # Minio Operator
 
+* 4.1.2-bb.1 (7/21/21)
+  * Upgraded Minio Operator to Version 4.1.2
+  * Upgraded Minio Helm Chart to version 4.1.2
+  * Added NetworkPolicy objects to control/limit network access for Minio Operator
+
 * 4.0.4-bb.1 (4/29/2021)
   * Upgraded Operator to Version 4.0.3.  CRD now uses "tenats" instaned of "miniinstances"
   * New operator has substantially more tuning knobs for tenants
