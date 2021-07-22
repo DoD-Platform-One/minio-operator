@@ -4,6 +4,8 @@
   * Upgraded Minio Operator to Version 4.1.2
   * Upgraded Minio Helm Chart to version 4.1.2
   * Added NetworkPolicy objects to control/limit network access for Minio Operator
+  * Kpt update of upstream folder to contain the 4.1.2 upstream release source from github
+  * Added Openshift DNS access support to networkwork policy
 
 * 4.0.4-bb.1 (4/29/2021)
   * Upgraded Operator to Version 4.0.3.  CRD now uses "tenats" instaned of "miniinstances"
