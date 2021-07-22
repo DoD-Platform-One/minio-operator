@@ -56,7 +56,7 @@ const (
 	DefaultServiceNameSuffix = "-internal-service"
 
 	// MinIOPrometheusPath is the path where MinIO tenant exposes Prometheus metrics
-	MinIOPrometheusPath = "/minio/prometheus/metrics"
+	MinIOPrometheusPath = "/minio/v2/metrics/cluster"
 
 	// MinIOPrometheusPort is the port where MinIO tenant exposes Prometheus metrics
 	MinIOPrometheusPort = "9000"
@@ -71,16 +71,16 @@ const (
 	DefaultImagePullPolicy = corev1.PullIfNotPresent
 
 	// DefaultOperatorImage is the default operator image to be used
-	DefaultOperatorImage = "minio/operator:v4.0.3"
+	DefaultOperatorImage = "minio/operator:v4.1.2"
 
 	// DefaultTenantImage is the default MinIO image used while creating tenant
-	DefaultTenantImage = "minio/minio:RELEASE.2021-03-01T04-20-55Z"
+	DefaultTenantImage = "minio/minio:RELEASE.2021-06-17T00-10-46Z"
 
 	// DefaultKESImage is the default KES image used while creating tenant
-	DefaultKESImage = "minio/kes:v0.13.4"
+	DefaultKESImage = "minio/kes:v0.14.0"
 
 	// DefaultConsoleImage is the default console image used while creating tenant
-	DefaultConsoleImage = "minio/console:v0.6.3"
+	DefaultConsoleImage = "minio/console:v0.7.4"
 
 	// DefaultOperatorServiceName is the default service name for operator
 	DefaultOperatorServiceName = "operator"

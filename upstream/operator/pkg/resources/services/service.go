@@ -27,13 +27,17 @@ import (
 	miniov2 "github.com/minio/operator/pkg/apis/minio.min.io/v2"
 )
 
-// NewClusterIPForMinIO will return a new headless Kubernetes service for a Tenant
+// NewClusterIPForMinIO will return a new ClusterIP Kubernetes service for a Tenant
 func NewClusterIPForMinIO(t *miniov2.Tenant) *corev1.Service {
 	var port int32 = miniov2.MinIOPortLoadBalancerSVC
 	var name string = miniov2.MinIOServiceHTTPPortName
 	var internalLabels, labels, annotations map[string]string
 
 	internalLabels = t.MinIOPodLabels()
+	// Add these labels so this service can be targeted by Prometheus ServiceMonitor
+	if t.HasPrometheusSMEnabled() {
+		internalLabels = miniov2.MergeMaps(internalLabels, t.MinIOPodLabelsForSM())
+	}
 	if t.TLS() {
 		port = miniov2.MinIOTLSPortLoadBalancerSVC
 		name = miniov2.MinIOServiceHTTPSPortName
@@ -41,6 +45,8 @@ func NewClusterIPForMinIO(t *miniov2.Tenant) *corev1.Service {
 	if t.Spec.ServiceMetadata != nil && t.Spec.ServiceMetadata.MinIOServiceLabels != nil {
 		labels = miniov2.MergeMaps(internalLabels, t.Spec.ServiceMetadata.MinIOServiceLabels)
 		annotations = t.Spec.ServiceMetadata.MinIOServiceAnnotations
+	} else {
+		labels = internalLabels
 	}
 	minioPort := corev1.ServicePort{
 		Port:       port,

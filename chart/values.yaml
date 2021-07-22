@@ -1,3 +1,18 @@
+# Network Policies  Values
+
+networkPolicies:
+  enabled: false
+  controlPlaneCidr: 0.0.0.0/0
+  ingressLabels:
+    app: istio-ingressgateway
+    istio: ingressgateway
+
+openshift: false
+
+monitoring:
+  enabled: false
+  namespace: monitoring
+
 # Default values for minio-operator.
 operator:
   ## set kubernetes cluster domain where minio is running
@@ -6,8 +21,9 @@ operator:
   nsToWatch: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.0.4
+    tag: v4.1.2
     pullPolicy: IfNotPresent
+  imagePullSecrets: []
   replicaCount: 1
   securityContext:
     runAsUser: 1000
@@ -20,13 +36,13 @@ operator:
       ephemeral-storage: 500Mi
 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+#nameOverride: ""
+#fullnameOverride: ""
 ## set kubernetes cluster domain where minio is running
 ##
-clusterDomain:
+#clusterDomain:
 # watchedNamespace: set to blank to enable watching all namespaces
-watchedNamespace:
+#watchedNamespace:
 
 serviceAccount:
   # Specifies whether a service account should be created

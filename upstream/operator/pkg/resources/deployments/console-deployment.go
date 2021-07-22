@@ -23,7 +23,6 @@ import (
 	"strconv"
 	"strings"
 
-	miniov1 "github.com/minio/operator/pkg/apis/minio.min.io/v1"
 	miniov2 "github.com/minio/operator/pkg/apis/minio.min.io/v2"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -68,10 +67,10 @@ func consoleEnvVars(t *miniov2.Tenant) []corev1.EnvVar {
 		var caCerts []string
 		if t.ExternalCert() {
 			for index := range t.Spec.ExternalCertSecret {
-				caCerts = append(caCerts, fmt.Sprintf("%s/CAs/minio-hostname-%d.crt", miniov1.ConsoleConfigMountPath, index))
+				caCerts = append(caCerts, fmt.Sprintf("%s/CAs/minio-hostname-%d.crt", miniov2.ConsoleConfigMountPath, index))
 			}
 		} else {
-			caCerts = append(caCerts, fmt.Sprintf("%s/CAs/minio.crt", miniov1.ConsoleConfigMountPath))
+			caCerts = append(caCerts, fmt.Sprintf("%s/CAs/minio.crt", miniov2.ConsoleConfigMountPath))
 		}
 		envVars = append(envVars, corev1.EnvVar{
 			Name:  "CONSOLE_MINIO_SERVER_TLS_ROOT_CAS",
@@ -127,7 +126,7 @@ func ConsoleVolumeMounts(t *miniov2.Tenant, oldConsole bool) (mounts []corev1.Vo
 	}
 
 	if oldConsole && (t.TLS() || t.ConsoleExternalCert()) {
-		volumeMount.MountPath = miniov1.ConsoleConfigMountPath
+		volumeMount.MountPath = miniov2.ConsoleConfigMountPath
 	}
 
 	return []corev1.VolumeMount{
@@ -139,7 +138,7 @@ func ConsoleVolumeMounts(t *miniov2.Tenant, oldConsole bool) (mounts []corev1.Vo
 func consoleContainer(t *miniov2.Tenant, oldConsole bool) corev1.Container {
 	args := []string{"server"}
 
-	// apply old args for console versions older than v.0.4.4
+	// apply old args for console versions older than v0.4.4
 	if oldConsole {
 		if t.AutoCert() || t.ConsoleExternalCert() {
 			args = append(args, "--tls-certificate=/tmp/console/server.crt", "--tls-key=/tmp/console/server.key")

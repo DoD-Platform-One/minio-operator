@@ -4,11 +4,11 @@
 [id="{p}-api-reference"]
 == API Reference
 
-:minio-image: https://hub.docker.com/r/minio/minio/tags[minio/minio:RELEASE.2021-03-01T04-20-55Z]
-:console-image: https://hub.docker.com/r/minio/console/tags[minio/console:v0.6.3]
-:kes-image: https://hub.docker.com/r/minio/kes/tags[minio/kes:v0.13.4]
+:minio-image: https://hub.docker.com/r/minio/minio/tags[minio/minio:RELEASE.2021-06-17T00-10-46Z]
+:console-image: https://hub.docker.com/r/minio/console/tags[minio/console:v0.7.4]
+:kes-image: https://hub.docker.com/r/minio/kes/tags[minio/kes:v0.14.0]
 :prometheus-image: https://quay.io/prometheus/prometheus:latest[prometheus/prometheus:latest]
-:logsearch-image: https://hub.docker.com/r/minio/logsearchapi/tags[minio/logsearchapi:v4.0.3]
+:logsearch-image: https://hub.docker.com/r/minio/logsearchapi/tags[minio/logsearchapi:v4.1.2]
 :postgres-image: https://github.com/docker-library/postgres[library/postgres]
 
 
@@ -213,6 +213,18 @@ ExposeServices (`exposeServices`) defines the exposure of the MinIO object stora
  Directs the Operator to expose the MinIO Console service. Defaults to `true`. +
 
 |===
+
+
+[id="{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-healthstatus"]
+==== HealthStatus (string) 
+
+
+
+.Appears In:
+****
+- xref:{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-tenantstatus[$$TenantStatus$$]
+****
+
 
 
 [id="{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-kesconfig"]
@@ -455,6 +467,32 @@ LogDbConfig (`db`) defines the configuration of the PostgreSQL StatefulSet deplo
 |===
 
 
+[id="{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-logging"]
+==== Logging 
+
+Logging describes Logging for MinIO tenants.
+
+.Appears In:
+****
+- xref:{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-tenantspec[$$TenantSpec$$]
+****
+
+[cols="25a,75a", options="header"]
+|===
+| Field | Description
+
+|*`json`* __boolean__ 
+|
+
+|*`anonymous`* __boolean__ 
+|
+
+|*`quiet`* __boolean__ 
+|
+
+|===
+
+
 [id="{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-pool"]
 ==== Pool 
 
@@ -521,7 +559,7 @@ Pool (`pools`) defines a MinIO server pool on a Tenant. Each pool consists of a 
 [id="{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-poolstate"]
 ==== PoolState (string) 
 
-PoolState represents the state of a pool
+
 
 .Appears In:
 ****
@@ -588,6 +626,10 @@ PrometheusConfig (`prometheus`) defines the configuration of a Prometheus instan
 |*Optional* + 
  Specify the amount of storage to request in Gigabytes (GB) for supporting the Prometheus pod.
 
+|*`storageClassName`* __string__ 
+|*Optional* + 
+ Specify the storage class for the PVC to support the Prometheus pod.
+
 |*`annotations`* __object (keys:string, values:string)__ 
 |*Optional* + 
  If provided, use these annotations for Prometheus Object Meta annotations
@@ -614,6 +656,32 @@ PrometheusConfig (`prometheus`) defines the configuration of a Prometheus instan
  * `runAsNonRoot` + 
  * `runAsUser` + 
  * `seLinuxOptions` +
+
+|===
+
+
+[id="{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-prometheusoperatorconfig"]
+==== PrometheusOperatorConfig 
+
+PrometheusOperatorConfig (`prometheus`) defines the configuration of a Prometheus service monitor object as part of the MinIO tenant. The Operator automatically configures the Prometheus service monitor to scrape and store metrics from the MinIO tenant. + 
+ Specify if the https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/getting-started.md#include-servicemonitors[Service Monitor] to be created for this tenant.
+
+.Appears In:
+****
+- xref:{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-tenantspec[$$TenantSpec$$]
+****
+
+[cols="25a,75a", options="header"]
+|===
+| Field | Description
+
+|*`labels`* __object (keys:string, values:string)__ 
+|*Optional* + 
+ If provided, use these labels for Console Object Meta labels
+
+|*`annotations`* __object (keys:string, values:string)__ 
+|*Optional* + 
+ If provided, use these annotations for Console Object Meta annotations
 
 |===
 
@@ -769,15 +837,6 @@ TenantSpec (`spec`) defines the configuration of a MinIO Tenant object. +
 |===
 | Field | Description
 
-|*`users`* __link:https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#localobjectreference-v1-core[$$LocalObjectReference$$] array__ 
-|*Optional* + 
- An array of https://kubernetes.io/docs/concepts/configuration/secret/[Kubernetes opaque secrets] to use for generating MinIO users during tenant provisioning. + 
- Each element in the array is an object consisting of a key-value pair `name: <string>`, where the `<string>` references an opaque Kubernetes secret. + 
- Each referenced Kubernetes secret must include the following fields: + 
- * `CONSOLE_ACCESS_KEY` - The "Username" for the MinIO user + 
- * `CONSOLE_SECRET_KEY` - The "Password" for the MinIO user + 
- The Operator creates each user with the `consoleAdmin` policy by default. You can change the assigned policy after the Tenant starts. +
-
 |*`pools`* __xref:{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-pool[$$Pool$$] array__ 
 |*Required* + 
  An array of objects describing each MinIO server pool deployed in the MinIO Tenant. Each pool consists of a set of MinIO server pods which "pool" their storage resources for supporting object storage and retrieval requests. Each server pool is independent of all others and supports horizontal scaling of available storage resources in the MinIO Tenant. + 
@@ -797,15 +856,14 @@ TenantSpec (`spec`) defines the configuration of a MinIO Tenant object. +
  Pod Management Policy for pod created by StatefulSet
 
 |*`credsSecret`* __link:https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#localobjectreference-v1-core[$$LocalObjectReference$$]__ 
-|*Optional* + 
+|*Required* + 
  Specify a https://kubernetes.io/docs/concepts/configuration/secret/[Kubernetes opaque secret] to use for setting the MinIO root access key and secret key. Specify the secret as `name: <secret>`. The Kubernetes secret must contain the following fields: + 
  * `data.accesskey` - The access key for the root credentials + 
- * `data.secretkey` - The secret key for the root credentials + 
- The MinIO Operator automatically generates the secret along with appropriate values for the access key and secret key if this field is omitted. +
+ * `data.secretkey` - The secret key for the root credentials +
 
 |*`env`* __link:https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#envvar-v1-core[$$EnvVar$$] array__ 
 |*Optional* + 
- If provided, the MinIO Operator the specified environment variables when deploying the Tenant resource.
+ If provided, the MinIO Operator adds the specified environment variables when deploying the Tenant resource.
 
 |*`externalCertSecret`* __xref:{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-localcertificatereference[$$LocalCertificateReference$$] array__ 
 |*Optional* + 
@@ -877,6 +935,11 @@ TenantSpec (`spec`) defines the configuration of a MinIO Tenant object. +
  Directs the MinIO Operator to deploy and configure Prometheus for collecting tenant metrics. + 
  For example, `minio.<namespace>.svc.<cluster-domain>.<example>/minio/v2/metrics/cluster`. The specific DNS name for the service depends on your Kubernetes cluster configuration. See the Kubernetes documentation on https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/[DNS for Services and Pods] for more information.
 
+|*`prometheusOperator`* __xref:{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-prometheusoperatorconfig[$$PrometheusOperatorConfig$$]__ 
+|*Optional* + 
+ Directs the MinIO Operator to deploy a ServiceMonitor object. + 
+ ServiceMonitor object allows native integration with Prometheus Operator.
+
 |*`serviceAccountName`* __string__ 
 |*Optional* + 
  The https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/[Kubernetes Service Account] to use for running MinIO pods created as part of the Tenant. +
@@ -906,7 +969,21 @@ TenantSpec (`spec`) defines the configuration of a MinIO Tenant object. +
 |*Optional* + 
  Specify custom labels and annotations to append to the MinIO service and/or Console service.
 
+|*`users`* __link:https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#localobjectreference-v1-core[$$LocalObjectReference$$]__ 
+|*Optional* + 
+ An array of https://kubernetes.io/docs/concepts/configuration/secret/[Kubernetes opaque secrets] to use for generating MinIO users during tenant provisioning. + 
+ Each element in the array is an object consisting of a key-value pair `name: <string>`, where the `<string>` references an opaque Kubernetes secret. + 
+ Each referenced Kubernetes secret must include the following fields: + 
+ * `CONSOLE_ACCESS_KEY` - The "Username" for the MinIO user + 
+ * `CONSOLE_SECRET_KEY` - The "Password" for the MinIO user + 
+ The Operator creates each user with the `consoleAdmin` policy by default. You can change the assigned policy after the Tenant starts. +
+
+|*`logging`* __xref:{anchor_prefix}-github-com-minio-operator-pkg-apis-minio-min-io-v2-logging[$$Logging$$]__ 
+|*Optional* + 
+ Enable JSON, Anonymous logging for MinIO tenants.
+
 |===
+
 
 
 

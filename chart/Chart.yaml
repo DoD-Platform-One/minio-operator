@@ -1,8 +1,8 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
 name: minio-operator
-version: 4.0.4-bb.1
-appVersion: 4.0.4
+version: 4.1.2-bb.1
+appVersion: v4.1.2
 keywords:
 - storage
 - object-storage
@@ -11,8 +11,12 @@ home: https://min.io
 icon: https://min.io/resources/img/logo/MINIO_wordmark.png
 sources:
 - https://github.com/minio/operator
-kubeVersion: ">=1.17.0-0"
 maintainers:
 - name: MinIO, Inc
   email: dev@minio.io
 type: application
+dependencies:
+  - name: minio-operator-crds
+    version: "4.1.12"
+    condition: installCRDs
+    repository: "file://minio-operator-crds"

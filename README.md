@@ -1,31 +1,21 @@
-# MinIO Operator V4.0.4
+# MinIO Operator V4.1.2
 
-### Environment variables
-
-These variables may be passed to operator Deployment in order to modify some of its parameters
-
-| Name                | Default | Description                                                                                                                   |
-| ---                 | ---     | ---                                                                                                                           |
-| `WATCHED_NAMESPACE` |         | If set, the operator will watch only MinIO resources deployed in the specified namespace. All namespaces are watched if empty |
-| `CLUSTER_DOMAIN`    | cluster.local | Cluster Domain of the Kubernetes cluster |
+[![MinIO](https://raw.githubusercontent.com/minio/minio/master/.github/logo.svg?sanitize=true)](https://min.io)
 
 MinIO is a Kubernetes-native high performance object store with an S3-compatible API. The
 MinIO Kubernetes Operator supports deploying MinIO Tenants onto private and public
 cloud infrastructures ("Hybrid" Cloud).
 
-*IMPORTANT*: This documentation reflects the *latest bleeding-edge release* of the MinIO Operator. The API and syntax may differ from
-previous releases. For documentation on previous releases, please visit the documentation in context of that release tag:
+More detailed and specific information on Minio and the Minio Operator can be found in the "upstream" folder of this
+repository or at https://github.com/minio/operator .
 
-- [v3.0.29](https://github.com/minio/operator/blob/v3.0.29/README.md)
-- [v3.0.28](https://github.com/minio/operator/blob/v3.0.28/README.md)
+The Platform One Deployment of Minio Operator and Minio Instances is based on deployments using Helm Charts.   The
+Kubectl command line extension is not used.
 
 ## Table of Contents
 
 * [Architecture](#architecture)
-  * [MinIO Console](#minio-console)
-  * [MinIO Operator and `kubectl` Plugin](#minio-operator-and-kubectl-plugin)
 * [Create a MinIO Tenant](#create-a-minio-tenant)
-* [Expand a MinIO Tenant](#expand-a-minio-tenant)
 * [Kubernetes Cluster Configuration](#kubernetes-cluster-configuration)
   * [Default Storage Class](#default-storage-class)
   * [Local Persistent Volumes](#local-persistent-volumes)
@@ -39,40 +29,9 @@ MinIO Tenant deployed into Kubernetes:
 
 ![Tenant Architecture](upstream/operator/docs/images/architecture.png)
 
-MinIO provides multiple methods for accessing and managing the MinIO Tenant:
-
-## MinIO Console
-
-The MinIO Console provides a graphical user interface (GUI) for interacting with
-MinIO Tenants.
-
-![Console Dashboard](upstream/operator/docs/images/console-dashboard.png)
-
-Administrators of MinIO Tenants can perform a variety of tasks through the Console,
-including user creation, policy configuration, and bucket replication. The
-Console also provides a high level view of Tenant health, usage, and healing
-status.
-
-For more complete documentation on using the MinIO Console, see the
-[MinIO Console Github Repository](https://github.com/minio/console).
-
-## MinIO Operator and `kubectl` Plugin
-
-The MinIO Operator extends the Kubernetes API to support deploying MinIO-specific
-resources as a Tenant in a Kubernetes cluster.
-
-The MinIO `kubectl minio` plugin wraps the Operator to provide a simplified interface
-for deploying and managing MinIO Tenants in a Kubernetes cluster through the
-`kubectl` command line tool.
-
-# Create a MinIO Tenant
-
-This procedure creates a 4-node MinIO Tenant suitable for evaluation and
-early development using MinIO for object storage.
-
 ## Prerequisites
 
-- MinIO Operator requires Kubernetes version 1.17.0 or later.
+- Starting with Operator v4.0.0, MinIO requires Kubernetes version 1.19.0 or later. Previous versions of the Operator supported Kubernetes 1.17.0 or later. You must upgrade your Kubernetes cluster to 1.19.0 or later to use Operator v4.0.0+.
 
 - This procedure assumes the cluster contains a
   [namespace](https://github.com/minio/operator/blob/master/README.md#minio-tenant-namespace) for
@@ -83,9 +42,15 @@ early development using MinIO for object storage.
   for the MinIO Tenant Persistent Volumes  (`PV`). The `StorageClass`
   *must* have `volumeBindingMode: WaitForFirstConsumer`
 
-## Connect to the Tenant
+## Creating a Tenant
 
-MinIO Operator creates services that allow you to connect to the tenents and the consoles for thosee tenants.
+A tenant can be created by copying the Minio repository (https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio)
+and deploying it in to a namespace created for your tenant.
+
+## Connecting to the Tenant
+
+MinIO outputs credentials for connecting to the MinIO Tenant as part of the creation
+process:
 
 ```sh
 
@@ -101,31 +66,6 @@ Tenant 'minio-tenant-1' created in 'minio-tenant-1' Namespace
 
 ```
 
-MinIO Tenants deploy with TLS enabled by default, where the MinIO Operator uses the
-Kubernetes `certificates.k8s.io` API to generate the required x.509 certificates. Each
-certificate is signed using the Kubernetes Certificate Authority (CA) configured during
-cluster deployment. While Kubernetes mounts this CA on Pods in the cluster, Pods do
-*not* trust that CA by default. You must copy the CA to a directory such that the
-`update-ca-certificates` utility can find and add it to the system trust store to
-enable validation of MinIO TLS certificates:
-
-```sh
-
-cp /var/run/secrets/kubernetes.io/serviceaccount/ca.crt /usr/local/share/ca-certificates/
-update-ca-certificates
-```
-
-For applications *external* to the Kubernetes cluster, you must configure
-[Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) or a
-[Load Balancer](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer) to
-expose the MinIO Tenant services. Alternatively, you can use the `kubectl port-forward` command
-to temporarily forward traffic from the local host to the MinIO Tenant.
-
-- The `minio` service provides access to MinIO Object Storage operations.
-
-- The `minio-tenant-1-console` service provides access to the MinIO Console. The
-  MinIO Console supports GUI administration of the MinIO Tenant.
-
 # Kubernetes Cluster Configuration
 
 ## Default Storage Class
@@ -140,7 +80,6 @@ MinIO Tenants *require* that the `StorageClass` set
 `Immediate` setting, which can cause complications during `PVC` binding. MinIO
 strongly recommends creating a custom `StorageClass` for use by
 `PV` supporting a MinIO Tenant:
-
 
 The following `StorageClass` object contains the appropriate fields for use with the MinIO Plugin:
 
@@ -182,14 +121,13 @@ MinIO supports no more than *one* MinIO Tenant per Namespace. The following
 ```sh
 kubectl create namespace minio-tenant-1
 ```
-
 # License
 
 Use of MinIO Operator is governed by the GNU AGPLv3 or later, found in the [LICENSE](./LICENSE) file.
 
 # Explore Further
 
-- [Create a MinIO Tenant](https://github.com/minio/operator#create-a-minio-instance).
+- [Create a MinIO Tenant](https://github.com/minio/operator#create-a-minio-tenant).
 - [TLS for MinIO Tenant](https://github.com/minio/operator/blob/master/docs/tls.md).
 - [Examples for MinIO Tenant Settings](https://github.com/minio/operator/blob/master/docs/examples.md)
 - [Custom Hostname Discovery](https://github.com/minio/operator/blob/master/docs/custom-name-templates.md).

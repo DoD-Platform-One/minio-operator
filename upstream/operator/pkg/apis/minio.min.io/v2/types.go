@@ -75,21 +75,6 @@ type S3Features struct {
 //
 //
 type TenantSpec struct {
-	// *Optional* +
-	//
-	// An array of https://kubernetes.io/docs/concepts/configuration/secret/[Kubernetes opaque secrets] to use for generating MinIO users during tenant provisioning. +
-	//
-	// Each element in the array is an object consisting of a key-value pair `name: <string>`, where the `<string>` references an opaque Kubernetes secret. +
-	//
-	// Each referenced Kubernetes secret must include the following fields: +
-	//
-	// * `CONSOLE_ACCESS_KEY` - The "Username" for the MinIO user +
-	//
-	// * `CONSOLE_SECRET_KEY` - The "Password" for the MinIO user +
-	//
-	// The Operator creates each user with the `consoleAdmin` policy by default. You can change the assigned policy after the Tenant starts. +
-	// +optional
-	Users []*corev1.LocalObjectReference `json:"users,omitempty"`
 	// *Required* +
 	//
 	// An array of objects describing each MinIO server pool deployed in the MinIO Tenant. Each pool consists of a set of MinIO server pods which "pool" their storage resources for supporting object storage and retrieval requests. Each server pool is independent of all others and supports horizontal scaling of available storage resources in the MinIO Tenant. +
@@ -114,7 +99,7 @@ type TenantSpec struct {
 	// Pod Management Policy for pod created by StatefulSet
 	// +optional
 	PodManagementPolicy appsv1.PodManagementPolicyType `json:"podManagementPolicy,omitempty"`
-	// *Optional* +
+	// *Required* +
 	//
 	// Specify a https://kubernetes.io/docs/concepts/configuration/secret/[Kubernetes opaque secret] to use for setting the MinIO root access key and secret key. Specify the secret as `name: <secret>`. The Kubernetes secret must contain the following fields: +
 	//
@@ -122,13 +107,12 @@ type TenantSpec struct {
 	//
 	// * `data.secretkey` - The secret key for the root credentials +
 	//
-	// The MinIO Operator automatically generates the secret along with appropriate values for the access key and secret key if this field is omitted. +
 	//
 	// +optional
 	CredsSecret *corev1.LocalObjectReference `json:"credsSecret,omitempty"`
 	// *Optional* +
 	//
-	// If provided, the MinIO Operator the specified environment variables when deploying the Tenant resource.
+	// If provided, the MinIO Operator adds the specified environment variables when deploying the Tenant resource.
 	// +optional
 	Env []corev1.EnvVar `json:"env,omitempty"`
 	// *Optional* +
@@ -240,6 +224,13 @@ type TenantSpec struct {
 	Prometheus *PrometheusConfig `json:"prometheus,omitempty"`
 	// *Optional* +
 	//
+	// Directs the MinIO Operator to deploy a ServiceMonitor object. +
+	//
+	// ServiceMonitor object allows native integration with Prometheus Operator.
+	//+optional
+	PrometheusOperator *PrometheusOperatorConfig `json:"prometheusOperator,omitempty"`
+	// *Optional* +
+	//
 	// The https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/[Kubernetes Service Account] to use for running MinIO pods created as part of the Tenant. +
 	// +optional
 	ServiceAccountName string `json:"serviceAccountName,omitempty"`
@@ -278,6 +269,33 @@ type TenantSpec struct {
 	// Specify custom labels and annotations to append to the MinIO service and/or Console service.
 	// +optional
 	ServiceMetadata *ServiceMetadata `json:"serviceMetadata,omitempty"`
+	// *Optional* +
+	//
+	// An array of https://kubernetes.io/docs/concepts/configuration/secret/[Kubernetes opaque secrets] to use for generating MinIO users during tenant provisioning. +
+	//
+	// Each element in the array is an object consisting of a key-value pair `name: <string>`, where the `<string>` references an opaque Kubernetes secret. +
+	//
+	// Each referenced Kubernetes secret must include the following fields: +
+	//
+	// * `CONSOLE_ACCESS_KEY` - The "Username" for the MinIO user +
+	//
+	// * `CONSOLE_SECRET_KEY` - The "Password" for the MinIO user +
+	//
+	// The Operator creates each user with the `consoleAdmin` policy by default. You can change the assigned policy after the Tenant starts. +
+	// +optional
+	Users []*corev1.LocalObjectReference `json:"users,omitempty"`
+	// *Optional* +
+	//
+	// Enable JSON, Anonymous logging for MinIO tenants.
+	// +optional
+	Logging *Logging `json:"logging,omitempty"`
+}
+
+// Logging describes Logging for MinIO tenants.
+type Logging struct {
+	JSON      bool `json:"json,omitempty"`
+	Anonymous bool `json:"anonymous,omitempty"`
+	Quiet     bool `json:"quiet,omitempty"`
 }
 
 // ServiceMetadata (`serviceMetadata`) defines custom labels and annotations for the MinIO Object Storage service and/or MinIO Console service. +
@@ -355,6 +373,18 @@ type PoolStatus struct {
 	State  PoolState `json:"state"`
 }
 
+// HealthStatus represents whether the tenant is healthy, with decreased service or offline
+type HealthStatus string
+
+const (
+	// HealthStatusGreen indicates a healthy tenant: all drives online
+	HealthStatusGreen HealthStatus = "green"
+	// HealthStatusYellow indicates a decreased resilience tenant, some drives offline
+	HealthStatusYellow HealthStatus = "yellow"
+	// HealthStatusRed indicates a the tenant is offline, or lost write quorum
+	HealthStatusRed HealthStatus = "red"
+)
+
 // TenantStatus is the status for a Tenant resource
 type TenantStatus struct {
 	CurrentState      string `json:"currentState"`
@@ -367,6 +397,26 @@ type TenantStatus struct {
 	// All the pools get an individual status
 	// +nullable
 	Pools []PoolStatus `json:"pools"`
+	// *Optional* +
+	//
+	// Minimum number of disks that need to be online
+	WriteQuorum int32 `json:"writeQuorum,omitempty"`
+	// *Optional* +
+	//
+	// Total number of drives online for the tenant
+	DrivesOnline int32 `json:"drivesOnline,omitempty"`
+	// *Optional* +
+	//
+	// Total number of drives offline
+	DrivesOffline int32 `json:"drivesOffline,omitempty"`
+	// *Optional* +
+	//
+	// Drives with healing going on
+	DrivesHealing int32 `json:"drivesHealing,omitempty"`
+	// *Optional* +
+	//
+	// Health State of the tenant
+	HealthStatus HealthStatus `json:"healthStatus,omitempty"`
 }
 
 // CertificateConfig (`certConfig`) defines controlling attributes associated to any TLS certificate automatically generated by the Operator as part of tenant creation. These fields have no effect if `spec.autoCert: false`.
@@ -584,6 +634,11 @@ func (lc *LogConfig) EqualImage(image string) bool {
 	return lc.Image == image
 }
 
+// EqualImage returns true if config image and current input image are same
+func (c KESConfig) EqualImage(currentImage string) bool {
+	return c.Image == currentImage
+}
+
 // LogConfig (`log`) defines the configuration of the MinIO Log Search API deployed as part of the MinIO Tenant. The Operator deploys a PostgreSQL instance as part of the tenant to support storing and querying MinIO logs. +
 //
 // If the tenant specification includes the `console` object, the Operator automatically configures and enables MinIO Log Search via the Console UI.
@@ -697,6 +752,11 @@ type PrometheusConfig struct {
 	DiskCapacityDB *int `json:"diskCapacityGB,omitempty"`
 	// *Optional* +
 	//
+	// Specify the storage class for the PVC to support the Prometheus pod.
+	// +optional
+	StorageClassName *string `json:"storageClassName,omitempty"`
+	// *Optional* +
+	//
 	// If provided, use these annotations for Prometheus Object Meta annotations
 	// +optional
 	Annotations map[string]string `json:"annotations,omitempty"`
@@ -734,6 +794,23 @@ type PrometheusConfig struct {
 	// * `seLinuxOptions` +
 	// +optional
 	SecurityContext *corev1.PodSecurityContext `json:"securityContext,omitempty"`
+}
+
+// PrometheusOperatorConfig (`prometheus`) defines the configuration of a Prometheus service monitor object as part of the MinIO tenant. The Operator automatically configures the Prometheus service monitor to scrape and store metrics from the MinIO tenant. +
+//
+// Specify if the https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/getting-started.md#include-servicemonitors[Service Monitor] to
+// be created for this tenant.
+type PrometheusOperatorConfig struct {
+	// *Optional* +
+	//
+	// If provided, use these labels for Console Object Meta labels
+	// +optional
+	Labels map[string]string `json:"labels,omitempty"`
+	// *Optional* +
+	//
+	// If provided, use these annotations for Console Object Meta annotations
+	// +optional
+	Annotations map[string]string `json:"annotations,omitempty"`
 }
 
 // LogDbConfig (`db`) defines the configuration of the PostgreSQL StatefulSet deployed to support the MinIO LogSearch API. +

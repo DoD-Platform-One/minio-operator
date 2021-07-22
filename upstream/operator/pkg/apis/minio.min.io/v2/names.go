@@ -83,12 +83,18 @@ func (t *Tenant) MinIOHLServiceName() string {
 // with current MinIO StatefulSet pods
 func (t *Tenant) MinIOCIServiceName() string {
 	// DO NOT CHANGE, this should be constant
+	// This is possible because each namespace has only one Tenant
 	return "minio"
 }
 
 // MinIOBucketBaseDomain returns the base domain name for buckets
 func (t *Tenant) MinIOBucketBaseDomain() string {
 	return fmt.Sprintf("%s.svc.%s", t.Namespace, GetClusterDomain())
+}
+
+// MinIOHLPodHostname returns the full address of a particular MinIO pod.
+func (t *Tenant) MinIOHLPodHostname(podName string) string {
+	return fmt.Sprintf("%s.%s.%s.svc.%s", podName, t.MinIOHLServiceName(), t.Namespace, GetClusterDomain())
 }
 
 // MinIOBucketBaseWildcardDomain returns the base domain name for buckets
@@ -101,6 +107,16 @@ func (t *Tenant) MinIOFQDNServiceName() string {
 	return fmt.Sprintf("%s.%s.svc.%s", t.MinIOCIServiceName(), t.Namespace, GetClusterDomain())
 }
 
+// MinIOFQDNServiceNameAndNamespace returns the name of the service created for the tenant up to namespace, ie: minio.default
+func (t *Tenant) MinIOFQDNServiceNameAndNamespace() string {
+	return fmt.Sprintf("%s.%s", t.MinIOCIServiceName(), t.Namespace)
+}
+
+// MinIOFQDNShortServiceName returns the name of the service created for the tenant up to svc, ie: minio.default.svc
+func (t *Tenant) MinIOFQDNShortServiceName() string {
+	return fmt.Sprintf("%s.svc", t.MinIOFQDNServiceNameAndNamespace())
+}
+
 // MinIOCSRName returns the name of CSR that is generated if AutoTLS is enabled
 // Namespace adds uniqueness to the CSR name (single MinIO tenant per namsepace)
 // since CSR is not a namespaced resource
@@ -111,7 +127,7 @@ func (t *Tenant) MinIOCSRName() string {
 // MinIOClientCSRName returns the name of CSR that is generated for Client side authentication
 // Used by KES Pods
 func (t *Tenant) MinIOClientCSRName() string {
-	return t.Name + "-client" + CSRNameSuffix
+	return t.Name + "-client-" + t.Namespace + CSRNameSuffix
 }
 
 // KES Related Names
@@ -215,6 +231,11 @@ func (t *Tenant) LogSecretName() string {
 	return fmt.Sprintf("%s-%s", t.Name, "log-secret")
 }
 
+// PromServiceMonitorSecret returns name of secret with jwt for Prometheus service monitor
+func (t *Tenant) PromServiceMonitorSecret() string {
+	return fmt.Sprintf("%s-%s", t.Name, "prom-sm-secret")
+}
+
 // LogSearchAPIDeploymentName returns name of Log Search API server deployment
 func (t *Tenant) LogSearchAPIDeploymentName() string {
 	return fmt.Sprintf("%s-%s", t.Name, LogSearchAPIContainerName)
@@ -228,6 +249,12 @@ func (t *Tenant) LogSearchAPIServiceName() string {
 // PrometheusStatefulsetName returns name of statefulset meant for Prometheus
 // metrics.
 func (t *Tenant) PrometheusStatefulsetName() string {
+	return fmt.Sprintf("%s-%s", t.Name, "prometheus")
+}
+
+// PrometheusServiceMonitorName returns name of service monitor meant
+// for Prometheus metrics.
+func (t *Tenant) PrometheusServiceMonitorName() string {
 	return fmt.Sprintf("%s-%s", t.Name, "prometheus")
 }
 

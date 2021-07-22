@@ -93,6 +93,8 @@ rules:
       - certificates.k8s.io
     resourceNames:
       - kubernetes.io/legacy-unknown
+      - kubernetes.io/kube-apiserver-client
+      - kubernetes.io/kubelet-serving
     resources:
       - signers
     verbs:
@@ -110,3 +112,9 @@ rules:
       - "*"
     verbs:
       - "*"
+  - apiGroups:
+      - monitoring.coreos.com
+    resources:
+      - servicemonitors
+    verbs:
+      - '*'

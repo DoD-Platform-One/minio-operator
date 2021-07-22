@@ -32,7 +32,7 @@ import (
 
 // Returns the MinIO environment variables set in configuration.
 // If a user specifies a secret in the spec (for MinIO credentials) we use
-// that to set MINIO_ACCESS_KEY & MINIO_SECRET_KEY.
+// that to set MINIO_ROOT_USER & MINIO_ROOT_PASSWORD.
 func minioEnvironmentVars(t *miniov2.Tenant, wsSecret *v1.Secret, hostsTemplate string, opVersion string) []corev1.EnvVar {
 	var envVars []corev1.EnvVar
 	// Add all the environment variables
@@ -90,7 +90,7 @@ func minioEnvironmentVars(t *miniov2.Tenant, wsSecret *v1.Secret, hostsTemplate 
 	if t.HasCredsSecret() {
 		secretName := t.Spec.CredsSecret.Name
 		envVars = append(envVars, corev1.EnvVar{
-			Name: "MINIO_ACCESS_KEY",
+			Name: "MINIO_ROOT_USER",
 			ValueFrom: &corev1.EnvVarSource{
 				SecretKeyRef: &corev1.SecretKeySelector{
 					LocalObjectReference: corev1.LocalObjectReference{
@@ -100,7 +100,7 @@ func minioEnvironmentVars(t *miniov2.Tenant, wsSecret *v1.Secret, hostsTemplate 
 				},
 			},
 		}, corev1.EnvVar{
-			Name: "MINIO_SECRET_KEY",
+			Name: "MINIO_ROOT_PASSWORD",
 			ValueFrom: &corev1.EnvVarSource{
 				SecretKeyRef: &corev1.SecretKeySelector{
 					LocalObjectReference: corev1.LocalObjectReference{
@@ -195,7 +195,7 @@ func volumeMounts(t *miniov2.Tenant, pool *miniov2.Pool) (mounts []corev1.Volume
 		}
 	}
 
-	if t.AutoCert() || t.ExternalCert() {
+	if t.AutoCert() || t.ExternalCert() || t.HasKESEnabled() {
 		mounts = append(mounts, corev1.VolumeMount{
 			Name:      t.MinIOTLSSecretName(),
 			MountPath: miniov2.MinIOCertPath,
@@ -208,6 +208,24 @@ func volumeMounts(t *miniov2.Tenant, pool *miniov2.Pool) (mounts []corev1.Volume
 // Builds the MinIO container for a Tenant.
 func poolMinioServerContainer(t *miniov2.Tenant, wsSecret *v1.Secret, pool *miniov2.Pool, hostsTemplate string, opVersion string) corev1.Container {
 	args := []string{"server", "--certs-dir", miniov2.MinIOCertPath}
+	if t.Spec.Logging == nil {
+		// By default enable --json and --anonymous flags.
+		// allow them to be turned off selectively.
+		args = append(args, "--json", "--anonymous")
+	} else {
+		// If logging is specified, expect users to
+		// provide the right set of settings to toggle
+		// various flags.
+		if t.Spec.Logging.JSON {
+			args = append(args, "--json")
+		}
+		if t.Spec.Logging.Anonymous {
+			args = append(args, "--anonymous")
+		}
+		if t.Spec.Logging.Quiet {
+			args = append(args, "--quiet")
+		}
+	}
 
 	return corev1.Container{
 		Name:  miniov2.MinIOServerName,
@@ -254,8 +272,8 @@ func minioSecurityContext(pool *miniov2.Pool) *corev1.PodSecurityContext {
 	return &securityContext
 }
 
-// NewForMinIOPool creates a new StatefulSet for the given Cluster.
-func NewForMinIOPool(t *miniov2.Tenant, wsSecret *v1.Secret, pool *miniov2.Pool, serviceName string, hostsTemplate, operatorVersion string) *appsv1.StatefulSet {
+// NewPool creates a new StatefulSet for the given Cluster.
+func NewPool(t *miniov2.Tenant, wsSecret *v1.Secret, pool *miniov2.Pool, serviceName string, hostsTemplate, operatorVersion string) *appsv1.StatefulSet {
 	var podVolumes []corev1.Volume
 	var replicas = pool.Servers
 	var podVolumeSources []corev1.VolumeProjection
@@ -286,35 +304,6 @@ func NewForMinIOPool(t *miniov2.Tenant, wsSecret *v1.Secret, pool *miniov2.Pool,
 				Items: serverCertPaths,
 			},
 		})
-	}
-
-	// External Client certificates will have priority over AutoCert generated certificates
-	if t.ExternalClientCert() {
-		clientCertSecret = t.Spec.ExternalClientCertSecret.Name
-		// This covers both secrets of type "kubernetes.io/tls" and
-		// "cert-manager.io/v1alpha2" because of same keys in both.
-		if t.Spec.ExternalClientCertSecret.Type == "kubernetes.io/tls" || t.Spec.ExternalClientCertSecret.Type == "cert-manager.io/v1alpha2" {
-			clientCertPaths = []corev1.KeyToPath{
-				{Key: "tls.crt", Path: "client.crt"},
-				{Key: "tls.key", Path: "client.key"},
-			}
-		}
-	} else if t.AutoCert() {
-		clientCertSecret = t.MinIOClientTLSSecretName()
-	}
-
-	// KES External certificates will have priority over AutoCert generated certificates
-	if t.KESExternalCert() {
-		kesCertSecret = t.Spec.KES.ExternalCertSecret.Name
-		// This covers both secrets of type "kubernetes.io/tls" and
-		// "cert-manager.io/v1alpha2" because of same keys in both.
-		if t.Spec.KES.ExternalCertSecret.Type == "kubernetes.io/tls" || t.Spec.KES.ExternalCertSecret.Type == "cert-manager.io/v1alpha2" {
-			KESCertPath = []corev1.KeyToPath{
-				{Key: "tls.crt", Path: "CAs/kes.crt"},
-			}
-		}
-	} else if t.AutoCert() {
-		kesCertSecret = t.KESTLSSecretName()
 	}
 
 	if t.ExternalCert() {
@@ -403,40 +392,41 @@ func NewForMinIOPool(t *miniov2.Tenant, wsSecret *v1.Secret, pool *miniov2.Pool,
 				},
 			})
 		}
-		// Will mount into ~/.minio/certs/CAs folder the user provided CA certificates.
-		// This is used for MinIO to verify TLS connections with other applications.
-		//	certs
-		//		+ CAs
-		//			 + ca-0.crt
-		//			 + ca-1.crt
-		//			 + ca-2.crt
-		if t.ExternalCaCerts() {
-			for index, secret := range t.Spec.ExternalCaCertSecret {
-				var caCertPaths []corev1.KeyToPath
-				// This covers both secrets of type "kubernetes.io/tls" and
-				// "cert-manager.io/v1alpha2" because of same keys in both.
-				if secret.Type == "kubernetes.io/tls" {
-					caCertPaths = []corev1.KeyToPath{
-						{Key: "tls.crt", Path: fmt.Sprintf("CAs/ca-%d.crt", index)},
-					}
-				} else if secret.Type == "cert-manager.io/v1alpha2" {
-					caCertPaths = []corev1.KeyToPath{
-						{Key: "ca.crt", Path: fmt.Sprintf("CAs/ca-%d.crt", index)},
-					}
-				} else {
-					caCertPaths = []corev1.KeyToPath{
-						{Key: "public.crt", Path: fmt.Sprintf("CAs/ca-%d.crt", index)},
-					}
+	}
+
+	// Will mount into ~/.minio/certs/CAs folder the user provided CA certificates.
+	// This is used for MinIO to verify TLS connections with other applications.
+	//	certs
+	//		+ CAs
+	//			 + ca-0.crt
+	//			 + ca-1.crt
+	//			 + ca-2.crt
+	if t.ExternalCaCerts() {
+		for index, secret := range t.Spec.ExternalCaCertSecret {
+			var caCertPaths []corev1.KeyToPath
+			// This covers both secrets of type "kubernetes.io/tls" and
+			// "cert-manager.io/v1alpha2" because of same keys in both.
+			if secret.Type == "kubernetes.io/tls" {
+				caCertPaths = []corev1.KeyToPath{
+					{Key: "tls.crt", Path: fmt.Sprintf("CAs/ca-%d.crt", index)},
 				}
-				podVolumeSources = append(podVolumeSources, corev1.VolumeProjection{
-					Secret: &corev1.SecretProjection{
-						LocalObjectReference: corev1.LocalObjectReference{
-							Name: secret.Name,
-						},
-						Items: caCertPaths,
-					},
-				})
+			} else if secret.Type == "cert-manager.io/v1alpha2" {
+				caCertPaths = []corev1.KeyToPath{
+					{Key: "ca.crt", Path: fmt.Sprintf("CAs/ca-%d.crt", index)},
+				}
+			} else {
+				caCertPaths = []corev1.KeyToPath{
+					{Key: "public.crt", Path: fmt.Sprintf("CAs/ca-%d.crt", index)},
+				}
 			}
+			podVolumeSources = append(podVolumeSources, corev1.VolumeProjection{
+				Secret: &corev1.SecretProjection{
+					LocalObjectReference: corev1.LocalObjectReference{
+						Name: secret.Name,
+					},
+					Items: caCertPaths,
+				},
+			})
 		}
 	}
 
@@ -455,8 +445,37 @@ func NewForMinIOPool(t *miniov2.Tenant, wsSecret *v1.Secret, pool *miniov2.Pool,
 		},
 	}...)
 
-	// Add SSL volume from SSL secret to the podVolumes
-	if t.TLS() && t.HasKESEnabled() {
+	// If KES is enable mount TLS certificate secrets
+	if t.HasKESEnabled() {
+		// External Client certificates will have priority over AutoCert generated certificates
+		if t.ExternalClientCert() {
+			clientCertSecret = t.Spec.ExternalClientCertSecret.Name
+			// This covers both secrets of type "kubernetes.io/tls" and
+			// "cert-manager.io/v1alpha2" because of same keys in both.
+			if t.Spec.ExternalClientCertSecret.Type == "kubernetes.io/tls" || t.Spec.ExternalClientCertSecret.Type == "cert-manager.io/v1alpha2" {
+				clientCertPaths = []corev1.KeyToPath{
+					{Key: "tls.crt", Path: "client.crt"},
+					{Key: "tls.key", Path: "client.key"},
+				}
+			}
+		} else {
+			clientCertSecret = t.MinIOClientTLSSecretName()
+		}
+
+		// KES External certificates will have priority over AutoCert generated certificates
+		if t.KESExternalCert() {
+			kesCertSecret = t.Spec.KES.ExternalCertSecret.Name
+			// This covers both secrets of type "kubernetes.io/tls" and
+			// "cert-manager.io/v1alpha2" because of same keys in both.
+			if t.Spec.KES.ExternalCertSecret.Type == "kubernetes.io/tls" || t.Spec.KES.ExternalCertSecret.Type == "cert-manager.io/v1alpha2" {
+				KESCertPath = []corev1.KeyToPath{
+					{Key: "tls.crt", Path: "CAs/kes.crt"},
+				}
+			}
+		} else {
+			kesCertSecret = t.KESTLSSecretName()
+		}
+
 		podVolumeSources = append(podVolumeSources, []corev1.VolumeProjection{
 			{
 				Secret: &corev1.SecretProjection{
@@ -508,12 +527,13 @@ func NewForMinIOPool(t *miniov2.Tenant, wsSecret *v1.Secret, pool *miniov2.Pool,
 	}
 
 	// Add information labels, such as which pool we are building this pod about
-	ssMeta.Labels[miniov2.TenantLabel] = t.Name
 	ssMeta.Labels[miniov2.PoolLabel] = pool.Name
+	ssMeta.Labels[miniov2.TenantLabel] = t.Name
 
 	containers := []corev1.Container{
 		poolMinioServerContainer(t, wsSecret, pool, hostsTemplate, operatorVersion),
 	}
+
 	// attach any sidecar containers and volumes
 	if t.Spec.SideCars != nil && len(t.Spec.SideCars.Containers) > 0 {
 		containers = append(containers, t.Spec.SideCars.Containers...)
