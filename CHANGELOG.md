@@ -1,5 +1,8 @@
 # Minio Operator
 
+* 4.1.2-bb.2 (8/18/21)
+  * Added resource requests and limits to the Minio Operator
+
 * 4.1.2-bb.1 (7/21/21)
   * Upgraded Minio Operator to Version 4.1.2
   * Upgraded Minio Helm Chart to version 4.1.2
