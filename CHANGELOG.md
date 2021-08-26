@@ -1,4 +1,6 @@
 # Minio Operator
+* 4.1.2-bb.3 (8/26/21)
+  * Added istio sidecar scraping network policy
 
 * 4.1.2-bb.2 (8/18/21)
   * Added resource requests and limits to the Minio Operator

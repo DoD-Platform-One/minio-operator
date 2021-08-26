@@ -7,6 +7,9 @@ networkPolicies:
     app: istio-ingressgateway
     istio: ingressgateway
 
+istio:
+  enabled: false
+
 openshift: false
 
 monitoring:
