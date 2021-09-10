@@ -91,5 +91,5 @@ app.kubernetes.io/instance: {{ printf "%s-%s" .Release.Name "console" }}
 Create the name of the service account to use
 */}}
 {{- define "minio-operator.serviceAccountName" -}}
-{{- default (include "minio-operator.fullname" .) .Values.serviceAccount.name }}
+minio-operator
 {{- end }}
