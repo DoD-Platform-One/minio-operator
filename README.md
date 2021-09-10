@@ -1,4 +1,4 @@
-# MinIO Operator V4.1.2
+# MinIO Operator
 
 [![MinIO](https://raw.githubusercontent.com/minio/minio/master/.github/logo.svg?sanitize=true)](https://min.io)
 
