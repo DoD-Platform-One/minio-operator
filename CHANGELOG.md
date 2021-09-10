@@ -1,4 +1,7 @@
 # Minio Operator
+* 4.2.3-bb.1 (9/10/21)
+  * hardcoded service account name
+
 * 4.2.3-bb.0 (9/9/21)
   * Upgraded Minio Operator to Version 4.2.3
   * Upgraded Minio Helm Chart to version 4.2.3
