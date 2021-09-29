@@ -1,4 +1,8 @@
 # Minio Operator
+
+* 4.2.3-bb.2 (9/29/21)
+  * Added networkPolicy for egress to instance
+
 * 4.2.3-bb.1 (9/10/21)
   * hardcoded service account name
 
