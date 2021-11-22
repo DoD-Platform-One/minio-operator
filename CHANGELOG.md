@@ -1,5 +1,8 @@
 # Minio Operator
 
+* 4.2.3-bb.3 (11/22/21)
+  * remove extra Image Pull Secret definition under operator field
+
 * 4.2.3-bb.2 (9/29/21)
   * Added networkPolicy for egress to instance
 
