@@ -1,137 +1,184 @@
-# MinIO Operator
+# minio-operator
 
-[![MinIO](https://raw.githubusercontent.com/minio/minio/master/.github/logo.svg?sanitize=true)](https://min.io)
+![Version: 4.2.3-bb.3](https://img.shields.io/badge/Version-4.2.3--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.2.3](https://img.shields.io/badge/AppVersion-v4.2.3-informational?style=flat-square)
 
-MinIO is a Kubernetes-native high performance object store with an S3-compatible API. The
-MinIO Kubernetes Operator supports deploying MinIO Tenants onto private and public
-cloud infrastructures ("Hybrid" Cloud).
+A Helm chart for MinIO Operator
 
-More detailed and specific information on Minio and the Minio Operator can be found in the "upstream" folder of this
-repository or at https://github.com/minio/operator .
+## Upstream References
+* <https://min.io>
 
-The Platform One Deployment of Minio Operator and Minio Instances is based on deployments using Helm Charts.   The
-Kubectl command line extension is not used.
+* <https://github.com/minio/operator>
 
-## Table of Contents
+## Learn More
+* [Application Overview](docs/overview.md)
+* [Other Documentation](docs/)
 
-* [Architecture](#architecture)
-* [Create a MinIO Tenant](#create-a-minio-tenant)
-* [Kubernetes Cluster Configuration](#kubernetes-cluster-configuration)
-  * [Default Storage Class](#default-storage-class)
-  * [Local Persistent Volumes](#local-persistent-volumes)
-  * [MinIO Tenant Namespace](#minio-tenant-namespace)
+## Pre-Requisites
 
-# Architecture
+* Kubernetes Cluster deployed
+* Kubernetes config installed in `~/.kube/config`
+* Helm installed
 
-Each MinIO Tenant represents an independent MinIO Object Store within
-the Kubernetes cluster. The following diagram describes the architecture of a
-MinIO Tenant deployed into Kubernetes:
+Install Helm
 
-![Tenant Architecture](upstream/operator/docs/images/architecture.png)
+https://helm.sh/docs/intro/install/
 
-## Prerequisites
+## Deployment
 
-- Starting with Operator v4.0.0, MinIO requires Kubernetes version 1.19.0 or later. Previous versions of the Operator supported Kubernetes 1.17.0 or later. You must upgrade your Kubernetes cluster to 1.19.0 or later to use Operator v4.0.0+.
-
-- This procedure assumes the cluster contains a
-  [namespace](https://github.com/minio/operator/blob/master/README.md#minio-tenant-namespace) for
-  the MinIO Tenant.
-
-- This procedure assumes the cluster contains a
-  [`StorageClass`](https://github.com/minio/operator/blob/master/README.md#default-storage-class)
-  for the MinIO Tenant Persistent Volumes  (`PV`). The `StorageClass`
-  *must* have `volumeBindingMode: WaitForFirstConsumer`
-
-## Creating a Tenant
-
-A tenant can be created by copying the Minio repository (https://repo1.dso.mil/platform-one/big-bang/apps/application-utilities/minio)
-and deploying it in to a namespace created for your tenant.
-
-## Connecting to the Tenant
-
-MinIO outputs credentials for connecting to the MinIO Tenant as part of the creation
-process:
-
-```sh
-
-Tenant 'minio-tenant-1' created in 'minio-tenant-1' Namespace
-  Username: admin
-  Password: dbc978c2-bfbe-41bf-9dc6-699c76bafcd0
-+-------------+------------------------+------------------+--------------+-----------------+
-| APPLICATION |      SERVICE NAME      |     NAMESPACE    | SERVICE TYPE | SERVICE PORT(S) |
-+-------------+------------------------+------------------+--------------+-----------------+
-| MinIO       | minio                  | minio-tenant-1   | ClusterIP    | 443             |
-| Console     | minio-tenant-1-console | minio-tenant-1   | ClusterIP    | 9090,9443       |
-+-------------+------------------------+------------------+--------------+-----------------+
-
+* Clone down the repository
+* cd into directory
+```bash
+helm install minio-operator chart/
 ```
 
-# Kubernetes Cluster Configuration
+## Values
 
-## Default Storage Class
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| networkPolicies.enabled | bool | `false` |  |
+| networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
+| networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
+| networkPolicies.ingressLabels.istio | string | `"ingressgateway"` |  |
+| istio.enabled | bool | `false` |  |
+| openshift | bool | `false` |  |
+| monitoring.enabled | bool | `false` |  |
+| monitoring.namespace | string | `"monitoring"` |  |
+| operator.env[0].name | string | `"CLUSTER_DOMAIN"` |  |
+| operator.env[0].value | string | `"cluster.local"` |  |
+| operator.env[1].name | string | `"WATCHED_NAMESPACE"` |  |
+| operator.env[1].value | string | `""` |  |
+| operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
+| operator.image.tag | string | `"v4.2.3"` |  |
+| operator.image.pullPolicy | string | `"IfNotPresent"` |  |
+| operator.initcontainers | list | `[]` |  |
+| operator.replicaCount | int | `1` |  |
+| operator.securityContext.runAsUser | int | `1000` |  |
+| operator.securityContext.runAsGroup | int | `1000` |  |
+| operator.securityContext.runAsNonRoot | bool | `true` |  |
+| operator.securityContext.fsGroup | int | `1000` |  |
+| operator.nodeSelector | object | `{}` |  |
+| operator.affinity | object | `{}` |  |
+| operator.tolerations | list | `[]` |  |
+| operator.resources.requests.cpu | string | `"200m"` |  |
+| operator.resources.requests.memory | string | `"256Mi"` |  |
+| operator.resources.requests.ephemeral-storage | string | `"500Mi"` |  |
+| operator.resources.limits.cpu | string | `"200m"` |  |
+| operator.resources.limits.memory | string | `"256Mi"` |  |
+| imagePullSecrets | list | `[]` |  |
+| serviceAccount.create | bool | `true` |  |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.name | string | `""` |  |
+| nodeSelector | object | `{}` |  |
+| affinity | object | `{}` |  |
+| tolerations | list | `[]` |  |
+| console.image.repository | string | `"minio/console"` |  |
+| console.image.tag | string | `"v0.6.3"` |  |
+| console.image.pullPolicy | string | `"IfNotPresent"` |  |
+| console.replicaCount | int | `1` |  |
 
-The MinIO Kubernetes Plugin (`kubectl minio`) automatically generates
-Persistent Volume Claims (`PVC`) as part of deploying a MinIO Tenant.
-The plugin defaults to creating each `PVC` with the `default`
-Kubernetes [`Storage Class`](https://kubernetes.io/docs/concepts/storage/storage-classes/).
+## Contributing
 
-MinIO Tenants *require* that the `StorageClass` set
-`volumeBindingMode` to `WaitForFirstConsumer`. The default `StorageClass` may use the
-`Immediate` setting, which can cause complications during `PVC` binding. MinIO
-strongly recommends creating a custom `StorageClass` for use by
-`PV` supporting a MinIO Tenant:
+Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in contributing.
+# minio-operator
 
-The following `StorageClass` object contains the appropriate fields for use with the MinIO Plugin:
+![Version: 4.1.5](https://img.shields.io/badge/Version-4.1.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.1.2](https://img.shields.io/badge/AppVersion-v4.1.2-informational?style=flat-square)
 
-```yaml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-    name: local-storage
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
+A Helm chart for MinIO Operator
+
+## Upstream References
+* <https://min.io>
+
+* <https://github.com/minio/operator>
+
+## Learn More
+* [Application Overview](docs/overview.md)
+* [Other Documentation](docs/)
+
+## Pre-Requisites
+
+* Kubernetes Cluster deployed
+* Kubernetes config installed in `~/.kube/config`
+* Helm installed
+
+Install Helm
+
+https://helm.sh/docs/intro/install/
+
+## Deployment
+
+* Clone down the repository
+* cd into directory
+```bash
+helm install minio-operator chart/
 ```
 
-To specify the storage class, include the `--storage-class` option to
-`kubectl minio tenant create`.
+## Values
 
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| operator.clusterDomain | string | `""` |  |
+| operator.nsToWatch | string | `""` |  |
+| operator.image.repository | string | `"minio/operator"` |  |
+| operator.image.tag | string | `"v4.1.2"` |  |
+| operator.image.pullPolicy | string | `"IfNotPresent"` |  |
+| operator.imagePullSecrets | list | `[]` |  |
+| operator.replicaCount | int | `1` |  |
+| operator.securityContext.runAsUser | int | `1000` |  |
+| operator.securityContext.runAsGroup | int | `1000` |  |
+| operator.securityContext.runAsNonRoot | bool | `true` |  |
+| operator.securityContext.fsGroup | int | `1000` |  |
+| operator.resources.requests.cpu | string | `"200m"` |  |
+| operator.resources.requests.memory | string | `"256Mi"` |  |
+| operator.resources.requests.ephemeral-storage | string | `"500Mi"` |  |
+| console.image.repository | string | `"minio/console"` |  |
+| console.image.tag | string | `"v0.7.4"` |  |
+| console.image.pullPolicy | string | `"IfNotPresent"` |  |
+| console.imagePullSecrets | list | `[]` |  |
+| console.replicaCount | int | `1` |  |
+| console.resources | object | `{}` |  |
+| tenants[0].name | string | `"minio1"` |  |
+| tenants[0].image.repository | string | `"minio/minio"` |  |
+| tenants[0].image.tag | string | `"RELEASE.2021-06-17T00-10-46Z"` |  |
+| tenants[0].image.pullPolicy | string | `"IfNotPresent"` |  |
+| tenants[0].namespace | string | `"default"` |  |
+| tenants[0].imagePullSecret | object | `{}` |  |
+| tenants[0].scheduler | object | `{}` |  |
+| tenants[0].pools[0].servers | int | `4` |  |
+| tenants[0].pools[0].volumesPerServer | int | `4` |  |
+| tenants[0].pools[0].size | string | `"10Gi"` |  |
+| tenants[0].pools[0].storageClassName | string | `"standard"` |  |
+| tenants[0].pools[0].tolerations | object | `{}` |  |
+| tenants[0].pools[0].nodeSelector | object | `{}` |  |
+| tenants[0].pools[0].affinity | object | `{}` |  |
+| tenants[0].pools[0].resources | object | `{}` |  |
+| tenants[0].pools[0].securityContext | object | `{}` |  |
+| tenants[0].mountPath | string | `"/export"` |  |
+| tenants[0].subPath | string | `"/data"` |  |
+| tenants[0].secrets.enabled | bool | `true` |  |
+| tenants[0].secrets.name | string | `"minio1-secret"` |  |
+| tenants[0].secrets.accessKey | string | `"minio"` |  |
+| tenants[0].secrets.secretKey | string | `"minio123"` |  |
+| tenants[0].metrics.enabled | bool | `false` |  |
+| tenants[0].metrics.port | int | `9000` |  |
+| tenants[0].certificate.externalCertSecret | object | `{}` |  |
+| tenants[0].certificate.requestAutoCert | bool | `true` |  |
+| tenants[0].certificate.certConfig | object | `{}` |  |
+| tenants[0].s3.bucketDNS | bool | `false` |  |
+| tenants[0].podManagementPolicy | string | `"Parallel"` |  |
+| tenants[0].serviceMetadata | object | `{}` |  |
+| tenants[0].env | object | `{}` |  |
+| tenants[0].priorityClassName | string | `""` |  |
+| tenants[0].console.image.repository | string | `"minio/console"` |  |
+| tenants[0].console.image.tag | string | `"v0.7.4"` |  |
+| tenants[0].console.image.pullPolicy | string | `"IfNotPresent"` |  |
+| tenants[0].console.replicaCount | int | `1` |  |
+| tenants[0].console.secrets.enabled | bool | `true` |  |
+| tenants[0].console.secrets.name | string | `"console-secret"` |  |
+| tenants[0].console.secrets.passphrase | string | `"SECRET"` |  |
+| tenants[0].console.secrets.salt | string | `"SECRET"` |  |
+| tenants[0].console.secrets.accessKey | string | `"YOURCONSOLEACCESS"` |  |
+| tenants[0].console.secrets.secretKey | string | `"YOURCONSOLESECRET"` |  |
 
-## Local Persistent Volumes
+## Contributing
 
-MinIO automatically creates Persistent Volume Claims (PVC) as part of Tenant creation.
-Ensure the cluster has at least one
-[Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
-for each PVC MinIO requests.
-
-You can estimate the number of PVC by multiplying the number of `minio` server pods in the
-Tenant by the number of drives per node. For example, a 4-node Tenant with
-4 drives per node requires 16 PVC and therefore 16 PV.
-
-MinIO *strongly recommends* using the following CSI drivers for
-creating local PV to ensure best object storage performance:
-
-- [Local Persistent Volume](https://kubernetes.io/docs/concepts/storage/volumes/#local)
-- [OpenEBS Local PV](https://docs.openebs.io/docs/next/localpv.html)
-
-## MinIO Tenant Namespace
-
-MinIO supports no more than *one* MinIO Tenant per Namespace. The following
-`kubectl` command creates a new namespace for the MinIO Tenant.
-
-```sh
-kubectl create namespace minio-tenant-1
-```
-# License
-
-Use of MinIO Operator is governed by the GNU AGPLv3 or later, found in the [LICENSE](./LICENSE) file.
-
-# Explore Further
-
-- [Create a MinIO Tenant](https://github.com/minio/operator#create-a-minio-tenant).
-- [TLS for MinIO Tenant](https://github.com/minio/operator/blob/master/docs/tls.md).
-- [Examples for MinIO Tenant Settings](https://github.com/minio/operator/blob/master/docs/examples.md)
-- [Custom Hostname Discovery](https://github.com/minio/operator/blob/master/docs/custom-name-templates.md).
-- [Apply PodSecurityPolicy](https://github.com/minio/operator/blob/master/docs/pod-security-policy.md).
-- [Deploy MinIO Tenant with Console](https://github.com/minio/operator/blob/master/docs/console.md).
-- [Deploy MinIO Tenant with KES](https://github.com/minio/operator/blob/master/docs/kes.md).
-- [Tenant API Documentation](docs/crd.adoc)
+Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in contributing.
