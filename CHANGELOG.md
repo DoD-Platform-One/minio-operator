@@ -1,41 +1,57 @@
-# Minio Operator
+# Changelog
 
-* 4.2.3-bb.3 (11/22/21)
-  * remove extra Image Pull Secret definition under operator field
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+---
+# # [4.2.3-bb.4]  - 2021-12-28
+### Changed
+ -  remove extra Image Pull Secret definition under operator field
 
-* 4.2.3-bb.2 (9/29/21)
-  * Added networkPolicy for egress to instance
+## [4.2.3-bb.3] - 2021-11-22 
+### Changed
+-  remove extra Image Pull Secret definition under operator field
 
-* 4.2.3-bb.1 (9/10/21)
-  * hardcoded service account name
+# # [4.2.3-bb.2] - 2021-09-29 
+### Changed
+- Added networkPolicy for egress to instance
 
-* 4.2.3-bb.0 (9/9/21)
-  * Upgraded Minio Operator to Version 4.2.3
-  * Upgraded Minio Helm Chart to version 4.2.3
+## [4.2.3-bb.1] - 2021-10-09  
+### Changed
+- hardcoded service account name
 
-* 4.1.2-bb.3 (8/26/21)
-  * Added istio sidecar scraping network policy
+# # [4.2.3-bb.0] - 2021-09-09   
+### Changed
+- Upgraded Minio Operator to Version 4.2.3
+-  Upgraded Minio Helm Chart to version 4.2.3
 
-* 4.1.2-bb.2 (8/18/21)
-  * Added resource requests and limits to the Minio Operator
+## [4.1.2-bb.3] - 2021-08-26    
+### Changed
+- Added istio sidecar scraping network policy
 
-* 4.1.2-bb.1 (7/21/21)
-  * Upgraded Minio Operator to Version 4.1.2
-  * Upgraded Minio Helm Chart to version 4.1.2
-  * Added NetworkPolicy objects to control/limit network access for Minio Operator
-  * Kpt update of upstream folder to contain the 4.1.2 upstream release source from github
-  * Added Openshift DNS access support to networkwork policy
+## [4.1.2-bb.2] - 2021-08-18  
+### Changed
+-  Added resource requests and limits to the Minio Operator
 
-* 4.0.4-bb.1 (4/29/2021)
-  * Upgraded Operator to Version 4.0.3.  CRD now uses "tenats" instaned of "miniinstances"
-  * New operator has substantially more tuning knobs for tenants
+## [4.1.2-bb.1] - 2021-07-21 
+### Upgrade to 4.12
+- Upgraded Minio Operator to Version 4.1.2
+-  Upgraded Minio Helm Chart to version 4.1.2
+-  Added NetworkPolicy objects to control/limit network access for Minio Operator
+-  Kpt update of upstream folder to contain the 4.1.2 upstream release source from github
+-  Added Openshift DNS access support to networkwork policy
 
-* 2.0.9-bb.3 (04/13/2021)
- * Added ability to pass affinity and nodeselector to helm chart
- * Added affinity documentation
+## [4.0.4-bb.1] - 2021-04-29 
+### Upgrade to 4.0.3
+-  Upgraded Operator to Version 4.0.3.  CRD now uses "tenats" instaned of "miniinstances"
+-  New operator has substantially more tuning knobs for tenants
 
-* 1.0.0 (01/21/2021)
-  * Created Helm wrap for deployment of the operator
-  * Added imagepullsecret to the deployment
+# # [2.0.9-bb.3] - 2021-04-13  
+### Changed
+ -  Added ability to pass affinity and nodeselector to helm chart
+ -  Added affinity documentation
+
+## [1.0.0]  - 2021-01-21
+### Changed
+- Created Helm wrap for deployment of the operator
+-  Added imagepullsecret to the deployment
 
 

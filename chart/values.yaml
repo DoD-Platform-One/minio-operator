@@ -78,6 +78,9 @@ affinity: {}
 
 tolerations: []
 
+annotations: {}
+  # bigbang.dev/istioVersion
+
 console:
   image:
     repository: minio/console
