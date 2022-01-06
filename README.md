@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.2.3-bb.3](https://img.shields.io/badge/Version-4.2.3--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.2.3](https://img.shields.io/badge/AppVersion-v4.2.3-informational?style=flat-square)
+![Version: 4.2.3-bb.4](https://img.shields.io/badge/Version-4.2.3--bb.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.2.3](https://img.shields.io/badge/AppVersion-v4.2.3-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -71,6 +71,7 @@ helm install minio-operator chart/
 | nodeSelector | object | `{}` |  |
 | affinity | object | `{}` |  |
 | tolerations | list | `[]` |  |
+| annotations | object | `{}` |  |
 | console.image.repository | string | `"minio/console"` |  |
 | console.image.tag | string | `"v0.6.3"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
