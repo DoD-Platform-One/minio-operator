@@ -2,6 +2,16 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ---
+# # [4.4.3-bb.0]  - 2022-01-24
+### Added
+- upstream console charts with logic to enable/disable -- disabled by default
+
+### Changed
+- Update to 4.4.3 -- upstream charts now split on operator/tenant charts -- kpt is used now
+
+### Removed
+- The upstream directory containing the upstream git source code
+
 # # [4.2.3-bb.4]  - 2021-12-28
 ### Changed
  -  remove extra Image Pull Secret definition under operator field

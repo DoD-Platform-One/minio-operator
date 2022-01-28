@@ -1,4 +1,66 @@
-# Network Policies  Values
+# Default values for minio-operator.
+
+operator:
+  ## Setup environment variables for the Operator
+  env:
+    - name: MINIO_OPERATOR_TLS_ENABLE
+      value: "on"
+    - name: CLUSTER_DOMAIN
+      value: "cluster.local"
+    - name: WATCHED_NAMESPACE
+      value: ""
+  image:
+    repository: registry1.dso.mil/ironbank/opensource/minio/operator
+    tag: v4.4.3
+    pullPolicy: IfNotPresent
+  imagePullSecrets: [ ]
+  initcontainers: [ ]
+  replicaCount: 1
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    fsGroup: 1000
+  nodeSelector: { }
+  affinity: { }
+  tolerations: [ ]
+  topologySpreadConstraints: [ ]
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+      ephemeral-storage: 500Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+console:
+  enabled: false
+  image:
+    repository: minio/console
+    tag: v0.13.2
+    pullPolicy: IfNotPresent
+  imagePullSecrets: [ ]
+  initcontainers: [ ]
+  replicaCount: 1
+  nodeSelector: { }
+  affinity: { }
+  tolerations: [ ]
+  topologySpreadConstraints: [ ]
+  resources: { }
+  securityContext:
+    runAsUser: 1000
+    runAsNonRoot: true
+  ingress:
+    enabled: false
+    ingressClassName: ""
+    labels: { }
+    annotations: { }
+    tls: [ ]
+    host: console.local
+    path: /
+    
+# Big Bang Added Values    
 
 networkPolicies:
   enabled: false
@@ -15,54 +77,7 @@ openshift: false
 monitoring:
   enabled: false
   namespace: monitoring
-
-# Default values for minio-operator.
-operator:
-  ## DEPRECATED: Please use the "CLUSTER_DOMAIN" or "WATCHED_NAMESPACE" env variable
-  ## set kubernetes cluster domain where minio is running
-  # clusterDomain: ""
-  # nsToWatch: set to blank to enable watching all namespaces
-  # nsToWatch: ""
-  env:
-  ## instead of clusterDomain and nsToWatch.
-  ## set kubernetes cluster domain where minio is running
-    - name: CLUSTER_DOMAIN
-      value: "cluster.local"
-  ## set to blank to enable watching all namespaces
-    - name: WATCHED_NAMESPACE
-      value: ""
-  image:
-    repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.2.3
-    pullPolicy: IfNotPresent
-  initcontainers: []
-  replicaCount: 1
-  securityContext:
-    runAsUser: 1000
-    runAsGroup: 1000
-    runAsNonRoot: true
-    fsGroup: 1000
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-  resources:
-    requests:
-      cpu: 200m
-      memory: 256Mi
-      ephemeral-storage: 500Mi
-    limits:
-      cpu: 200m
-      memory: 256Mi
-
-imagePullSecrets: []
-#nameOverride: ""
-#fullnameOverride: ""
-## set kubernetes cluster domain where minio is running
-##
-#clusterDomain:
-# watchedNamespace: set to blank to enable watching all namespaces
-#watchedNamespace:
-
+    
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -72,18 +87,19 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-nodeSelector: {}
-
-affinity: {}
-
-tolerations: []
+imagePullSecrets: []
+#nameOverride: ""
+#fullnameOverride: ""
 
 annotations: {}
-  # bigbang.dev/istioVersion
-
-console:
+    
+# Used in templates/bigbang/tenant-patch-job.yaml
+# Needed for operator upgrade.go logic to cleanly upgrade from bb v4.2.3 to v4.4.3
+tenantPatchJob:
+  enabled: true
+  minioNamespace: minio
   image:
-    repository: minio/console
-    tag: v0.6.3
-    pullPolicy: IfNotPresent
-  replicaCount: 1
+    repository: registry1.dso.mil/ironbank/big-bang/base
+    tag: 8.4
+    pullSecrets:
+      - private-registry
