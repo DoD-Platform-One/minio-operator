@@ -497,6 +497,25 @@ spec:
                   replicas:
                     format: int32
                     type: integer
+                  resources:
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                    type: object
                   securityContext:
                     properties:
                       fsGroup:
@@ -575,6 +594,45 @@ spec:
                           type: integer
                         value:
                           type: string
+                      type: object
+                    type: array
+                  topologySpreadConstraints:
+                    items:
+                      properties:
+                        labelSelector:
+                          properties:
+                            matchExpressions:
+                              items:
+                                properties:
+                                  key:
+                                    type: string
+                                  operator:
+                                    type: string
+                                  values:
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              type: object
+                          type: object
+                        maxSkew:
+                          format: int32
+                          type: integer
+                        topologyKey:
+                          type: string
+                        whenUnsatisfiable:
+                          type: string
+                      required:
+                      - maxSkew
+                      - topologyKey
+                      - whenUnsatisfiable
                       type: object
                     type: array
                 required:
@@ -1232,6 +1290,45 @@ spec:
                               type: string
                           type: object
                         type: array
+                      topologySpreadConstraints:
+                        items:
+                          properties:
+                            labelSelector:
+                              properties:
+                                matchExpressions:
+                                  items:
+                                    properties:
+                                      key:
+                                        type: string
+                                      operator:
+                                        type: string
+                                      values:
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                            maxSkew:
+                              format: int32
+                              type: integer
+                            topologyKey:
+                              type: string
+                            whenUnsatisfiable:
+                              type: string
+                          required:
+                          - maxSkew
+                          - topologyKey
+                          - whenUnsatisfiable
+                          type: object
+                        type: array
                       volumeClaimTemplate:
                         properties:
                           apiVersion:
@@ -1474,6 +1571,45 @@ spec:
                           type: integer
                         value:
                           type: string
+                      type: object
+                    type: array
+                  topologySpreadConstraints:
+                    items:
+                      properties:
+                        labelSelector:
+                          properties:
+                            matchExpressions:
+                              items:
+                                properties:
+                                  key:
+                                    type: string
+                                  operator:
+                                    type: string
+                                  values:
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              type: object
+                          type: object
+                        maxSkew:
+                          format: int32
+                          type: integer
+                        topologyKey:
+                          type: string
+                        whenUnsatisfiable:
+                          type: string
+                      required:
+                      - maxSkew
+                      - topologyKey
+                      - whenUnsatisfiable
                       type: object
                     type: array
                 type: object
@@ -1852,6 +1988,45 @@ spec:
                     type: string
                   storageClassName:
                     type: string
+                  topologySpreadConstraints:
+                    items:
+                      properties:
+                        labelSelector:
+                          properties:
+                            matchExpressions:
+                              items:
+                                properties:
+                                  key:
+                                    type: string
+                                  operator:
+                                    type: string
+                                  values:
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              type: object
+                          type: object
+                        maxSkew:
+                          format: int32
+                          type: integer
+                        topologyKey:
+                          type: string
+                        whenUnsatisfiable:
+                          type: string
+                      required:
+                      - maxSkew
+                      - topologyKey
+                      - whenUnsatisfiable
+                      type: object
+                    type: array
                 type: object
               requestAutoCert:
                 type: boolean
@@ -3790,6 +3965,8 @@ spec:
               pools:
                 items:
                   properties:
+                    legacySecurityContext:
+                      type: boolean
                     ssName:
                       type: string
                     state:
@@ -3800,11 +3977,30 @@ spec:
                   type: object
                 nullable: true
                 type: array
+              provisionedBuckets:
+                type: boolean
+              provisionedUsers:
+                type: boolean
               revision:
                 format: int32
                 type: integer
               syncVersion:
                 type: string
+              usage:
+                properties:
+                  capacity:
+                    format: int64
+                    type: integer
+                  rawCapacity:
+                    format: int64
+                    type: integer
+                  rawUsage:
+                    format: int64
+                    type: integer
+                  usage:
+                    format: int64
+                    type: integer
+                type: object
               waitingOnReady:
                 format: date-time
                 type: string
@@ -3852,6 +4048,17 @@ spec:
             type: object
           spec:
             properties:
+              buckets:
+                items:
+                  properties:
+                    name:
+                      type: string
+                    objectLock:
+                      type: boolean
+                    region:
+                      type: string
+                  type: object
+                type: array
               certConfig:
                 properties:
                   commonName:
@@ -4290,6 +4497,25 @@ spec:
                   replicas:
                     format: int32
                     type: integer
+                  resources:
+                    properties:
+                      limits:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                      requests:
+                        additionalProperties:
+                          anyOf:
+                          - type: integer
+                          - type: string
+                          pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                          x-kubernetes-int-or-string: true
+                        type: object
+                    type: object
                   securityContext:
                     properties:
                       fsGroup:
@@ -4370,8 +4596,112 @@ spec:
                           type: string
                       type: object
                     type: array
+                  topologySpreadConstraints:
+                    items:
+                      properties:
+                        labelSelector:
+                          properties:
+                            matchExpressions:
+                              items:
+                                properties:
+                                  key:
+                                    type: string
+                                  operator:
+                                    type: string
+                                  values:
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              type: object
+                          type: object
+                        maxSkew:
+                          format: int32
+                          type: integer
+                        topologyKey:
+                          type: string
+                        whenUnsatisfiable:
+                          type: string
+                      required:
+                      - maxSkew
+                      - topologyKey
+                      - whenUnsatisfiable
+                      type: object
+                    type: array
                 required:
                 - kesSecret
+                type: object
+              liveness:
+                properties:
+                  exec:
+                    properties:
+                      command:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  failureThreshold:
+                    format: int32
+                    type: integer
+                  httpGet:
+                    properties:
+                      host:
+                        type: string
+                      httpHeaders:
+                        items:
+                          properties:
+                            name:
+                              type: string
+                            value:
+                              type: string
+                          required:
+                          - name
+                          - value
+                          type: object
+                        type: array
+                      path:
+                        type: string
+                      port:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        x-kubernetes-int-or-string: true
+                      scheme:
+                        type: string
+                    required:
+                    - port
+                    type: object
+                  initialDelaySeconds:
+                    format: int32
+                    type: integer
+                  periodSeconds:
+                    format: int32
+                    type: integer
+                  successThreshold:
+                    format: int32
+                    type: integer
+                  tcpSocket:
+                    properties:
+                      host:
+                        type: string
+                      port:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        x-kubernetes-int-or-string: true
+                    required:
+                    - port
+                    type: object
+                  timeoutSeconds:
+                    format: int32
+                    type: integer
                 type: object
               log:
                 properties:
@@ -5025,6 +5355,45 @@ spec:
                               type: string
                           type: object
                         type: array
+                      topologySpreadConstraints:
+                        items:
+                          properties:
+                            labelSelector:
+                              properties:
+                                matchExpressions:
+                                  items:
+                                    properties:
+                                      key:
+                                        type: string
+                                      operator:
+                                        type: string
+                                      values:
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  type: object
+                              type: object
+                            maxSkew:
+                              format: int32
+                              type: integer
+                            topologyKey:
+                              type: string
+                            whenUnsatisfiable:
+                              type: string
+                          required:
+                          - maxSkew
+                          - topologyKey
+                          - whenUnsatisfiable
+                          type: object
+                        type: array
                       volumeClaimTemplate:
                         properties:
                           apiVersion:
@@ -5267,6 +5636,45 @@ spec:
                           type: integer
                         value:
                           type: string
+                      type: object
+                    type: array
+                  topologySpreadConstraints:
+                    items:
+                      properties:
+                        labelSelector:
+                          properties:
+                            matchExpressions:
+                              items:
+                                properties:
+                                  key:
+                                    type: string
+                                  operator:
+                                    type: string
+                                  values:
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              type: object
+                          type: object
+                        maxSkew:
+                          format: int32
+                          type: integer
+                        topologyKey:
+                          type: string
+                        whenUnsatisfiable:
+                          type: string
+                      required:
+                      - maxSkew
+                      - topologyKey
+                      - whenUnsatisfiable
                       type: object
                     type: array
                 type: object
@@ -5548,6 +5956,14 @@ spec:
                               type: array
                           type: object
                       type: object
+                    annotations:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    labels:
+                      additionalProperties:
+                        type: string
+                      type: object
                     name:
                       type: string
                     nodeSelector:
@@ -5652,6 +6068,45 @@ spec:
                             type: integer
                           value:
                             type: string
+                        type: object
+                      type: array
+                    topologySpreadConstraints:
+                      items:
+                        properties:
+                          labelSelector:
+                            properties:
+                              matchExpressions:
+                                items:
+                                  properties:
+                                    key:
+                                      type: string
+                                    operator:
+                                      type: string
+                                    values:
+                                      items:
+                                        type: string
+                                      type: array
+                                  required:
+                                  - key
+                                  - operator
+                                  type: object
+                                type: array
+                              matchLabels:
+                                additionalProperties:
+                                  type: string
+                                type: object
+                            type: object
+                          maxSkew:
+                            format: int32
+                            type: integer
+                          topologyKey:
+                            type: string
+                          whenUnsatisfiable:
+                            type: string
+                        required:
+                        - maxSkew
+                        - topologyKey
+                        - whenUnsatisfiable
                         type: object
                       type: array
                     volumeClaimTemplate:
@@ -6166,17 +6621,112 @@ spec:
                     type: string
                   storageClassName:
                     type: string
+                  topologySpreadConstraints:
+                    items:
+                      properties:
+                        labelSelector:
+                          properties:
+                            matchExpressions:
+                              items:
+                                properties:
+                                  key:
+                                    type: string
+                                  operator:
+                                    type: string
+                                  values:
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              type: object
+                          type: object
+                        maxSkew:
+                          format: int32
+                          type: integer
+                        topologyKey:
+                          type: string
+                        whenUnsatisfiable:
+                          type: string
+                      required:
+                      - maxSkew
+                      - topologyKey
+                      - whenUnsatisfiable
+                      type: object
+                    type: array
                 type: object
               prometheusOperator:
+                type: boolean
+              readiness:
                 properties:
-                  annotations:
-                    additionalProperties:
-                      type: string
+                  exec:
+                    properties:
+                      command:
+                        items:
+                          type: string
+                        type: array
                     type: object
-                  labels:
-                    additionalProperties:
-                      type: string
+                  failureThreshold:
+                    format: int32
+                    type: integer
+                  httpGet:
+                    properties:
+                      host:
+                        type: string
+                      httpHeaders:
+                        items:
+                          properties:
+                            name:
+                              type: string
+                            value:
+                              type: string
+                          required:
+                          - name
+                          - value
+                          type: object
+                        type: array
+                      path:
+                        type: string
+                      port:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        x-kubernetes-int-or-string: true
+                      scheme:
+                        type: string
+                    required:
+                    - port
                     type: object
+                  initialDelaySeconds:
+                    format: int32
+                    type: integer
+                  periodSeconds:
+                    format: int32
+                    type: integer
+                  successThreshold:
+                    format: int32
+                    type: integer
+                  tcpSocket:
+                    properties:
+                      host:
+                        type: string
+                      port:
+                        anyOf:
+                        - type: integer
+                        - type: string
+                        x-kubernetes-int-or-string: true
+                    required:
+                    - port
+                    type: object
+                  timeoutSeconds:
+                    format: int32
+                    type: integer
                 type: object
               requestAutoCert:
                 type: boolean
@@ -7622,6 +8172,8 @@ spec:
               pools:
                 items:
                   properties:
+                    legacySecurityContext:
+                      type: boolean
                     ssName:
                       type: string
                     state:
@@ -7632,11 +8184,30 @@ spec:
                   type: object
                 nullable: true
                 type: array
+              provisionedBuckets:
+                type: boolean
+              provisionedUsers:
+                type: boolean
               revision:
                 format: int32
                 type: integer
               syncVersion:
                 type: string
+              usage:
+                properties:
+                  capacity:
+                    format: int64
+                    type: integer
+                  rawCapacity:
+                    format: int64
+                    type: integer
+                  rawUsage:
+                    format: int64
+                    type: integer
+                  usage:
+                    format: int64
+                    type: integer
+                type: object
               waitingOnReady:
                 format: date-time
                 type: string
