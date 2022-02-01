@@ -2,6 +2,11 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ---
+# # [4.4.3-bb.1]  - 2022-01-31
+### Updated
+- Chart.yaml to follow new standardization for release automation
+- renovate check to update new standardization
+
 # # [4.4.3-bb.0]  - 2022-01-24
 ### Added
 - upstream console charts with logic to enable/disable -- disabled by default
