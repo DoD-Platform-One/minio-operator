@@ -66,19 +66,28 @@ spec:
             - /bin/bash
             - -c
             - |
-              kubectl get tenants minio-minio-minio-instance -n {{ .Values.tenantPatchJob.minioNamespace }} >& /dev/null
+              kubectl get tenants -A >& /dev/null
               if [[ $? != 0 ]]; then
-                echo "Tenant not found.  no patch necessary :D"
+                echo "no tenants were found.  no patches are necessary :D"
                 exit 0
               fi
-
-              if [[ -z $(kubectl get tenants minio-minio-minio-instance -n {{ .Values.tenantPatchJob.minioNamespace }} -o jsonpath='{.spec.pools[0].securityContext.runAsNonRoot}') ]]; then
-                echo "Patching minio tenants to have securityContext.runAsNonRoot: true"
-                kubectl patch tenants minio-minio-minio-instance -n {{ .Values.tenantPatchJob.minioNamespace }} --type=json -p='[{"op":"add","path":"/spec/pools/0/securityContext/runAsNonRoot", "value":true}]'
-              else
-                echo "existing securityContext.runAsNonRoot was found; no patch necessary :D"
-                exit 0
-              fi
+              
+              for t in $(kubectl get tenants -A -o json | jq -r '.items[] | .metadata.namespace + ":" + .metadata.name'  | xargs); do
+                arr=(${t//:/' '})
+                namespace=${arr[0]}
+                name=${arr[1]}
+                
+                echo "Testing tenant namespace=$namespace name=$name"
+                kubectl get tenants -n $namespace $name >& /dev/null
+                if [[ -z $(kubectl get tenants -n $namespace $name -o jsonpath='{.spec.pools[0].securityContext.runAsNonRoot}') ]]; then
+                  echo "  patch required to add securityContext.runAsNonRoot: true"
+                  kubectl patch tenants -n $namespace $name --type=json -p='[{"op":"add","path":"/spec/pools/0/securityContext/runAsNonRoot", "value":true}]'
+                else
+                  echo "  existing securityContext.runAsNonRoot was found; no patch necessary :D"
+                fi
+                echo
+                  
+              done             
 
           resources:
             requests:

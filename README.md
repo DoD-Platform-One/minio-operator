@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.4.3-bb.1](https://img.shields.io/badge/Version-4.4.3--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.3](https://img.shields.io/badge/AppVersion-v4.4.3-informational?style=flat-square)
+![Version: 4.4.3-bb.2](https://img.shields.io/badge/Version-4.4.3--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.3](https://img.shields.io/badge/AppVersion-v4.4.3-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -35,20 +35,8 @@ helm install minio-operator chart/
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| networkPolicies.enabled | bool | `false` |  |
-| networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
-| networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
-| networkPolicies.ingressLabels.istio | string | `"ingressgateway"` |  |
-| istio.enabled | bool | `false` |  |
-| openshift | bool | `false` |  |
-| monitoring.enabled | bool | `false` |  |
-| monitoring.namespace | string | `"monitoring"` |  |
-| serviceAccount.create | bool | `true` |  |
-| serviceAccount.annotations | object | `{}` |  |
-| serviceAccount.name | string | `""` |  |
-| annotations | object | `{}` |  |
 | operator.env[0].name | string | `"MINIO_OPERATOR_TLS_ENABLE"` |  |
-| operator.env[0].value | string | `"off"` |  |
+| operator.env[0].value | string | `"on"` |  |
 | operator.env[1].name | string | `"CLUSTER_DOMAIN"` |  |
 | operator.env[1].value | string | `"cluster.local"` |  |
 | operator.env[2].name | string | `"WATCHED_NAMESPACE"` |  |
@@ -56,7 +44,7 @@ helm install minio-operator chart/
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
 | operator.image.tag | string | `"v4.4.3"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
-| operator.image.imagePullSecret.name | string | `"private-registry"` |  |
+| operator.imagePullSecrets | list | `[]` |  |
 | operator.initcontainers | list | `[]` |  |
 | operator.replicaCount | int | `1` |  |
 | operator.securityContext.runAsUser | int | `1000` |  |
@@ -93,6 +81,23 @@ helm install minio-operator chart/
 | console.ingress.tls | list | `[]` |  |
 | console.ingress.host | string | `"console.local"` |  |
 | console.ingress.path | string | `"/"` |  |
+| networkPolicies.enabled | bool | `false` |  |
+| networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
+| networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
+| networkPolicies.ingressLabels.istio | string | `"ingressgateway"` |  |
+| istio.enabled | bool | `false` |  |
+| openshift | bool | `false` |  |
+| monitoring.enabled | bool | `false` |  |
+| monitoring.namespace | string | `"monitoring"` |  |
+| serviceAccount.create | bool | `true` |  |
+| serviceAccount.annotations | object | `{}` |  |
+| serviceAccount.name | string | `""` |  |
+| imagePullSecrets | list | `[]` |  |
+| annotations | object | `{}` |  |
+| tenantPatchJob.enabled | bool | `true` |  |
+| tenantPatchJob.image.repository | string | `"registry1.dso.mil/ironbank/big-bang/base"` |  |
+| tenantPatchJob.image.tag | float | `8.4` |  |
+| tenantPatchJob.image.pullSecrets[0] | string | `"private-registry"` |  |
 
 ## Contributing
 
