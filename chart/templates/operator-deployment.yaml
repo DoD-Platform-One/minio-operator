@@ -23,7 +23,7 @@ spec:
       imagePullSecrets:
       {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "minio-operator.serviceAccountName" . }}
+      serviceAccountName: minio-operator
       {{- with .Values.operator.securityContext }}
       securityContext:
       {{- toYaml . | nindent 8 }}

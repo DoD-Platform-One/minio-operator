@@ -8,5 +8,5 @@ roleRef:
   name: minio-operator-role
 subjects:
   - kind: ServiceAccount
-    name: {{ include "minio-operator.serviceAccountName" . }}
+    name: minio-operator
     namespace: {{ .Release.Namespace }}

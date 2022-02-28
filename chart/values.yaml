@@ -11,7 +11,7 @@ operator:
       value: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.4.3
+    tag: v4.4.10
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
@@ -38,7 +38,7 @@ console:
   enabled: false
   image:
     repository: minio/console
-    tag: v0.13.2
+    tag: v0.14.8
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
@@ -59,7 +59,9 @@ console:
     tls: [ ]
     host: console.local
     path: /
-    
+  volumes: [ ]
+  volumeMounts: [ ]
+
 # Big Bang Added Values    
 
 networkPolicies:
@@ -77,7 +79,7 @@ openshift: false
 monitoring:
   enabled: false
   namespace: monitoring
-    
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
