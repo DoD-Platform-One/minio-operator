@@ -86,10 +86,3 @@ Selector labels Operator
 app.kubernetes.io/name: {{ include "minio-operator.name" . }}
 app.kubernetes.io/instance: {{ printf "%s-%s" .Release.Name "console" }}
 {{- end -}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "minio-operator.serviceAccountName" -}}
-minio-operator
-{{- end }}

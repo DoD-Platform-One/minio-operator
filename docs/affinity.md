@@ -1,20 +1,23 @@
 # Affinity
 
-* [Kubernetes affinity ](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
+* [Kubernetes affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
 
-Pod constraints for MinIO operator is implemented following the kubernetes affinity documentation. The MinIO Operator Pod can be constrained using nodeSelector or Affinity/Antti-affinity feature
+Pod constraints for MinIO operator is implemented following the kubernetes affinity documentation. The MinIO Operator Pod can be constrained using nodeSelector or Affinity/Anti-affinity feature
 
-## nodeSelector 
+## nodeSelector
+
 In the values.yaml  set `nodeSelector` as such:
-```
+
+```yaml
  nodeSelector:
     <key>: <values> 
 ```
 
 ## nodeAffinity
+
 In the `values.yaml`, set `nodeAffinity` as such:
 
-```
+```yaml
 affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -34,10 +37,12 @@ affinity:
             values:
             - another-node-label-value
 ```
-## podAffinity
-In the `values.yaml`, set Pod affinity/antiaffinity like:
 
-```
+## podAffinity
+
+In the `values.yaml`, set Pod affinity/anti-affinity like:
+
+```yaml
 affinity:
     podAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -60,6 +65,3 @@ affinity:
               - S2
           topologyKey: topology.kubernetes.io/zone
 ```
-
-
-
