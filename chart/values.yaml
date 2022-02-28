@@ -104,3 +104,5 @@ tenantPatchJob:
     tag: 8.4
     pullSecrets:
       - private-registry
+
+installCRDs: true
