@@ -6,7 +6,7 @@
   "dependencyDashboardTitle": "Renovate: Upgrade MinIO-Operator Package Dependencies",
   "draftPR": true,
   "enabledManagers": ["regex"],
-  "labels": ["minioOperator","Package Sustainment","kind::chore"],
+  "labels": ["minioOperator","Package Sustainment","kind::maintenance"],
   
   "packageRules": [
     {
