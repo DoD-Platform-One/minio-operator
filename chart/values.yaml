@@ -11,7 +11,7 @@ operator:
       value: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.4.10
+    tag: v4.4.12
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
@@ -37,8 +37,8 @@ operator:
 console:
   enabled: false
   image:
-    repository: minio/console
-    tag: v0.14.8
+    repository: registry1.dso.mil/ironbank/opensource/minio/console
+    tag: v0.15.5
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
