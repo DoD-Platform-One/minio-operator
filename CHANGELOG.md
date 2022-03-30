@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [4.4.12-bb.0] - 2022-03-30
+
+### Changed
+
+- Update to 4.4.12
+  
 ## [4.4.10-bb.1] - 2022-02-28
 
 ### Changed
