@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.4.12-bb.1](https://img.shields.io/badge/Version-4.4.12--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.12](https://img.shields.io/badge/AppVersion-v4.4.12-informational?style=flat-square)
+![Version: 4.4.12-bb.2](https://img.shields.io/badge/Version-4.4.12--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.12](https://img.shields.io/badge/AppVersion-v4.4.12-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -42,7 +42,7 @@ helm install minio-operator chart/
 | operator.env[2].name | string | `"WATCHED_NAMESPACE"` |  |
 | operator.env[2].value | string | `""` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v4.4.10"` |  |
+| operator.image.tag | string | `"v4.4.12"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | list | `[]` |  |
 | operator.initcontainers | list | `[]` |  |
@@ -61,8 +61,8 @@ helm install minio-operator chart/
 | operator.resources.limits.cpu | string | `"200m"` |  |
 | operator.resources.limits.memory | string | `"256Mi"` |  |
 | console.enabled | bool | `false` |  |
-| console.image.repository | string | `"minio/console"` |  |
-| console.image.tag | string | `"v0.14.8"` |  |
+| console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/console"` |  |
+| console.image.tag | string | `"v0.15.5"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
 | console.imagePullSecrets | list | `[]` |  |
 | console.initcontainers | list | `[]` |  |
