@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.4.12-bb.2](https://img.shields.io/badge/Version-4.4.12--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.12](https://img.shields.io/badge/AppVersion-v4.4.12-informational?style=flat-square)
+![Version: 4.4.12-bb.3](https://img.shields.io/badge/Version-4.4.12--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.12](https://img.shields.io/badge/AppVersion-v4.4.12-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -88,6 +88,7 @@ helm install minio-operator chart/
 | networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
 | networkPolicies.ingressLabels.istio | string | `"ingressgateway"` |  |
 | istio.enabled | bool | `false` |  |
+| istio.mtls.mode | string | `"STRICT"` |  |
 | openshift | bool | `false` |  |
 | monitoring.enabled | bool | `false` |  |
 | monitoring.namespace | string | `"monitoring"` |  |
