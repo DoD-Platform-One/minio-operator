@@ -11,20 +11,20 @@ operator:
       value: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.4.12
+    tag: v4.4.16
     pullPolicy: IfNotPresent
-  imagePullSecrets: [ ]
-  initcontainers: [ ]
+  imagePullSecrets: []
+  initcontainers: []
   replicaCount: 1
   securityContext:
     runAsUser: 1000
     runAsGroup: 1000
     runAsNonRoot: true
     fsGroup: 1000
-  nodeSelector: { }
-  affinity: { }
-  tolerations: [ ]
-  topologySpreadConstraints: [ ]
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  topologySpreadConstraints: []
   resources:
     requests:
       cpu: 200m
@@ -38,31 +38,31 @@ console:
   enabled: false
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/console
-    tag: v0.15.5
+    tag: v0.16.0
     pullPolicy: IfNotPresent
-  imagePullSecrets: [ ]
-  initcontainers: [ ]
+  imagePullSecrets: []
+  initcontainers: []
   replicaCount: 1
-  nodeSelector: { }
-  affinity: { }
-  tolerations: [ ]
-  topologySpreadConstraints: [ ]
-  resources: { }
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  topologySpreadConstraints: []
+  resources: {}
   securityContext:
     runAsUser: 1000
     runAsNonRoot: true
   ingress:
     enabled: false
     ingressClassName: ""
-    labels: { }
-    annotations: { }
-    tls: [ ]
+    labels: {}
+    annotations: {}
+    tls: []
     host: console.local
     path: /
-  volumes: [ ]
-  volumeMounts: [ ]
+  volumes: []
+  volumeMounts: []
 
-# Big Bang Added Values    
+# Big Bang Added Values
 
 networkPolicies:
   enabled: false
@@ -98,7 +98,7 @@ imagePullSecrets: []
 #fullnameOverride: ""
 
 annotations: {}
-    
+
 # Used in templates/bigbang/tenant-patch-job.yaml
 # Needed for operator upgrade.go logic to cleanly upgrade from bb v4.2.3 to v4.4.3
 tenantPatchJob:
@@ -108,5 +108,4 @@ tenantPatchJob:
     tag: 8.4
     pullSecrets:
       - private-registry
-
 installCRDs: true

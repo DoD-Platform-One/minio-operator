@@ -1,8 +1,8 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
 name: minio-operator
-version: 4.4.12-bb.3
-appVersion: v4.4.12
+version: 4.4.16-bb.0
+appVersion: v4.4.16
 keywords:
   - storage
   - object-storage
@@ -17,9 +17,9 @@ maintainers:
 type: application
 dependencies:
   - name: minio-operator-crds
-    version: "4.4.12"
+    version: "4.4.16"
     condition: installCRDs
     repository: "file://minio-operator-crds"
 annotations:
   bigbang.dev/applicationVersions: |
-    - Minio Operator: v4.4.12
+    - Minio Operator: v4.4.16
