@@ -26,9 +26,17 @@
     {
       "fileMatch": ["^chart/Chart\\.yaml$"],
       "matchStrings": [
-          "- Minio Operator:\\s+(?<currentValue>.+)"
+          "- Minio Operator:\\s+(?<currentValue>.+)",
+          "appVersion:\\s+(?<currentValue>.+)"
       ],
       "depNameTemplate": "ironbank/opensource/minio/operator",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "fileMatch": ["^tests/images\\.txt$"],
+      "matchStrings": [
+        "s*(?<depName>.+):(?<currentValue>.+)"
+      ],
       "datasourceTemplate": "docker"
     }
   ]
