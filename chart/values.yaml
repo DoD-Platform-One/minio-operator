@@ -105,7 +105,7 @@ tenantPatchJob:
   enabled: true
   image:
     repository: registry1.dso.mil/ironbank/big-bang/base
-    tag: 8.4
+    tag: 1.17.0
     pullSecrets:
       - private-registry
 installCRDs: true
