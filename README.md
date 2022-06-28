@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.4.16-bb.2](https://img.shields.io/badge/Version-4.4.16--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.16](https://img.shields.io/badge/AppVersion-v4.4.16-informational?style=flat-square)
+![Version: 4.4.16-bb.3](https://img.shields.io/badge/Version-4.4.16--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.16](https://img.shields.io/badge/AppVersion-v4.4.16-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -97,9 +97,9 @@ helm install minio-operator chart/
 | serviceAccount.name | string | `""` |  |
 | imagePullSecrets | list | `[]` |  |
 | annotations | object | `{}` |  |
-| tenantPatchJob.enabled | bool | `true` |  |
+| tenantPatchJob.enabled | bool | `false` |  |
 | tenantPatchJob.image.repository | string | `"registry1.dso.mil/ironbank/big-bang/base"` |  |
-| tenantPatchJob.image.tag | string | `"1.17.0"` |  |
+| tenantPatchJob.image.tag | string | `"2.0.0"` |  |
 | tenantPatchJob.image.pullSecrets[0] | string | `"private-registry"` |  |
 | installCRDs | bool | `true` |  |
 
