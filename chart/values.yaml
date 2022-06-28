@@ -102,10 +102,10 @@ annotations: {}
 # Used in templates/bigbang/tenant-patch-job.yaml
 # Needed for operator upgrade.go logic to cleanly upgrade from bb v4.2.3 to v4.4.3
 tenantPatchJob:
-  enabled: true
+  enabled: false
   image:
     repository: registry1.dso.mil/ironbank/big-bang/base
-    tag: 1.17.0
+    tag: 2.0.0
     pullSecrets:
       - private-registry
 installCRDs: true
