@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [4.4.25-bb.0] - 2022-07-01
+### Upgrade
+- Update to 4.4.25
+
 ## [4.4.16-bb.3] - 2022-06-28
 ### Updated
 - Updated bb base image to 2.0.0

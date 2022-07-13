@@ -11,20 +11,20 @@ operator:
       value: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.4.16
+    tag: v4.4.25
     pullPolicy: IfNotPresent
-  imagePullSecrets: []
-  initcontainers: []
+  imagePullSecrets: [ ]
+  initcontainers: [ ]
   replicaCount: 1
   securityContext:
     runAsUser: 1000
     runAsGroup: 1000
     runAsNonRoot: true
     fsGroup: 1000
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-  topologySpreadConstraints: []
+  nodeSelector: { }
+  affinity: { }
+  tolerations: [ ]
+  topologySpreadConstraints: [ ]
   resources:
     requests:
       cpu: 200m
@@ -38,29 +38,30 @@ console:
   enabled: false
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/console
-    tag: v0.16.0
+    tag: v0.19.0
     pullPolicy: IfNotPresent
-  imagePullSecrets: []
-  initcontainers: []
+  imagePullSecrets: [ ]
+  initcontainers: [ ]
   replicaCount: 1
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-  topologySpreadConstraints: []
-  resources: {}
+  nodeSelector: { }
+  affinity: { }
+  tolerations: [ ]
+  topologySpreadConstraints: [ ]
+  resources: { }
   securityContext:
     runAsUser: 1000
     runAsNonRoot: true
   ingress:
     enabled: false
     ingressClassName: ""
-    labels: {}
-    annotations: {}
-    tls: []
+    labels: { }
+    annotations: { }
+    tls: [ ]
     host: console.local
     path: /
-  volumes: []
-  volumeMounts: []
+    pathType: Prefix
+  volumes: [ ]
+  volumeMounts: [ ]
 
 # Big Bang Added Values
 
