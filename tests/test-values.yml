@@ -1,2 +1,7 @@
-imagePullSecrets:
-  - name: private-registry
+operator:
+  imagePullSecrets:
+    - name: private-registry
+
+console:
+  imagePullSecrets:
+    - name: private-registry

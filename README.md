@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.4.25-bb.0](https://img.shields.io/badge/Version-4.4.25--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.25](https://img.shields.io/badge/AppVersion-v4.4.25-informational?style=flat-square)
+![Version: 4.4.28-bb.0](https://img.shields.io/badge/Version-4.4.28--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.28](https://img.shields.io/badge/AppVersion-v4.4.28-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -42,7 +42,7 @@ helm install minio-operator chart/
 | operator.env[2].name | string | `"WATCHED_NAMESPACE"` |  |
 | operator.env[2].value | string | `""` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v4.4.25"` |  |
+| operator.image.tag | string | `"v4.4.28"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | list | `[]` |  |
 | operator.initcontainers | list | `[]` |  |
@@ -62,7 +62,7 @@ helm install minio-operator chart/
 | operator.resources.limits.memory | string | `"256Mi"` |  |
 | console.enabled | bool | `false` |  |
 | console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/console"` |  |
-| console.image.tag | string | `"v0.19.0"` |  |
+| console.image.tag | string | `"v0.19.5"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
 | console.imagePullSecrets | list | `[]` |  |
 | console.initcontainers | list | `[]` |  |
@@ -96,7 +96,6 @@ helm install minio-operator chart/
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.name | string | `""` |  |
-| imagePullSecrets | list | `[]` |  |
 | annotations | object | `{}` |  |
 | tenantPatchJob.enabled | bool | `false` |  |
 | tenantPatchJob.image.repository | string | `"registry1.dso.mil/ironbank/big-bang/base"` |  |
