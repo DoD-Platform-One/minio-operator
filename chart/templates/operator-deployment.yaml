@@ -50,7 +50,7 @@ spec:
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           {{- with .Values.operator.env }}
           securityContext:
-            {{- toYaml $.Values.containerSecurityContext | nindent 12 }}
+            {{- toYaml $.Values.operator.containerSecurityContext | nindent 12 }}
           env:
           {{ toYaml . | nindent 10 }}
           {{- end }}
