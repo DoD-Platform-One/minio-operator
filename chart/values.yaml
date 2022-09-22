@@ -33,6 +33,10 @@ operator:
     limits:
       cpu: 200m
       memory: 256Mi
+  containerSecurityContext:
+    capabilities:
+      drop: 
+        - ALL
 
 console:
   enabled: false
@@ -62,6 +66,10 @@ console:
     pathType: Prefix
   volumes: [ ]
   volumeMounts: [ ]
+  containerSecurityContext:
+    capabilities:
+      drop: 
+        - ALL
 
 # Big Bang Added Values
 

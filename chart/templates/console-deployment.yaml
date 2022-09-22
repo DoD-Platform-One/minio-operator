@@ -45,6 +45,8 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.console.image.repository }}:{{ .Values.console.image.tag }}"
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
+          securityContext:
+            {{- toYaml $.Values.console.containerSecurityContext | nindent 12 }}
           ports:
             - containerPort: 9090
               name: http
