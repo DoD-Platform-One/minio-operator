@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.4.28-bb.2](https://img.shields.io/badge/Version-4.4.28--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.4.28](https://img.shields.io/badge/AppVersion-v4.4.28-informational?style=flat-square)
+![Version: 4.5.1-bb.0](https://img.shields.io/badge/Version-4.5.1--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.5.1](https://img.shields.io/badge/AppVersion-v4.5.1-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -42,7 +42,7 @@ helm install minio-operator chart/
 | operator.env[2].name | string | `"WATCHED_NAMESPACE"` |  |
 | operator.env[2].value | string | `""` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v4.4.28"` |  |
+| operator.image.tag | string | `"v4.5.1"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | list | `[]` |  |
 | operator.initcontainers | list | `[]` |  |
@@ -63,7 +63,7 @@ helm install minio-operator chart/
 | operator.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | console.enabled | bool | `false` |  |
 | console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/console"` |  |
-| console.image.tag | string | `"v0.20.0"` |  |
+| console.image.tag | string | `"v0.20.4"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
 | console.imagePullSecrets | list | `[]` |  |
 | console.initcontainers | list | `[]` |  |
