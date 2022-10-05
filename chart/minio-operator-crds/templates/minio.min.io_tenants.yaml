@@ -4,8 +4,7 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.7
     meta.helm.sh/release-name: minio-operator
-    meta.helm.sh/release-namespace: minio-operator
-  creationTimestamp: null
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/managed-by: Helm
   name: tenants.minio.min.io
@@ -16,7 +15,7 @@ spec:
       clientConfig:
         service:
           name: operator
-          namespace: minio-operator
+          namespace: {{ .Release.Namespace }}
           path: /webhook/v1/crd-conversion
           port: 4222
       conversionReviewVersions:
@@ -180,6 +179,17 @@ spec:
                 required:
                 - name
                 type: object
+              externalClientCertSecrets:
+                items:
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
               image:
                 type: string
               imagePullPolicy:
@@ -2228,6 +2238,22 @@ spec:
                     type: string
                   storageClassName:
                     type: string
+                  tolerations:
+                    items:
+                      properties:
+                        effect:
+                          type: string
+                        key:
+                          type: string
+                        operator:
+                          type: string
+                        tolerationSeconds:
+                          format: int64
+                          type: integer
+                        value:
+                          type: string
+                      type: object
+                    type: array
                   topologySpreadConstraints:
                     items:
                       properties:
@@ -4542,6 +4568,17 @@ spec:
                 required:
                 - name
                 type: object
+              externalClientCertSecrets:
+                items:
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                type: array
               features:
                 properties:
                   bucketDNS:
@@ -7239,6 +7276,22 @@ spec:
                     type: string
                   storageClassName:
                     type: string
+                  tolerations:
+                    items:
+                      properties:
+                        effect:
+                          type: string
+                        key:
+                          type: string
+                        operator:
+                          type: string
+                        tolerationSeconds:
+                          format: int64
+                          type: integer
+                        value:
+                          type: string
+                      type: object
+                    type: array
                   topologySpreadConstraints:
                     items:
                       properties:

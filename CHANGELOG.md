@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [4.4.1-bb.0] - 2022-10-04
+### Upgrade
+- Updated Minio Operator Helm Chart to Version 4.5.1
+- Updated Minio CRD to Version 4.5.1
+- Updated Operator Image to v4.5.1
+- Updated Console Image to v0.20.4
+
 ## [4.4.28-bb.2] - 2022-09-20
 ### Upgrade
 - Add capabilities drop ALL

@@ -1,5 +1,4 @@
 # Default values for minio-operator.
-
 operator:
   ## Setup environment variables for the Operator
   env:
@@ -11,7 +10,7 @@ operator:
       value: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.4.28
+    tag: v4.5.1
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
@@ -42,7 +41,7 @@ console:
   enabled: false
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/console
-    tag: v0.20.0
+    tag: v0.20.4
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
