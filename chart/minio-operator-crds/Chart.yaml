@@ -1,8 +1,8 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator CRD deployment
 name: minio-operator-crds
-version: "4.5.1"
-appVersion: "4.5.1"
+version: "4.5.3"
+appVersion: "4.5.3"
 kubeVersion: ">=1.19.0-0"
 keywords:
   - Minio
