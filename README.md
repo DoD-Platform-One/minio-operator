@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.5.3-bb.0](https://img.shields.io/badge/Version-4.5.3--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.5.3](https://img.shields.io/badge/AppVersion-v4.5.3-informational?style=flat-square)
+![Version: 4.5.4-bb.0](https://img.shields.io/badge/Version-4.5.4--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.5.4](https://img.shields.io/badge/AppVersion-v4.5.4-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -42,7 +42,7 @@ helm install minio-operator chart/
 | operator.env[2].name | string | `"WATCHED_NAMESPACE"` |  |
 | operator.env[2].value | string | `""` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v4.5.3"` |  |
+| operator.image.tag | string | `"v4.5.4"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | list | `[]` |  |
 | operator.initcontainers | list | `[]` |  |
@@ -52,7 +52,10 @@ helm install minio-operator chart/
 | operator.securityContext.runAsNonRoot | bool | `true` |  |
 | operator.securityContext.fsGroup | int | `1000` |  |
 | operator.nodeSelector | object | `{}` |  |
-| operator.affinity | object | `{}` |  |
+| operator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].key | string | `"name"` |  |
+| operator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].operator | string | `"In"` |  |
+| operator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"minio-operator"` |  |
+| operator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey | string | `"kubernetes.io/hostname"` |  |
 | operator.tolerations | list | `[]` |  |
 | operator.topologySpreadConstraints | list | `[]` |  |
 | operator.resources.requests.cpu | string | `"200m"` |  |
@@ -63,7 +66,7 @@ helm install minio-operator chart/
 | operator.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | console.enabled | bool | `false` |  |
 | console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/console"` |  |
-| console.image.tag | string | `"v0.21.1"` |  |
+| console.image.tag | string | `"v0.21.3"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
 | console.imagePullSecrets | list | `[]` |  |
 | console.initcontainers | list | `[]` |  |
