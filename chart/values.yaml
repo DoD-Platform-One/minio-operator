@@ -10,16 +10,15 @@ operator:
       value: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.5.4
+    tag: v4.5.8
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
   replicaCount: 1
-  securityContext:
+  containerSecurityContext:
     runAsUser: 1000
     runAsGroup: 1000
     runAsNonRoot: true
-    fsGroup: 1000
   nodeSelector: { }
   affinity:
     podAntiAffinity:
@@ -41,16 +40,12 @@ operator:
     limits:
       cpu: 200m
       memory: 256Mi
-  containerSecurityContext:
-    capabilities:
-      drop: 
-        - ALL
 
 console:
   enabled: false
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/console
-    tag: v0.21.3
+    tag: v0.23.0
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
@@ -60,7 +55,10 @@ console:
   tolerations: [ ]
   topologySpreadConstraints: [ ]
   resources: { }
-  securityContext:
+  SecurityContext:
+    runAsUser: 1000
+    runAsNonRoot: true
+  containerSecurityContext:
     runAsUser: 1000
     runAsNonRoot: true
   ingress:
@@ -74,10 +72,6 @@ console:
     pathType: Prefix
   volumes: [ ]
   volumeMounts: [ ]
-  containerSecurityContext:
-    capabilities:
-      drop: 
-        - ALL
 
 # Big Bang Added Values
 
