@@ -49,14 +49,20 @@ spec:
           image: "{{ .Values.operator.image.repository }}:{{ .Values.operator.image.tag }}"
           imagePullPolicy: {{ .Values.operator.image.pullPolicy }}
           {{- with .Values.operator.env }}
-          securityContext:
-            {{- toYaml $.Values.operator.containerSecurityContext | nindent 12 }}
           env:
           {{ toYaml . | nindent 10 }}
           {{- end }}
           resources:
-      {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- toYaml .Values.operator.resources | nindent 12 }}
+          securityContext:
+          {{- with .Values.operator.containerSecurityContext }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
       {{- with .Values.operator.initContainers }}
       initContainers:
       {{- toYaml . | nindent 8 }}
       {{- end}}
+      {{- with .Values.operator.runtimeClassName }}
+      runtimeClassName: 
+      {{- toYaml . | nindent 8 }}
+  {{- end }}

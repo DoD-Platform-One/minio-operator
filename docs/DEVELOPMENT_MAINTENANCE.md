@@ -14,7 +14,6 @@
  `helm dependency update chart`
 
 # How to test the upgrade
-
 Local install:
 1. Clean install:
 install minio-operator and minio from your branch.
@@ -26,6 +25,48 @@ modify [MinIO](https://repo1.dso.mil/platform-one/big-bang/apps/application-util
 
 # Modifications made to upstream chart
 This is a high-level list of modifitations that Big Bang has made to the upstream helm chart. You can use this as as cross-check to make sure that no modifications were lost during the upgrade process.
+
+## When performing the helm update the following items should be maintained.
+1. In chart/templates/_helpers.tpl; maintain the folowing function:
+```
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "minio-operator.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+```
+1. in chart/templates/console-deployment.yaml:  keep the condiitonal
+```
+{{- if .Values.console.enabled }}
+```
+1. in chart/templates/consolde-ingress.yaml:  keep the conditional deployment
+```
+{{- if .Values.console.enabled }}
+```
+1. in chart/template/console-ui.yaml: keep the conditional
+```
+{{- if .Values.console.enabled }}
+```
+1. if there is a version of minio.min.io_tenants.yaml in the chart/templates, this file should be moved to the minio package if the kpt update does not do it automatically.
+1. in chart/templates/serviceaccount.yaml: maintain the conditionals around the service account creation.
+1. in chart/templates/operator-deployment.yaml: keep the line 18 annotions section below:
+```
+     annotations:
+        {{- toYaml .Values.annotations | nindent 8 }}
+      {{- end }}
+
+```
 
 ##  chart/values.yaml
 - Bigbang additions at the end of the file
