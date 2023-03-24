@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 4.5.8-bb.0](https://img.shields.io/badge/Version-4.5.8--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.5.8](https://img.shields.io/badge/AppVersion-v4.5.8-informational?style=flat-square)
+![Version: 4.5.8-bb.1](https://img.shields.io/badge/Version-4.5.8--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v4.5.8](https://img.shields.io/badge/AppVersion-v4.5.8-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -47,9 +47,14 @@ helm install minio-operator chart/
 | operator.imagePullSecrets | list | `[]` |  |
 | operator.initcontainers | list | `[]` |  |
 | operator.replicaCount | int | `1` |  |
+| operator.SecurityContext.runAsUser | int | `1000` |  |
+| operator.SecurityContext.runAsGroup | int | `1000` |  |
+| operator.SecurityContext.runAsNonRoot | bool | `true` |  |
+| operator.SecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | operator.containerSecurityContext.runAsUser | int | `1000` |  |
 | operator.containerSecurityContext.runAsGroup | int | `1000` |  |
 | operator.containerSecurityContext.runAsNonRoot | bool | `true` |  |
+| operator.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | operator.nodeSelector | object | `{}` |  |
 | operator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].key | string | `"name"` |  |
 | operator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].operator | string | `"In"` |  |
@@ -64,7 +69,7 @@ helm install minio-operator chart/
 | operator.resources.limits.memory | string | `"256Mi"` |  |
 | console.enabled | bool | `false` |  |
 | console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/console"` |  |
-| console.image.tag | string | `"v0.23.0"` |  |
+| console.image.tag | string | `"v0.25.0"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
 | console.imagePullSecrets | list | `[]` |  |
 | console.initcontainers | list | `[]` |  |
@@ -76,8 +81,10 @@ helm install minio-operator chart/
 | console.resources | object | `{}` |  |
 | console.SecurityContext.runAsUser | int | `1000` |  |
 | console.SecurityContext.runAsNonRoot | bool | `true` |  |
+| console.SecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | console.containerSecurityContext.runAsUser | int | `1000` |  |
 | console.containerSecurityContext.runAsNonRoot | bool | `true` |  |
+| console.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | console.ingress.enabled | bool | `false` |  |
 | console.ingress.ingressClassName | string | `""` |  |
 | console.ingress.labels | object | `{}` |  |
