@@ -15,10 +15,14 @@ operator:
   imagePullSecrets: [ ]
   initcontainers: [ ]
   replicaCount: 1
+  securityContext: {}
   containerSecurityContext:
     runAsUser: 1000
     runAsGroup: 1000
     runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
   nodeSelector: { }
   affinity:
     podAntiAffinity:
@@ -45,7 +49,7 @@ console:
   enabled: false
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/console
-    tag: v0.23.0
+    tag: v0.25.0
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
@@ -55,12 +59,13 @@ console:
   tolerations: [ ]
   topologySpreadConstraints: [ ]
   resources: { }
-  SecurityContext:
-    runAsUser: 1000
-    runAsNonRoot: true
+  securityContext: {}
   containerSecurityContext:
     runAsUser: 1000
     runAsNonRoot: true
+    capabilities:
+      drop:
+        - ALL
   ingress:
     enabled: false
     ingressClassName: ""
