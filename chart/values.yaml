@@ -10,7 +10,7 @@ operator:
       value: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v4.5.8
+    tag: v5.0.3
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
@@ -24,6 +24,7 @@ operator:
       drop:
         - ALL
   nodeSelector: { }
+  priorityClassName: ""
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -49,7 +50,7 @@ console:
   enabled: false
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/console
-    tag: v0.25.0
+    tag: v0.26.0
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
