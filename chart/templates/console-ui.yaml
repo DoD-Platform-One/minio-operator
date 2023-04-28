@@ -30,6 +30,7 @@ rules:
       - list
       - patch
       - update
+      - delete
       - deletecollection
   - apiGroups:
       - ""
