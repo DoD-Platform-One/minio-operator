@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.4-bb.0](https://img.shields.io/badge/Version-5.0.4--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.4](https://img.shields.io/badge/AppVersion-v5.0.4-informational?style=flat-square)
+![Version: 5.0.4-bb.1](https://img.shields.io/badge/Version-5.0.4--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.4](https://img.shields.io/badge/AppVersion-v5.0.4-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -48,8 +48,8 @@ helm install minio-operator chart/
 | operator.initcontainers | list | `[]` |  |
 | operator.replicaCount | int | `1` |  |
 | operator.securityContext | object | `{}` |  |
-| operator.containerSecurityContext.runAsUser | int | `1000` |  |
-| operator.containerSecurityContext.runAsGroup | int | `1000` |  |
+| operator.containerSecurityContext.runAsUser | int | `1001` |  |
+| operator.containerSecurityContext.runAsGroup | int | `1001` |  |
 | operator.containerSecurityContext.runAsNonRoot | bool | `true` |  |
 | operator.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | operator.nodeSelector | object | `{}` |  |
@@ -78,7 +78,7 @@ helm install minio-operator chart/
 | console.topologySpreadConstraints | list | `[]` |  |
 | console.resources | object | `{}` |  |
 | console.securityContext | object | `{}` |  |
-| console.containerSecurityContext.runAsUser | int | `1000` |  |
+| console.containerSecurityContext.runAsUser | int | `1001` |  |
 | console.containerSecurityContext.runAsNonRoot | bool | `true` |  |
 | console.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | console.ingress.enabled | bool | `false` |  |
