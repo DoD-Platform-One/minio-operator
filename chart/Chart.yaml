@@ -1,7 +1,7 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
 name: minio-operator
-version: 5.0.4-bb.1
+version: 5.0.4-bb.2
 appVersion: v5.0.4
 keywords:
   - storage
@@ -28,4 +28,4 @@ annotations:
       image: registry1.dso.mil/ironbank/opensource/minio/operator:v5.0.4
     - name: console
       condition: console.enabled
-      image: registry1.dso.mil/ironbank/opensource/minio/console:v0.26.0
+      image: registry1.dso.mil/ironbank/opensource/minio/console:v0.26.4

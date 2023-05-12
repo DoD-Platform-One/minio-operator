@@ -50,7 +50,7 @@ console:
   enabled: false
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/console
-    tag: v0.26.0
+    tag: v0.26.4
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
