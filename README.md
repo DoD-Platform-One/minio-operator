@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.4-bb.1](https://img.shields.io/badge/Version-5.0.4--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.4](https://img.shields.io/badge/AppVersion-v5.0.4-informational?style=flat-square)
+![Version: 5.0.4-bb.2](https://img.shields.io/badge/Version-5.0.4--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.4](https://img.shields.io/badge/AppVersion-v5.0.4-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -67,7 +67,7 @@ helm install minio-operator chart/
 | operator.resources.limits.memory | string | `"256Mi"` |  |
 | console.enabled | bool | `false` |  |
 | console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/console"` |  |
-| console.image.tag | string | `"v0.26.0"` |  |
+| console.image.tag | string | `"v0.26.4"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
 | console.imagePullSecrets | list | `[]` |  |
 | console.initcontainers | list | `[]` |  |
