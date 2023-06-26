@@ -10,7 +10,7 @@ operator:
       value: ""
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator
-    tag: v5.0.4
+    tag: v5.0.5
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]
@@ -50,7 +50,7 @@ console:
   enabled: false
   image:
     repository: registry1.dso.mil/ironbank/opensource/minio/console
-    tag: v0.26.4
+    tag: v0.30.0
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
   initcontainers: [ ]

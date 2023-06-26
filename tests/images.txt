@@ -1,1 +1,1 @@
-registry1.dso.mil/ironbank/opensource/minio/console:v0.26.4
+registry1.dso.mil/ironbank/opensource/minio/console:v0.30.0
