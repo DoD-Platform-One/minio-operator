@@ -1,6 +1,6 @@
-# operator
+# minio-operator
 
-![Version: 5.0.5-bb.0](https://img.shields.io/badge/Version-5.0.5--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.5](https://img.shields.io/badge/AppVersion-v5.0.5-informational?style=flat-square)
+![Version: 5.0.9-bb.0](https://img.shields.io/badge/Version-5.0.9--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.9](https://img.shields.io/badge/AppVersion-v5.0.9-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -28,7 +28,7 @@ https://helm.sh/docs/intro/install/
 * Clone down the repository
 * cd into directory
 ```bash
-helm install operator chart/
+helm install minio-operator chart/
 ```
 
 ## Values
@@ -42,16 +42,19 @@ helm install operator chart/
 | operator.env[2].name | string | `"WATCHED_NAMESPACE"` |  |
 | operator.env[2].value | string | `""` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v5.0.5"` |  |
+| operator.image.tag | string | `"v5.0.9"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | list | `[]` |  |
-| operator.initcontainers | list | `[]` |  |
+| operator.runtimeClassName | string | `nil` |  |
+| operator.initContainers | list | `[]` |  |
 | operator.replicaCount | int | `1` |  |
 | operator.securityContext | object | `{}` |  |
 | operator.containerSecurityContext.runAsUser | int | `1001` |  |
 | operator.containerSecurityContext.runAsGroup | int | `1001` |  |
 | operator.containerSecurityContext.runAsNonRoot | bool | `true` |  |
 | operator.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| operator.volumes | list | `[]` |  |
+| operator.volumeMounts | list | `[]` |  |
 | operator.nodeSelector | object | `{}` |  |
 | operator.priorityClassName | string | `""` |  |
 | operator.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].key | string | `"name"` |  |
@@ -66,11 +69,13 @@ helm install operator chart/
 | operator.resources.limits.cpu | string | `"200m"` |  |
 | operator.resources.limits.memory | string | `"256Mi"` |  |
 | console.enabled | bool | `false` |  |
-| console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/console"` |  |
-| console.image.tag | string | `"v0.30.0"` |  |
+| console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
+| console.image.tag | string | `"v5.0.9"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
+| console.env | list | `[]` |  |
 | console.imagePullSecrets | list | `[]` |  |
-| console.initcontainers | list | `[]` |  |
+| console.runtimeClassName | string | `nil` |  |
+| console.initContainers | list | `[]` |  |
 | console.replicaCount | int | `1` |  |
 | console.nodeSelector | object | `{}` |  |
 | console.affinity | object | `{}` |  |

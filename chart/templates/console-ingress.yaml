@@ -12,8 +12,8 @@ metadata:
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.console.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.console.ingress.ingressClassName }}
+  {{- with .Values.console.ingress.ingressClassName }}
+  ingressClassName: {{ . }}
   {{- end }}
   {{- if .Values.console.ingress.tls }}
   tls:
@@ -36,5 +36,5 @@ spec:
                 name: "console"
                 port:
                   name: http
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}
