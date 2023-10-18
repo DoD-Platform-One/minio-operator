@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [5.0.10-bb.0] - 2023-10-17
+### Upgrade
+- Updated Minio Operator Helm Chart to v5.0.10
+
 ## [5.0.9-bb.0]
 ### Upgrade
 - Update console to version v0.30.0
