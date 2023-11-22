@@ -111,7 +111,7 @@ helm install minio-operator chart/
 | annotations | object | `{}` |  |
 | tenantPatchJob.enabled | bool | `false` |  |
 | tenantPatchJob.image.repository | string | `"registry1.dso.mil/ironbank/big-bang/base"` |  |
-| tenantPatchJob.image.tag | string | `"2.0.0"` |  |
+| tenantPatchJob.image.tag | string | `"2.1.0"` |  |
 | tenantPatchJob.image.pullSecrets[0] | string | `"private-registry"` |  |
 | installCRDs | bool | `true` |  |
 
