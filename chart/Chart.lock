@@ -1,6 +1,6 @@
 dependencies:
 - name: minio-operator-crds
   repository: file://minio-operator-crds
-  version: 5.0.10
-digest: sha256:ea0c3ac1a7fdb5f94b5c23dc94f9695915d1a795172c530c368a9259f0eecb22
-generated: "2023-10-17T10:39:44.220953-05:00"
+  version: 5.0.11
+digest: sha256:be6b017edec07ea1cbb8ea3586355a17df79503cd77068bde6db732bca0c7702
+generated: "2023-12-01T11:14:27.240572-05:00"
