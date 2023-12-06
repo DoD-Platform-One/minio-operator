@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.10-bb.1](https://img.shields.io/badge/Version-5.0.10--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.10](https://img.shields.io/badge/AppVersion-v5.0.10-informational?style=flat-square)
+![Version: 5.0.11-bb.0](https://img.shields.io/badge/Version-5.0.11--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.11](https://img.shields.io/badge/AppVersion-v5.0.11-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -41,16 +41,21 @@ helm install minio-operator chart/
 | operator.env[1].value | string | `"cluster.local"` |  |
 | operator.env[2].name | string | `"WATCHED_NAMESPACE"` |  |
 | operator.env[2].value | string | `""` |  |
+| operator.env[3].name | string | `"OPERATOR_STS_ENABLED"` |  |
+| operator.env[3].value | string | `"on"` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v5.0.10"` |  |
+| operator.image.tag | string | `"v5.0.11"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | list | `[]` |  |
 | operator.runtimeClassName | string | `nil` |  |
 | operator.initContainers | list | `[]` |  |
-| operator.replicaCount | int | `1` |  |
-| operator.securityContext | object | `{}` |  |
-| operator.containerSecurityContext.runAsUser | int | `1001` |  |
-| operator.containerSecurityContext.runAsGroup | int | `1001` |  |
+| operator.replicaCount | int | `2` |  |
+| operator.securityContext.runAsUser | int | `1000` |  |
+| operator.securityContext.runAsGroup | int | `1000` |  |
+| operator.securityContext.runAsNonRoot | bool | `true` |  |
+| operator.securityContext.fsGroup | int | `1000` |  |
+| operator.containerSecurityContext.runAsUser | int | `1000` |  |
+| operator.containerSecurityContext.runAsGroup | int | `1000` |  |
 | operator.containerSecurityContext.runAsNonRoot | bool | `true` |  |
 | operator.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | operator.volumes | list | `[]` |  |
@@ -70,7 +75,7 @@ helm install minio-operator chart/
 | operator.resources.limits.memory | string | `"256Mi"` |  |
 | console.enabled | bool | `false` |  |
 | console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| console.image.tag | string | `"v5.0.10"` |  |
+| console.image.tag | string | `"v5.0.11"` |  |
 | console.image.pullPolicy | string | `"IfNotPresent"` |  |
 | console.env | list | `[]` |  |
 | console.imagePullSecrets | list | `[]` |  |
@@ -78,12 +83,17 @@ helm install minio-operator chart/
 | console.initContainers | list | `[]` |  |
 | console.replicaCount | int | `1` |  |
 | console.nodeSelector | object | `{}` |  |
-| console.affinity | object | `{}` |  |
+| console.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].key | string | `"name"` |  |
+| console.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].operator | string | `"In"` |  |
+| console.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"minio-operator"` |  |
+| console.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey | string | `"kubernetes.io/hostname"` |  |
 | console.tolerations | list | `[]` |  |
 | console.topologySpreadConstraints | list | `[]` |  |
-| console.resources | object | `{}` |  |
-| console.securityContext | object | `{}` |  |
-| console.containerSecurityContext.runAsUser | int | `1001` |  |
+| console.resources.requests.cpu | float | `0.25` |  |
+| console.resources.requests.memory | string | `"512Mi"` |  |
+| console.securityContext.runAsUser | int | `1000` |  |
+| console.securityContext.runAsNonRoot | bool | `true` |  |
+| console.containerSecurityContext.runAsUser | int | `1000` |  |
 | console.containerSecurityContext.runAsNonRoot | bool | `true` |  |
 | console.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | console.ingress.enabled | bool | `false` |  |
@@ -94,8 +104,11 @@ helm install minio-operator chart/
 | console.ingress.host | string | `"console.local"` |  |
 | console.ingress.path | string | `"/"` |  |
 | console.ingress.pathType | string | `"Prefix"` |  |
-| console.volumes | list | `[]` |  |
-| console.volumeMounts | list | `[]` |  |
+| console.volumes[0].name | string | `"tmp"` |  |
+| console.volumes[0].emptyDir | object | `{}` |  |
+| console.volumeMounts[0].name | string | `"tmp"` |  |
+| console.volumeMounts[0].readOnly | bool | `false` |  |
+| console.volumeMounts[0].mountPath | string | `"/tmp/certs/CAs"` |  |
 | networkPolicies.enabled | bool | `false` |  |
 | networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
 | networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
