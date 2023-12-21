@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.11-bb.0](https://img.shields.io/badge/Version-5.0.11--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.11](https://img.shields.io/badge/AppVersion-v5.0.11-informational?style=flat-square)
+![Version: 5.0.11-bb.1](https://img.shields.io/badge/Version-5.0.11--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.11](https://img.shields.io/badge/AppVersion-v5.0.11-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -113,8 +113,21 @@ helm install minio-operator chart/
 | networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
 | networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
 | networkPolicies.ingressLabels.istio | string | `"ingressgateway"` |  |
+| domain | string | `"bigbang.dev"` |  |
 | istio.enabled | bool | `false` |  |
+| istio.hardened.enabled | bool | `false` |  |
+| istio.hardened.customAuthorizationPolicies | list | `[]` |  |
+| istio.hardened.tempo.enabled | bool | `false` |  |
+| istio.hardened.tempo.namespaces[0] | string | `"tempo"` |  |
+| istio.hardened.tempo.principals[0] | string | `"cluster.local/ns/tempo/sa/tempo-tempo"` |  |
 | istio.mtls.mode | string | `"STRICT"` |  |
+| istio.console.enabled | bool | `true` |  |
+| istio.console.annotations | object | `{}` |  |
+| istio.console.labels | object | `{}` |  |
+| istio.console.gateways[0] | string | `"istio-system/main"` |  |
+| istio.console.hosts[0] | string | `"minio-operator-console.{{ .Values.domain }}"` |  |
+| istio.console.service | string | `""` |  |
+| istio.console.port | string | `""` |  |
 | openshift | bool | `false` |  |
 | monitoring.enabled | bool | `false` |  |
 | monitoring.namespace | string | `"monitoring"` |  |
