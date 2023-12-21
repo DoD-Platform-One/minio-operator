@@ -290,12 +290,38 @@ networkPolicies:
     app: istio-ingressgateway
     istio: ingressgateway
 
+domain: bigbang.dev
+
 istio:
   enabled: false
+  hardened:
+    enabled: false
+    customAuthorizationPolicies: []
+    # - name: "allow-nothing"
+    #   enabled: true
+    #   spec: {}
+    tempo:
+      enabled: false
+      namespaces:
+      - tempo
+      principals:
+      - cluster.local/ns/tempo/sa/tempo-tempo
   mtls:
     # STRICT = Allow only mutual TLS traffic
     # PERMISSIVE = Allow both plain text and mutual TLS traffic
     mode: STRICT
+
+  # Enable and configure the optional MinIO Operator Console Istio components
+  console:
+    enabled: true
+    annotations: {}
+    labels: {}
+    gateways:
+      - istio-system/main
+    hosts:
+      -  minio-operator-console.{{ .Values.domain }}
+    service: ""
+    port: ""
 
 openshift: false
 
