@@ -1,0 +1,19 @@
+{{- if and .Values.istio.enabled .Values.istio.hardened.enabled -}}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: minio-policy
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: minio
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        namespaces:
+          - "minio"
+        principals:
+          - "cluster.local/ns/minio/sa/minio-minio"
+{{- end }}
