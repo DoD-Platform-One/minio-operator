@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.12-bb.0](https://img.shields.io/badge/Version-5.0.12--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.12](https://img.shields.io/badge/AppVersion-v5.0.12-informational?style=flat-square)
+![Version: 5.0.12-bb.1](https://img.shields.io/badge/Version-5.0.12--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.12](https://img.shields.io/badge/AppVersion-v5.0.12-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -140,6 +140,13 @@ helm install minio-operator chart/
 | tenantPatchJob.image.tag | string | `"2.1.0"` |  |
 | tenantPatchJob.image.pullSecrets[0] | string | `"private-registry"` |  |
 | installCRDs | bool | `true` |  |
+| bbtests.enabled | bool | `false` |  |
+| bbtests.cypress.artifacts | bool | `true` |  |
+| bbtests.cypress.resources.requests.cpu | string | `"1"` |  |
+| bbtests.cypress.resources.requests.memory | string | `"1Gi"` |  |
+| bbtests.cypress.resources.limits.cpu | string | `"2"` |  |
+| bbtests.cypress.resources.limits.memory | string | `"2Gi"` |  |
+| bbtests.cypress.envs.cypress_url | string | `"http://console.minio-operator.svc.cluster.local:9090"` |  |
 
 ## Contributing
 
