@@ -1,11 +1,17 @@
+istio:
+  enabled: true
+
 operator:
   imagePullSecrets:
     - name: private-registry
 
 console:
+  enabled: true
   imagePullSecrets:
     - name: private-registry
 
+bbtests:
+  enabled: true
+
 networkPolicies:
   enabled: true
-  controlPlaneCidr: 172.16.0.0/12
