@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.12-bb.1](https://img.shields.io/badge/Version-5.0.12--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.12](https://img.shields.io/badge/AppVersion-v5.0.12-informational?style=flat-square)
+![Version: 5.0.12-bb.2](https://img.shields.io/badge/Version-5.0.12--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.12](https://img.shields.io/badge/AppVersion-v5.0.12-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -43,6 +43,7 @@ helm install minio-operator chart/
 | operator.env[2].value | string | `""` |  |
 | operator.env[3].name | string | `"OPERATOR_STS_ENABLED"` |  |
 | operator.env[3].value | string | `"on"` |  |
+| operator.serviceAccountAnnotations | list | `[]` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
 | operator.image.tag | string | `"v5.0.12"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
@@ -92,8 +93,10 @@ helm install minio-operator chart/
 | console.resources.requests.cpu | float | `0.25` |  |
 | console.resources.requests.memory | string | `"512Mi"` |  |
 | console.securityContext.runAsUser | int | `1000` |  |
+| console.securityContext.runAsGroup | int | `1000` |  |
 | console.securityContext.runAsNonRoot | bool | `true` |  |
 | console.containerSecurityContext.runAsUser | int | `1000` |  |
+| console.containerSecurityContext.runAsGroup | int | `1000` |  |
 | console.containerSecurityContext.runAsNonRoot | bool | `true` |  |
 | console.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
 | console.ingress.enabled | bool | `false` |  |
