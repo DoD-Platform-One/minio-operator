@@ -1,4 +1,4 @@
-{{- if and .Values.istio.enabled .Values.istio.hardened.enabled -}}
+{{- if and .Values.istio.enabled .Values.istio.hardened.enabled .Values.istio.hardened.minio.enabled -}}
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:
@@ -12,8 +12,6 @@ spec:
   rules:
   - from:
     - source:
-        namespaces:
-          - "minio"
-        principals:
-          - "cluster.local/ns/minio/sa/minio-minio"
+        namespaces: {{ .Values.istio.hardened.minio.namespaces }}
+        principals: {{ .Values.istio.hardened.minio.principals }}
 {{- end }}
