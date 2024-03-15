@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.12-bb.3](https://img.shields.io/badge/Version-5.0.12--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.12](https://img.shields.io/badge/AppVersion-v5.0.12-informational?style=flat-square)
+![Version: 5.0.12-bb.4](https://img.shields.io/badge/Version-5.0.12--bb.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.12](https://img.shields.io/badge/AppVersion-v5.0.12-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -123,6 +123,9 @@ helm install minio-operator chart/
 | istio.hardened.tempo.enabled | bool | `false` |  |
 | istio.hardened.tempo.namespaces[0] | string | `"tempo"` |  |
 | istio.hardened.tempo.principals[0] | string | `"cluster.local/ns/tempo/sa/tempo-tempo"` |  |
+| istio.hardened.minio.enabled | bool | `true` |  |
+| istio.hardened.minio.namespaces[0] | string | `"minio"` |  |
+| istio.hardened.minio.principals[0] | string | `"cluster.local/ns/minio/sa/minio-minio-minio-instance-sa"` |  |
 | istio.mtls.mode | string | `"STRICT"` |  |
 | istio.console.enabled | bool | `true` |  |
 | istio.console.annotations | object | `{}` |  |
