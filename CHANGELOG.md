@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [5.0.13-bb.0] - 2024-03-15
+### Upgrade 
+- ironbank/opensource/minio/operator v5.0.12 -> v5.0.13
+- registry1.dso.mil/ironbank/opensource/minio/operator v5.0.12 -> v5.0.13
+
 ## [5.0.12-bb.4] - 2024-03-15
 ### Upgrade 
 - fixing and updating the minio authz policy
