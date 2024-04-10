@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.14-bb.1](https://img.shields.io/badge/Version-5.0.14--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.14](https://img.shields.io/badge/AppVersion-v5.0.14-informational?style=flat-square)
+![Version: 5.0.14-bb.2](https://img.shields.io/badge/Version-5.0.14--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.14](https://img.shields.io/badge/AppVersion-v5.0.14-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -116,6 +116,7 @@ helm install minio-operator chart/
 | networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
 | networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
 | networkPolicies.ingressLabels.istio | string | `"ingressgateway"` |  |
+| networkPolicies.additionalPolicies | list | `[]` |  |
 | domain | string | `"bigbang.dev"` |  |
 | istio.enabled | bool | `false` |  |
 | istio.hardened.enabled | bool | `false` |  |
