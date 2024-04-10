@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [5.0.14-bb.2] - 2024-04-09
+### Added
+- Added custom network polices
+
 ## [5.0.14-bb.1] - 2024-04-02
 ### Changed
 - Added Istio Sidecar to restrict egress traffic to REGISTRY_ONLY
