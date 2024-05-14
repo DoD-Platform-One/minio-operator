@@ -1,8 +1,8 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
 name: minio-operator
-version: 5.0.14-bb.2
-appVersion: v5.0.14
+version: 5.0.15-bb.0
+appVersion: v5.0.15
 keywords:
   - storage
   - object-storage
@@ -25,10 +25,10 @@ dependencies:
     repository: oci://registry1.dso.mil/bigbang
 annotations:
   bigbang.dev/applicationVersions: |
-    - Minio Operator: v5.0.14
+    - Minio Operator: v5.0.15
   helm.sh/images: |
     - name: operator
-      image: registry1.dso.mil/ironbank/opensource/minio/operator:v5.0.14
+      image: registry1.dso.mil/ironbank/opensource/minio/operator:v5.0.15
     - name: console
       condition: console.enabled
-      image: registry1.dso.mil/ironbank/opensource/minio/operator:v5.0.14
+      image: registry1.dso.mil/ironbank/opensource/minio/operator:v5.0.15
