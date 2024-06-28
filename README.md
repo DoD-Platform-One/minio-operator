@@ -1,6 +1,6 @@
 # minio-operator
 
-![Version: 5.0.15-bb.0](https://img.shields.io/badge/Version-5.0.15--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.15](https://img.shields.io/badge/AppVersion-v5.0.15-informational?style=flat-square)
+![Version: 5.0.15-bb.1](https://img.shields.io/badge/Version-5.0.15--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.15](https://img.shields.io/badge/AppVersion-v5.0.15-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -46,7 +46,10 @@ helm install minio-operator chart/
 | operator.env[2].value | string | `""` |  |
 | operator.env[3].name | string | `"OPERATOR_STS_ENABLED"` |  |
 | operator.env[3].value | string | `"on"` |  |
+| operator.env[4].name | string | `"MINIO_CONSOLE_TLS_ENABLE"` |  |
+| operator.env[4].value | string | `"off"` |  |
 | operator.serviceAccountAnnotations | list | `[]` |  |
+| operator.additionalLabels | object | `{}` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
 | operator.image.tag | string | `"v5.0.15"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
@@ -110,6 +113,7 @@ helm install minio-operator chart/
 | console.ingress.host | string | `"console.local"` |  |
 | console.ingress.path | string | `"/"` |  |
 | console.ingress.pathType | string | `"Prefix"` |  |
+| console.ingress.number | int | `9090` |  |
 | console.volumes[0].name | string | `"tmp"` |  |
 | console.volumes[0].emptyDir | object | `{}` |  |
 | console.volumeMounts[0].name | string | `"tmp"` |  |
