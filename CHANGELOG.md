@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [5.0.15-bb.1] - 2024-06-28
+
+### Upgrade 
+
+- Upgrade MinIO Tenant CRD to 5.0.15
+
 ## [5.0.15-bb.0] - 2024-05-09
 
 ### Upgrade
