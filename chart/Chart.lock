@@ -1,9 +1,9 @@
 dependencies:
 - name: minio-operator-crds
   repository: file://minio-operator-crds
-  version: 5.0.15
+  version: 5.0.16
 - name: gluon
   repository: oci://registry1.dso.mil/bigbang
   version: 0.4.8
-digest: sha256:af0af6e07a60dd02567c48e5566f488069c58d24de548ef472d6de440cec3c2c
-generated: "2024-06-21T14:42:19.801975-04:00"
+digest: sha256:6b6b8d5a0943362243597ce0e6b4128f162234804ee36da6b20c2609892fae61
+generated: "2024-07-09T15:28:11.5160157-04:00"

@@ -53,8 +53,11 @@ spec:
           env:
           {{ toYaml . | nindent 10 }}
           {{- end }}
-          resources:
-          {{- toYaml .Values.operator.resources | nindent 12 }}
+          {{- if .Values.operator.sidecarImage }}
+            - name: "OPERATOR_SIDECAR_IMAGE"
+              value: "{{ .Values.operator.sidecarImage.repository }}:{{ .Values.operator.sidecarImage.digest | default .Values.operator.sidecarImage.tag }}"
+          {{- end }}
+          resources: {{- toYaml .Values.operator.resources | nindent 12 }}
           securityContext:
           {{- with .Values.operator.containerSecurityContext }}
           {{- toYaml . | nindent 12 }}
