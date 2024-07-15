@@ -3,6 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [5.0.16-bb.0] - 2024-07-09
+
+### Upgrade 
+
+- Upgrade MinIO Tenant CRD to 5.0.16
 
 ## [5.0.15-bb.1] - 2024-06-28
 
