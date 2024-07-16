@@ -1,17 +1,15 @@
 # minio-operator
 
-![Version: 5.0.16-bb.0](https://img.shields.io/badge/Version-5.0.16--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.16](https://img.shields.io/badge/AppVersion-v5.0.16-informational?style=flat-square)
+![Version: 5.0.16-bb.1](https://img.shields.io/badge/Version-5.0.16--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.16](https://img.shields.io/badge/AppVersion-v5.0.16-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
 ## Upstream References
-
 * <https://min.io>
 
 * <https://github.com/minio/operator>
 
 ## Learn More
-
 * [Application Overview](docs/overview.md)
 * [Other Documentation](docs/)
 
@@ -23,13 +21,12 @@ A Helm chart for MinIO Operator
 
 Install Helm
 
-<https://helm.sh/docs/intro/install/>
+https://helm.sh/docs/intro/install/
 
 ## Deployment
 
 * Clone down the repository
 * cd into directory
-
 ```bash
 helm install minio-operator chart/
 ```
@@ -53,6 +50,7 @@ helm install minio-operator chart/
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
 | operator.image.tag | string | `"v5.0.16"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
+| operator.sidecarImage | object | `{}` |  |
 | operator.imagePullSecrets | list | `[]` |  |
 | operator.runtimeClassName | string | `nil` |  |
 | operator.initContainers | list | `[]` |  |
