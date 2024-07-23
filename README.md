@@ -9,6 +9,10 @@ A Helm chart for MinIO Operator
 
 * <https://github.com/minio/operator>
 
+### Upstream Release Notes
+
+The [upstream minio Operator release notes](https://github.com/minio/operator/releases) may help when reviewing this package.
+
 ## Learn More
 * [Application Overview](docs/overview.md)
 * [Other Documentation](docs/)
