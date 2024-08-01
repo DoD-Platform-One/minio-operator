@@ -1,7 +1,7 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
 name: minio-operator
-version: 5.0.16-bb.2
+version: 5.0.16-bb.3
 appVersion: v5.0.16
 keywords:
   - storage
@@ -26,6 +26,9 @@ dependencies:
 annotations:
   bigbang.dev/applicationVersions: |
     - Minio Operator: v5.0.16
+  bigbang.dev/upstreamReleaseNotesMarkdown: |
+    * [Find our upstream chart's CHANGELOG here](https://github.com/minio/operator/releases)
+    * [and our upstream application release notes here](https://github.com/minio/operator/releases)
   helm.sh/images: |
     - name: operator
       image: registry1.dso.mil/ironbank/opensource/minio/operator:v5.0.16
