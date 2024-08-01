@@ -3,9 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+
+## [5.0.16-bb.3] - 2024-07-31
+
+### Added
+
+- Added `bigbang.labels` helper function to authservice under `templates/bigbang`
+- Added call to `bigbang.labels` function in pod template section of `chart/templates/console-deployment.yaml` and `chart/templates/operator-deployment.yaml`
+
 ## [5.0.16-bb.2] - 2024-07-24
 
-### Changed 
+### Changed
 
 - Removed duplicate test values located in Big Bang repo
 
@@ -285,7 +293,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Update to 4.4.12
-  
+
 ## [4.4.10-bb.1] - 2022-02-28
 
 ### Changed
@@ -344,7 +352,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Added networkPolicy for egress to instance
 
-## [4.2.3-bb.1] - 2021-10-09  
+## [4.2.3-bb.1] - 2021-10-09
 
 ### Changed
 
@@ -363,7 +371,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Added istio sidecar scraping network policy
 
-## [4.1.2-bb.2] - 2021-08-18  
+## [4.1.2-bb.2] - 2021-08-18
 
 ### Changed
 
@@ -386,7 +394,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Upgraded Operator to Version 4.0.3.  CRD now uses "tenants" instead of "miniinstances"
 - New operator has substantially more tuning knobs for tenants
 
-## [2.0.9-bb.3] - 2021-04-13  
+## [2.0.9-bb.3] - 2021-04-13
 
 ### Changed
 

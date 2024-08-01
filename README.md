@@ -1,6 +1,7 @@
+<!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # minio-operator
 
-![Version: 5.0.16-bb.2](https://img.shields.io/badge/Version-5.0.16--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.16](https://img.shields.io/badge/AppVersion-v5.0.16-informational?style=flat-square)
+![Version: 5.0.16-bb.3](https://img.shields.io/badge/Version-5.0.16--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.16](https://img.shields.io/badge/AppVersion-v5.0.16-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -11,7 +12,8 @@ A Helm chart for MinIO Operator
 
 ### Upstream Release Notes
 
-The [upstream minio Operator release notes](https://github.com/minio/operator/releases) may help when reviewing this package.
+* [Find our upstream chart's CHANGELOG here](https://github.com/minio/operator/releases)
+* [and our upstream application release notes here](https://github.com/minio/operator/releases)
 
 ## Learn More
 * [Application Overview](docs/overview.md)
@@ -160,12 +162,17 @@ helm install minio-operator chart/
 | installCRDs | bool | `true` |  |
 | bbtests.enabled | bool | `false` |  |
 | bbtests.cypress.artifacts | bool | `true` |  |
-| bbtests.cypress.resources.requests.cpu | string | `"1"` |  |
-| bbtests.cypress.resources.requests.memory | string | `"1Gi"` |  |
+| bbtests.cypress.resources.requests.cpu | string | `"2"` |  |
+| bbtests.cypress.resources.requests.memory | string | `"4Gi"` |  |
 | bbtests.cypress.resources.limits.cpu | string | `"2"` |  |
-| bbtests.cypress.resources.limits.memory | string | `"2Gi"` |  |
+| bbtests.cypress.resources.limits.memory | string | `"4Gi"` |  |
 | bbtests.cypress.envs.cypress_url | string | `"http://console.minio-operator.svc.cluster.local:9090"` |  |
 
 ## Contributing
 
 Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in contributing.
+
+---
+
+_This file is programatically generated using `helm-docs` and some BigBang-specific templates. The `gluon` repository has [instructions for regenerating package READMEs](https://repo1.dso.mil/big-bang/product/packages/gluon/-/blob/master/docs/bb-package-readme.md)._
+
