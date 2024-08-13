@@ -5,11 +5,6 @@ operator:
   imagePullSecrets:
     - name: private-registry
 
-console:
-  enabled: true
-  imagePullSecrets:
-    - name: private-registry
-
 bbtests:
   enabled: true
 

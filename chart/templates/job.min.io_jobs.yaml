@@ -4,7 +4,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.15.0
-    operator.min.io/version: v5.0.16
+    operator.min.io/version: v6.0.2
   name: miniojobs.job.min.io
 spec:
   group: job.min.io
@@ -18,11 +18,11 @@ spec:
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .spec.tenant.name
-      name: Tenant
-      type: string
-    - jsonPath: .spec.status.phase
+    - jsonPath: .status.phase
       name: Phase
+      type: string
+    - jsonPath: .status.message
+      name: Message
       type: string
     name: v1alpha1
     schema:
@@ -1080,7 +1080,7 @@ spec:
                   x-kubernetes-map-type: atomic
                 type: array
               mcImage:
-                default: quay.io/minio/mc:latest
+                default: quay.io/minio/mc:RELEASE.2024-07-31T15-58-33Z
                 type: string
               securityContext:
                 properties:

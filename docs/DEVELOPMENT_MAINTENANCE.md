@@ -51,18 +51,6 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 ```
-1. in chart/templates/console-deployment.yaml:  keep the condiitonal
-```
-{{- if .Values.console.enabled }}
-```
-1. in chart/templates/consolde-ingress.yaml:  keep the conditional deployment
-```
-{{- if .Values.console.enabled }}
-```
-1. in chart/template/console-ui.yaml: keep the conditional
-```
-{{- if .Values.console.enabled }}
-```
 1. if there is a version of minio.min.io_tenants.yaml in the chart/templates, this file should be moved to the minio package if the kpt update does not do it automatically.
 1. in chart/templates/serviceaccount.yaml: maintain the conditionals around the service account creation.
 1. in chart/templates/operator-deployment.yaml: keep the line 18 annotions section below:

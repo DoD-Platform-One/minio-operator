@@ -1,7 +1,7 @@
 <!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # minio-operator
 
-![Version: 5.0.16-bb.3](https://img.shields.io/badge/Version-5.0.16--bb.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v5.0.16](https://img.shields.io/badge/AppVersion-v5.0.16-informational?style=flat-square)
+![Version: 6.0.2-bb.0](https://img.shields.io/badge/Version-6.0.2--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v6.0.2](https://img.shields.io/badge/AppVersion-v6.0.2-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -12,8 +12,14 @@ A Helm chart for MinIO Operator
 
 ### Upstream Release Notes
 
-* [Find our upstream chart's CHANGELOG here](https://github.com/minio/operator/releases)
-* [and our upstream application release notes here](https://github.com/minio/operator/releases)
+This package has no upstream release note links on file. Please add some to [chart/Chart.yaml](chart/Chart.yaml) under `annotations.bigbang.dev/upstreamReleaseNotesMarkdown`.
+Example:
+```yaml
+annotations:
+  bigbang.dev/upstreamReleaseNotesMarkdown: |
+    - [Find our upstream chart's CHANGELOG here](https://link-goes-here/CHANGELOG.md)
+    - [and our upstream application release notes here](https://another-link-here/RELEASE_NOTES.md)
+```
 
 ## Learn More
 * [Application Overview](docs/overview.md)
@@ -49,14 +55,15 @@ helm install minio-operator chart/
 | operator.env[2].value | string | `""` |  |
 | operator.env[3].name | string | `"OPERATOR_STS_ENABLED"` |  |
 | operator.env[3].value | string | `"on"` |  |
-| operator.env[4].name | string | `"MINIO_CONSOLE_TLS_ENABLE"` |  |
-| operator.env[4].value | string | `"off"` |  |
 | operator.serviceAccountAnnotations | list | `[]` |  |
 | operator.additionalLabels | object | `{}` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v5.0.16"` |  |
+| operator.image.tag | string | `"v6.0.1"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
-| operator.sidecarImage | object | `{}` |  |
+| operator.sidecarImage.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator-sidecar"` |  |
+| operator.sidecarImage.tag | string | `"v6.0.0"` |  |
+| operator.sidecarImage.digest | string | `""` |  |
+| operator.sidecarImage.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | list | `[]` |  |
 | operator.runtimeClassName | string | `nil` |  |
 | operator.initContainers | list | `[]` |  |
@@ -84,45 +91,6 @@ helm install minio-operator chart/
 | operator.resources.requests.ephemeral-storage | string | `"500Mi"` |  |
 | operator.resources.limits.cpu | string | `"200m"` |  |
 | operator.resources.limits.memory | string | `"256Mi"` |  |
-| console.enabled | bool | `false` |  |
-| console.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| console.image.tag | string | `"v5.0.16"` |  |
-| console.image.pullPolicy | string | `"IfNotPresent"` |  |
-| console.env | list | `[]` |  |
-| console.imagePullSecrets | list | `[]` |  |
-| console.runtimeClassName | string | `nil` |  |
-| console.initContainers | list | `[]` |  |
-| console.replicaCount | int | `1` |  |
-| console.nodeSelector | object | `{}` |  |
-| console.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].key | string | `"name"` |  |
-| console.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].operator | string | `"In"` |  |
-| console.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].labelSelector.matchExpressions[0].values[0] | string | `"minio-operator"` |  |
-| console.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey | string | `"kubernetes.io/hostname"` |  |
-| console.tolerations | list | `[]` |  |
-| console.topologySpreadConstraints | list | `[]` |  |
-| console.resources.requests.cpu | float | `0.25` |  |
-| console.resources.requests.memory | string | `"512Mi"` |  |
-| console.securityContext.runAsUser | int | `1000` |  |
-| console.securityContext.runAsGroup | int | `1000` |  |
-| console.securityContext.runAsNonRoot | bool | `true` |  |
-| console.containerSecurityContext.runAsUser | int | `1000` |  |
-| console.containerSecurityContext.runAsGroup | int | `1000` |  |
-| console.containerSecurityContext.runAsNonRoot | bool | `true` |  |
-| console.containerSecurityContext.capabilities.drop[0] | string | `"ALL"` |  |
-| console.ingress.enabled | bool | `false` |  |
-| console.ingress.ingressClassName | string | `""` |  |
-| console.ingress.labels | object | `{}` |  |
-| console.ingress.annotations | object | `{}` |  |
-| console.ingress.tls | list | `[]` |  |
-| console.ingress.host | string | `"console.local"` |  |
-| console.ingress.path | string | `"/"` |  |
-| console.ingress.pathType | string | `"Prefix"` |  |
-| console.ingress.number | int | `9090` |  |
-| console.volumes[0].name | string | `"tmp"` |  |
-| console.volumes[0].emptyDir | object | `{}` |  |
-| console.volumeMounts[0].name | string | `"tmp"` |  |
-| console.volumeMounts[0].readOnly | bool | `false` |  |
-| console.volumeMounts[0].mountPath | string | `"/tmp/certs/CAs"` |  |
 | networkPolicies.enabled | bool | `false` |  |
 | networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
 | networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
@@ -141,13 +109,6 @@ helm install minio-operator chart/
 | istio.hardened.minio.namespaces[0] | string | `"minio"` |  |
 | istio.hardened.minio.principals[0] | string | `"cluster.local/ns/minio/sa/minio-minio-minio-instance-sa"` |  |
 | istio.mtls.mode | string | `"STRICT"` |  |
-| istio.console.enabled | bool | `true` |  |
-| istio.console.annotations | object | `{}` |  |
-| istio.console.labels | object | `{}` |  |
-| istio.console.gateways[0] | string | `"istio-system/main"` |  |
-| istio.console.hosts[0] | string | `"minio-operator-console.{{ .Values.domain }}"` |  |
-| istio.console.service | string | `""` |  |
-| istio.console.port | string | `""` |  |
 | openshift | bool | `false` |  |
 | monitoring.enabled | bool | `false` |  |
 | monitoring.namespace | string | `"monitoring"` |  |

@@ -4,6 +4,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [6.0.2-bb.0] - 2024-08-13
+
+### Changed
+
+- Updated chart to v6.0.2
+- Updated gluon to 0.5.3
+
+## [6.0.1-bb.0] - 2024-08-12
+
+### Changed
+
+- Updated chart to v6.0.1
+
+## [6.0.0-bb.0] - 2024-08-12
+
+### Changed
+
+- Updated chart to v6.0.0
+- ironbank/opensource/minio/operator v5.0.16 -> v6.0.0
+- registry1.dso.mil/ironbank/opensource/minio/operator v5.0.16 -> v6.0.0
+- removed console
+
 ## [5.0.16-bb.3] - 2024-07-31
 
 ### Added
