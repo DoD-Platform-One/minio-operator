@@ -201,6 +201,10 @@ operator:
       cpu: 200m
       memory: 256Mi
 
+  # -- Labels for operator pod(s)
+  podLabels: {}
+  #e.g. foo: bar
+
 # Big Bang Added Values
 
 networkPolicies:
