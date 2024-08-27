@@ -3,7 +3,11 @@ kind: Deployment
 metadata:
   name: minio-operator
   namespace: {{ .Release.Namespace }}
-  labels:{{- include "minio-operator.labels" . | nindent 4 }}
+  labels:
+    {{- include "minio-operator.labels" . | nindent 4 }}
+    {{- if .Values.operator.podLabels }}
+    {{- tpl ( toYaml .Values.operator.podLabels ) . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.operator.replicaCount }}
   selector:
@@ -14,7 +18,9 @@ spec:
       labels:
         {{- include "minio-operator.labels" . | nindent 8 }}
         {{- include "minio-operator.selectorLabels" . | nindent 8 }}
-        {{- include "bigbang.labels" . | nindent 8 }}
+        {{- if .Values.operator.podLabels }}
+        {{- tpl ( toYaml .Values.operator.podLabels ) . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.operator.imagePullSecrets }}
       imagePullSecrets:

@@ -4,6 +4,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [6.0.2-bb.2] - 2024-08-26
+
+### Added
+
+- Added `podLabels` input value
+- Added usage of `podLabels` in `chart/templates/operator-deployment.yaml`
+
+### Removed
+
+- Removed `bigbang.labels` helper function to authservice under `templates/bigbang`
+- Removed call to `bigbang.labels` function in pod template section of `chart/templates/operator-deployment.yaml`
+
 ## [6.0.2-bb.1] - 2024-08-14
 
 ### Changed
