@@ -4,6 +4,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [5.0.16-bb.0] - 2024-07-09
+
+### Upgrade
+
+- Upgrade MinIO Tenant CRD to 5.0.16
+
+## [6.0.3-bb.0] - 2024-08-29
+
+### Changed
+
+- Upgraded registry1.dso.mil/ironbank/opensource/minio/operator v6.0.2 -> v6.0.3
+
 ## [6.0.2-bb.2] - 2024-08-26
 
 ### Added
