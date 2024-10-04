@@ -58,6 +58,10 @@ app.kubernetes.io/name: {{ include "minio-operator.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
+{{- define "minio.labels" -}}
+app: minio
+{{- end }}
+
 {{/*
 Common labels for console
 */}}

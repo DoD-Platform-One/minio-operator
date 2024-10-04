@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [6.0.3-bb.1] - 2024-10-04
+
+### Changed
+
+- Removed hardcoded minio labels
+
 ## [5.0.16-bb.0] - 2024-07-09
 
 ### Upgrade
