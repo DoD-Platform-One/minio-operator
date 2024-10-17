@@ -1,16 +1,16 @@
 <!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # minio-operator
 
-![Version: 6.0.3-bb.1](https://img.shields.io/badge/Version-6.0.3--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v6.0.3](https://img.shields.io/badge/AppVersion-v6.0.3-informational?style=flat-square)
+![Version: 6.0.4-bb.0](https://img.shields.io/badge/Version-6.0.4--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v6.0.4](https://img.shields.io/badge/AppVersion-v6.0.4-informational?style=flat-square)
 
 A Helm chart for MinIO Operator
 
 ## Upstream References
-* <https://min.io>
+- <https://min.io>
 
 * <https://github.com/minio/operator>
 
-### Upstream Release Notes
+## Upstream Release Notes
 
 This package has no upstream release note links on file. Please add some to [chart/Chart.yaml](chart/Chart.yaml) under `annotations.bigbang.dev/upstreamReleaseNotesMarkdown`.
 Example:
@@ -22,14 +22,15 @@ annotations:
 ```
 
 ## Learn More
-* [Application Overview](docs/overview.md)
-* [Other Documentation](docs/)
+
+- [Application Overview](docs/overview.md)
+- [Other Documentation](docs/)
 
 ## Pre-Requisites
 
-* Kubernetes Cluster deployed
-* Kubernetes config installed in `~/.kube/config`
-* Helm installed
+- Kubernetes Cluster deployed
+- Kubernetes config installed in `~/.kube/config`
+- Helm installed
 
 Install Helm
 
@@ -37,8 +38,9 @@ https://helm.sh/docs/intro/install/
 
 ## Deployment
 
-* Clone down the repository
-* cd into directory
+- Clone down the repository
+- cd into directory
+
 ```bash
 helm install minio-operator chart/
 ```
@@ -58,7 +60,7 @@ helm install minio-operator chart/
 | operator.serviceAccountAnnotations | list | `[]` |  |
 | operator.additionalLabels | object | `{}` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v6.0.3"` |  |
+| operator.image.tag | string | `"v6.0.4"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.sidecarImage.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator-sidecar"` |  |
 | operator.sidecarImage.tag | string | `"v6.0.2"` |  |
