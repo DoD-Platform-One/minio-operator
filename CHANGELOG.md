@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Upgraded registry1.dso.mil/ironbank/opensource/minio/operator v6.0.3 -> v6.0.4
+- Added the maintenance track annotation and badge
 
 ## [6.0.3-bb.1] - 2024-10-04
 

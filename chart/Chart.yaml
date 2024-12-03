@@ -24,6 +24,7 @@ dependencies:
     version: 0.5.3
     repository: oci://registry1.dso.mil/bigbang
 annotations:
+  bigbang.dev/maintenanceTrack: bb_integrated
   bigbang.dev/applicationVersions: |
     - Minio Operator: v6.0.4
   helm.sh/images: |
