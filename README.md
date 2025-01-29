@@ -1,7 +1,7 @@
 <!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # minio-operator
 
-![Version: 6.0.4-bb.1](https://img.shields.io/badge/Version-6.0.4--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v6.0.4](https://img.shields.io/badge/AppVersion-v6.0.4-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
+![Version: 7.0.0-bb.0](https://img.shields.io/badge/Version-7.0.0--bb.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v7.0.0](https://img.shields.io/badge/AppVersion-v7.0.0-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -60,10 +60,10 @@ helm install minio-operator chart/
 | operator.serviceAccountAnnotations | list | `[]` |  |
 | operator.additionalLabels | object | `{}` |  |
 | operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| operator.image.tag | string | `"v6.0.4"` |  |
+| operator.image.tag | string | `"v7.0.0"` |  |
 | operator.image.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.sidecarImage.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator-sidecar"` |  |
-| operator.sidecarImage.tag | string | `"v6.0.2"` |  |
+| operator.sidecarImage.tag | string | `"v7.0.0"` |  |
 | operator.sidecarImage.digest | string | `""` |  |
 | operator.sidecarImage.pullPolicy | string | `"IfNotPresent"` |  |
 | operator.imagePullSecrets | list | `[]` |  |
