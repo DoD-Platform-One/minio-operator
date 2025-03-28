@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+
+## [7.0.1-bb.1] (2025-03-28)
+
+### Upgrade
+
+- Upgrade image from mc:RELEASE.2024-10-02T08-27-28Z to mc:RELEASE.2025-01-17T23-25-50Z
+
 ## [7.0.1-bb.0] (2025-03-22)
 
 ### Changed
