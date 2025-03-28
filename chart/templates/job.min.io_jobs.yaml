@@ -1082,7 +1082,7 @@ spec:
               insecure:
                 type: boolean
               mcImage:
-                default: quay.io/minio/mc:RELEASE.2024-10-02T08-27-28Z
+                default: quay.io/minio/mc:RELEASE.2025-01-17T23-25-50Z
                 type: string
               securityContext:
                 properties:
