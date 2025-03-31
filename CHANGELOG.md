@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [7.0.1-bb.2] (2025-03-28)
+
+### Changed
+
+- Update mc image source from quay.io/minio to registry1.dso.mil/ironbank/opensource/minio
+
 ## [7.0.1-bb.1] (2025-03-28)
 
 ### Upgrade
