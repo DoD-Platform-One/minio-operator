@@ -4,6 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [7.0.1-bb.3] (2025-04-10)
+
+### Changed
+
+- Update registry1.dso.mil/ironbank/opensource/minio/operator-sidecar to v7.0.1
+
 ## [7.0.1-bb.2] (2025-03-28)
 
 ### Changed

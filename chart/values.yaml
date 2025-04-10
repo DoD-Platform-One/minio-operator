@@ -82,7 +82,7 @@ operator:
   #
   sidecarImage:
     repository: registry1.dso.mil/ironbank/opensource/minio/operator-sidecar
-    tag: v7.0.0
+    tag: v7.0.1
     digest: ""
     pullPolicy: IfNotPresent
 
