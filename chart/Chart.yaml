@@ -1,8 +1,8 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
 name: minio-operator
-version: 7.0.1-bb.3
-appVersion: v7.0.1
+version: 7.1.1-bb.0
+appVersion: v7.1.1
 keywords:
   - storage
   - object-storage
@@ -17,7 +17,7 @@ maintainers:
 type: application
 dependencies:
   - name: minio-operator-crds
-    version: "v7.0.0"
+    version: "v7.1.1"
     condition: installCRDs
     repository: "file://minio-operator-crds"
   - name: gluon
@@ -26,7 +26,7 @@ dependencies:
 annotations:
   bigbang.dev/maintenanceTrack: bb_integrated
   bigbang.dev/applicationVersions: |
-    - Minio Operator: v7.0.1
+    - Minio Operator: v7.1.1
   helm.sh/images: |
     - name: operator
-      image: registry1.dso.mil/ironbank/opensource/minio/operator:v7.0.1
+      image: registry1.dso.mil/ironbank/opensource/minio/operator:v7.1.1
