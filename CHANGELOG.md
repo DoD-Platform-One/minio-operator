@@ -4,6 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [7.1.1-bb.0] (2025-04-22)
+### Changed
+
+- registry1.dso.mil/ironbank/opensource/minio/operator v7.0.1 -> v7.1.1
+
 ## [7.0.1-bb.3] (2025-04-10)
 
 ### Changed

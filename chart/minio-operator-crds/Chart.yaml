@@ -1,8 +1,8 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator CRD deployment
 name: minio-operator-crds
-version: 7.0.0
-appVersion: v7.0.0
+version: 7.1.1
+appVersion: v7.1.1
 keywords:
   - Minio
   - storage
