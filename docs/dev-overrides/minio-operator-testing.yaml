@@ -1,0 +1,6 @@
+addons:
+  minioOperator:
+    enabled: true
+    git:
+      tag: null
+      branch: "renovate/ironbank"
