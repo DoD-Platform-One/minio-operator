@@ -1,18 +1,8 @@
 # How to Upgrade Minio Operator Package
 
-1.  Sync with new chart. This can be done with kpt or meld:
-    `kpt pkg update chart/@{TAG} --strategy alpha-git-patch`
-    or
-    `kpt pkg update chart/@{TAG} --strategy force-delete-replace`
-    or Meld UI
-    1. Move `minio.min.io_tenants.yaml` to `minio-operator-crds/templates/`
-    2. Update `minio-operator-crds/Chart.yaml` with new version
-    3. Update `chart/Chart.yaml` dependency version
-    4. Rebuild dependency .tgz:
-       `export HELM_EXPERIMENTAL_OCI=1`
-       `helm dependency update chart`
-2.  Update version references for the Chart in chart/Chart.yaml. versionshould be-bb.0(ex:1.14.3-bb.0) and appVersion should be(ex:1.14.3). Also validate that the BB annotation for the main Minio version is updated (leave the Tetrate version as-is unless you are updating those images).
-3.  Verify that chart/values.yaml tag and tidTAG have been updated to the new version.
+1. To update minio-operator's helm chart, visit the [upstream](https://github.com/minio/operator/tree/master/helm-releases) to see if there is a new release. Check for the helm-relases that follow the naming `operator-{version}.tgz` for the latest version. Whenever a dependency is updated you need to run `helm dependencies update ./chart` to pull in the new chart. Make sure the old helm chart has been removed and the new one has been added within chart/charts.
+2.  Update version references for the Chart in chart/Chart.yaml. Version should be-bb.0(ex:1.14.3-bb.0) and appVersion should be(ex:1.14.3). Also validate that the BB annotation for the main Minio version is updated (leave the Tetrate version as-is unless you are updating those images).
+3.  Verify that chart/values.yaml tag have been updated to the new version.
 4.  Add a changelog entry for the update. At minimum mention updating the image versions.
 5.  Generate the `README.md` updates by following the [guide in gluon](https://repo1.dso.mil/platform-one/big-bang/apps/library-charts/gluon/-/blob/master/docs/bb-package-readme.md).
 6.  Open an MR in "Draft" status (or check the one that Renovate creates for the issue) and validate that CI passes. This will perform a number of smoke tests against the package, but it is good to manually deploy to test some things that CI doesn't. Follow the steps below for manual testing.
@@ -118,30 +108,6 @@ This is a high-level list of modifitations that Big Bang has made to the upstrea
 
 ## When performing the helm update the following items should be maintained.
 
-1. In chart/templates/\_helpers.tpl; maintain the folowing function:
-
-```
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-\*/}}
-{{- define "minio-operator.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
-{{- end }}
-{{- end }}
-{{- end }}
-```
-
-1. if there is a version of minio.min.io_tenants.yaml in the chart/templates, this file should be moved to the minio package if the kpt update does not do it automatically.
-1. in chart/templates/serviceaccount.yaml: maintain the conditionals around the service account creation.
-
 ## chart/values.yaml
 
 - Bigbang additions at the end of the file
@@ -153,10 +119,6 @@ If release name contains chart name it will be used as a full name.
 - minio-operaotor-exception.yaml
 - peer-authentication.yaml
 - tenant-patch-job.yaml
-
-## chart/minio-operator-crds/\*
-
-- Bigbang moves the operator crd to this location to build the tgz
 
 ## chart/charts/\*.tgz
 
