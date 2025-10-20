@@ -1,7 +1,7 @@
 <!-- Warning: Do not manually edit this file. See notes on gluon + helm-docs at the end of this file for more information. -->
 # minio-operator
 
-![Version: 7.1.1-bb.1](https://img.shields.io/badge/Version-7.1.1--bb.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v7.1.1](https://img.shields.io/badge/AppVersion-v7.1.1-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
+![Version: 7.1.1-bb.2](https://img.shields.io/badge/Version-7.1.1--bb.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v7.1.1](https://img.shields.io/badge/AppVersion-v7.1.1-informational?style=flat-square) ![Maintenance Track: bb_integrated](https://img.shields.io/badge/Maintenance_Track-bb_integrated-green?style=flat-square)
 
 A Helm chart for MinIO Operator
 
@@ -51,6 +51,7 @@ helm install minio-operator chart/
 |-----|------|---------|-------------|
 | networkPolicies.enabled | bool | `false` |  |
 | networkPolicies.controlPlaneCidr | string | `"0.0.0.0/0"` |  |
+| networkPolicies.vpcCidr | string | `"0.0.0.0/0"` |  |
 | networkPolicies.ingressLabels.app | string | `"istio-ingressgateway"` |  |
 | networkPolicies.ingressLabels.istio | string | `"ingressgateway"` |  |
 | networkPolicies.additionalPolicies | list | `[]` |  |
@@ -83,30 +84,7 @@ helm install minio-operator chart/
 | bbtests.cypress.resources.limits.cpu | string | `"2"` |  |
 | bbtests.cypress.resources.limits.memory | string | `"4Gi"` |  |
 | bbtests.cypress.envs.cypress_url | string | `"http://console.minio-operator.svc.cluster.local:9090"` |  |
-| upstream.nameOverride | string | `"minio-operator"` |  |
-| upstream.operator.env[0].name | string | `"MINIO_OPERATOR_TLS_ENABLE"` |  |
-| upstream.operator.env[0].value | string | `"on"` |  |
-| upstream.operator.env[1].name | string | `"CLUSTER_DOMAIN"` |  |
-| upstream.operator.env[1].value | string | `"cluster.local"` |  |
-| upstream.operator.env[2].name | string | `"WATCHED_NAMESPACE"` |  |
-| upstream.operator.env[2].value | string | `""` |  |
-| upstream.operator.env[3].name | string | `"OPERATOR_STS_ENABLED"` |  |
-| upstream.operator.env[3].value | string | `"on"` |  |
-| upstream.operator.image.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator"` |  |
-| upstream.operator.image.tag | string | `"v7.1.1"` |  |
-| upstream.operator.image.pullPolicy | string | `"IfNotPresent"` |  |
-| upstream.operator.sidecarImage.repository | string | `"registry1.dso.mil/ironbank/opensource/minio/operator-sidecar"` |  |
-| upstream.operator.sidecarImage.tag | string | `"v7.0.1"` |  |
-| upstream.operator.sidecarImage.digest | string | `""` |  |
-| upstream.operator.sidecarImage.pullPolicy | string | `"IfNotPresent"` |  |
-| upstream.operator.imagePullSecrets | list | `[]` |  |
-| upstream.operator.runtimeClassName | string | `nil` |  |
-| upstream.operator.resources.requests.cpu | string | `"200m"` |  |
-| upstream.operator.resources.requests.memory | string | `"256Mi"` |  |
-| upstream.operator.resources.requests.ephemeral-storage | string | `"500Mi"` |  |
-| upstream.operator.resources.limits.cpu | string | `"200m"` |  |
-| upstream.operator.resources.limits.memory | string | `"256Mi"` |  |
-| upstream.operator.podLabels | object | `{}` |  |
+| upstream | object | Upstream chart values | Values to pass to [the upstream minio-operator chart](https://github.com/minio/operator/blob/master/helm/operator/values.yaml) |
 
 ## Contributing
 
@@ -114,5 +92,5 @@ Please see the [contributing guide](./CONTRIBUTING.md) if you are interested in 
 
 ---
 
-This file is programatically generated using `helm-docs` and some BigBang-specific templates. The `gluon` repository has [instructions for regenerating package READMEs](https://repo1.dso.mil/big-bang/product/packages/gluon/-/blob/master/docs/bb-package-readme.md).
+_This file is programatically generated using `helm-docs` and some BigBang-specific templates. The `gluon` repository has [instructions for regenerating package READMEs](https://repo1.dso.mil/big-bang/product/packages/gluon/-/blob/master/docs/bb-package-readme.md)._
 
