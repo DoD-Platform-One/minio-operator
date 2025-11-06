@@ -4,6 +4,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [7.1.1-bb.3] (2025-11-06)
+### Changed
+
+- Removed outdated env vars
+
 ## [7.1.1-bb.2] (2025-10-15)
 ### Changed
 
