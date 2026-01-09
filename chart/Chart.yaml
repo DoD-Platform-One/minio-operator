@@ -1,7 +1,7 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
 name: minio-operator
-version: 7.1.1-bb.3
+version: 7.1.1-bb.4
 appVersion: v7.1.1
 keywords:
   - storage
@@ -23,6 +23,9 @@ dependencies:
     version: 7.1.1
     repository: https://operator.min.io
     alias: "upstream"
+  - name: bb-common
+    version: 0.12.1
+    repository: oci://registry1.dso.mil/bigbang
   
 annotations:
   bigbang.dev/maintenanceTrack: bb_integrated

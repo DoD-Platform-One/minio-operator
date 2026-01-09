@@ -5,5 +5,8 @@ dependencies:
 - name: operator
   repository: https://operator.min.io
   version: 7.1.1
-digest: sha256:1e54dfe66b0cd7e733b2c29d5094f2c8e7591817d784ae4ab556491d2e408b7d
-generated: "2025-08-29T00:56:57.8303094-04:00"
+- name: bb-common
+  repository: oci://registry1.dso.mil/bigbang
+  version: 0.12.1
+digest: sha256:cbef08783564595e2576b68aa84e973e69d6d9662639afa6722a79bb6b8f5a99
+generated: "2026-01-05T09:18:35.775580854-06:00"
