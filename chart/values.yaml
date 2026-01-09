@@ -1,41 +1,34 @@
+# -- Network Policy configuration; see bb-common network policy docs for details: https://repo1.dso.mil/big-bang/product/packages/bb-common/-/tree/main/docs/network-policies?ref_type=heads
+# @default -- Basic configuration necessary for minio-operator to function
 networkPolicies:
   enabled: false
-  controlPlaneCidr: 0.0.0.0/0
-  vpcCidr: 0.0.0.0/0
-  ingressLabels:
-    app: istio-ingressgateway
-    istio: ingressgateway
-  additionalPolicies: []
+  egress:
+    from:
+      minio-operator:
+        to:
+          definition:
+            kubeAPI: true
+          k8s:
+            # Allow minio operator to egress to minio tenants in any namespace
+            "*:9000": true
+  ingress:
+    to:
+      minio-operator:4222:
+        from:
+          k8s:
+            # Allow ingress to minio operator from minio tenants in any namespace
+            "*": true
 
-domain: bigbang.dev
-
+# -- Istio configuration; see bb-common istio docs for details: https://repo1.dso.mil/big-bang/product/packages/bb-common/-/tree/main/docs/istio?ref_type=heads
+# @default -- Istio disabled
 istio:
   enabled: false
-  hardened:
-    enabled: false
-    customAuthorizationPolicies: []
-    # - name: "allow-nothing"
-    #   enabled: true
-    #   spec: {}
-    outboundTrafficPolicyMode: "REGISTRY_ONLY"
-    customServiceEntries: []
 
-    tempo:
-      enabled: false
-      namespaces:
-      - tempo
-      principals:
-      - cluster.local/ns/tempo/sa/tempo-tempo
-    minio:
-      enabled: true
-      namespaces:
-      - minio
-      principals:
-      - cluster.local/ns/minio/sa/minio-minio-minio-instance-sa
-  mtls:
-    # STRICT = Allow only mutual TLS traffic
-    # PERMISSIVE = Allow both plain text and mutual TLS traffic
-    mode: STRICT
+# -- Routes configuration; see bb-common routes docs for details: https://repo1.dso.mil/big-bang/product/packages/bb-common/-/tree/main/docs/routes?ref_type=heads
+# @default -- No routes defined
+routes: {}
+
+domain: bigbang.dev
 
 openshift: false
 
@@ -58,17 +51,6 @@ installCRDs: true
 
 bbtests:
   enabled: false
-  cypress:
-    artifacts: true
-    resources:
-      requests:
-        cpu: "2"
-        memory: "4Gi"
-      limits:
-        cpu: "2"
-        memory: "4Gi"
-    envs:
-      cypress_url: 'http://console.minio-operator.svc.cluster.local:9090'
 
 
 # -- Values to pass to [the upstream minio-operator chart](https://github.com/minio/operator/blob/master/helm/operator/values.yaml)
