@@ -2,15 +2,18 @@
 
 * [Kubernetes affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
 
-Pod constraints for MinIO operator is implemented following the kubernetes affinity documentation. The MinIO Operator Pod can be constrained using nodeSelector or Affinity/Anti-affinity feature
+Pod constraints for MinIO operator is implemented following the kubernetes affinity documentation. The MinIO Operator Pod can be constrained using nodeSelector or Affinity/Anti-affinity feature.
+
+> **Note:** These values must be nested under `upstream:` as this chart wraps the upstream MinIO operator Helm chart.
 
 ## nodeSelector
 
-In the values.yaml  set `nodeSelector` as such:
+In the `values.yaml`, set `nodeSelector` as such:
 
 ```yaml
- nodeSelector:
-    <key>: <values> 
+upstream:
+  nodeSelector:
+    <key>: <value>
 ```
 
 ## nodeAffinity
@@ -18,7 +21,8 @@ In the values.yaml  set `nodeSelector` as such:
 In the `values.yaml`, set `nodeAffinity` as such:
 
 ```yaml
-affinity:
+upstream:
+  affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
@@ -43,7 +47,8 @@ affinity:
 In the `values.yaml`, set Pod affinity/anti-affinity like:
 
 ```yaml
-affinity:
+upstream:
+  affinity:
     podAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
       - labelSelector:
