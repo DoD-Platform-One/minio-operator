@@ -1,0 +1,32 @@
+scratch/**
+node_modules
+# Helm generated files
+.helm/
+
+# Rendered templates
+rendered/
+
+# MacOS temp files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Secrets and sensitive files
+secrets.yaml
+*-secrets.yaml
+*.secret.yaml
+
+# Local value overrides
+values.local.yaml
+values.override.yaml
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

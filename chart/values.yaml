@@ -51,6 +51,17 @@ installCRDs: true
 
 bbtests:
   enabled: false
+  cypress:
+    artifacts: true
+    resources:
+      requests:
+        cpu: "2"
+        memory: "4Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+    envs:
+      cypress_url: "http://console.minio-operator.svc.cluster.local:9090"
 
 
 # -- Values to pass to [the upstream minio-operator chart](https://github.com/minio/operator/blob/master/helm/operator/values.yaml)
@@ -85,4 +96,3 @@ upstream:
         cpu: 200m
         memory: 256Mi
     podLabels: {}
-

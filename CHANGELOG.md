@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [7.1.1-bb.5] (2026-03-13)
+### Fixed
+
+- Updated `gluon` dependency to `0.9.8`
+- Added explicit `bbtests.cypress` defaults so helm test resources still render with the updated Gluon Cypress runner
+- Updated Renovate configuration to detect and update the `gluon` chart dependency
+
 ## [7.1.1-bb.3] (2025-11-06)
 ### Changed
 
