@@ -5,10 +5,14 @@
   "configWarningReuseIssue": false,
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Renovate: Upgrade MinIO-Operator Package Dependencies",
-  "draftPR": true,
-  "enabledManagers": [
-    "custom.regex"
-  ],
+    "draftPR": true,
+    "enabledManagers": [
+        "custom.regex",
+        "helmv3"
+    ],
+    "ignorePaths": [
+        "chart/charts/**"
+    ],
   "labels": [
     "minioOperator",
     "Package Sustainment",
@@ -51,6 +55,18 @@
       ],
       "depNameTemplate": "ironbank/opensource/minio/operator",
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^chart/Chart\\.yaml$/"
+      ],
+      "matchStrings": [
+        "- name:[\\s]+gluon[\\s]+version:[\\s]+(?<currentValue>.*)"
+      ],
+      "depNameTemplate": "bigbang/gluon",
+      "datasourceTemplate": "docker",
+      "registryUrlTemplate": "https://registry1.dso.mil"
     },
     {
       "customType": "regex",

@@ -1,12 +1,12 @@
 dependencies:
 - name: gluon
   repository: oci://registry1.dso.mil/bigbang
-  version: 0.5.12
+  version: 0.9.8
 - name: operator
   repository: https://operator.min.io
   version: 7.1.1
 - name: bb-common
   repository: oci://registry1.dso.mil/bigbang
   version: 0.12.1
-digest: sha256:cbef08783564595e2576b68aa84e973e69d6d9662639afa6722a79bb6b8f5a99
-generated: "2026-01-05T09:18:35.775580854-06:00"
+digest: sha256:190594559e4a47b298b12b5064cc6a9e88ae4a3a6464779c33de35c345a6ba21
+generated: "2026-03-12T14:00:26.870719-07:00"
